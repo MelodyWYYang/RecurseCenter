@@ -1,4 +1,5 @@
 public class itemValidationRequest {
+    //author: Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
     protected user owner;
     protected item obj;
     protected String description;
