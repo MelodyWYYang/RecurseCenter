@@ -1,24 +1,24 @@
-public class itemValidationRequest {
+public class ItemValidationRequest {
     //author: Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
-    protected user owner;
-    protected item obj;
+    protected User owner;
+    protected Item obj;
     protected String description;
 
-    public itemValidationRequest(user owner, item obj, String desc){
+    public ItemValidationRequest(User owner, Item obj, String desc){
         this.description = desc;
         this.obj = obj;
         this.owner = owner;
     }
-    public itemValidationRequest(user owner, item obj){
+    public ItemValidationRequest(User owner, Item obj){
         this.obj = obj;
         this.owner = owner;
     }
 
-    public item getObj() {
+    public Item getObj() {
         return obj;
     }
 
-    public user getOwner() {
+    public User getOwner() {
         return owner;
     }
 
