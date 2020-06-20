@@ -46,7 +46,9 @@ public class Item {
     }
 
     public void deleteTag(String tag){
-        tags.remove(tag);
+        if(tags.contains(tag)){
+            tags.remove(tag);
+        }
     }
 
     //getters
