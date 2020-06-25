@@ -1,6 +1,54 @@
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class AdminUser {
-    //author: ___________ in group 0110 for CSC207H1 summer 2020 project
-    protected static ArrayList<Item> itemValidationQueue;
+    //author: Tingyu Liang in group 0110 for CSC207H1 summer 2020 project
+
+    private String username;
+    private String password;
+
+    public static ArrayList<ItemValidationRequest> itemValidationQueue;
+    public static ArrayList<User> accountsToFreezeQueue;
+
+    public AdminUser(String username, String password) {
+        this.username = username;
+        this.password = password;
+        itemValidationQueue = new ArrayList<ItemValidationRequest>();
+        accountsToFreezeQueue = new ArrayList<User>();
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    /**public Optional<Item> pollValidationRequest() {
+        if (itemValidationQueue.size() == 0) {
+            return Optional.empty();
+        }
+
+    }**/
+
+
+    public void dequeueAndFreeze(ArrayList<User> accountsToFreezeQueue) {
+        User user = accountsToFreezeQueue.get(0);
+        // requires implementation of the User class
+        // user.isFrozen = true;
+        accountsToFreezeQueue.remove(0);
+    }
+
+    public void changeThresholdForUser(int newThreshold) {
+        Trade.numLendsForBorrowThreshold = newThreshold;
+    }
 }
