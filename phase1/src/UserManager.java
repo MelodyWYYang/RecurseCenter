@@ -47,5 +47,11 @@ public class UserManager {
 
     public void sendValidationRequest(String name, String description, String id, User owner) {
         Item item = new Item(name, description, id, owner);
-        AdminUser.itemValidationQueue.add(item);}
+        AdminUser.itemValidationQueue.add(new ItemValidationRequest(owner, item, description));
+    }
+
+    public void sendValidationRequest(String name, String id, User owner) {
+        Item item = new Item(name, id, owner);
+        AdminUser.itemValidationQueue.add(new ItemValidationRequest(owner, item));
+    }
 }

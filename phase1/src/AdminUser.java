@@ -33,12 +33,13 @@ public class AdminUser {
         return password;
     }
 
-    /**public Optional<Item> pollValidationRequest() {
-        if (itemValidationQueue.size() == 0) {
-            return Optional.empty();
+    public void pollValidationRequest(boolean accepted) {
+        ItemValidationRequest request = itemValidationQueue.get(0);
+        if (accepted) {
+            request.getOwner().availableItems.add(request.getObj());
         }
-
-    }**/
+        AdminUser.itemValidationQueue.remove(0);
+    }
 
 
     public void dequeueAndFreeze(ArrayList<User> accountsToFreezeQueue) {

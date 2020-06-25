@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class User {
@@ -6,6 +7,8 @@ public class User {
     private int numBorrowed = 0;
 
     private int numLent = 0;
+
+    protected ArrayList<Item> availableItems;
 
     protected ArrayList<Trade> requestQueue;
 
