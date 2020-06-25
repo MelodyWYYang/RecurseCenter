@@ -7,6 +7,8 @@ public class User {
 
     private int numLent = 0;
 
+    protected ArrayList<Trade> requestQueue;
+
     //A stack of trade requests. Queue at the end and dequeue at index 0.
     private ArrayList<Trade> tradeRequestQueue;
 

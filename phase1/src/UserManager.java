@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class UserManager {
@@ -5,11 +6,46 @@ public class UserManager {
 
     public ArrayList<User> listUsers;
 
-    public void createUser() {} //Call the constructor for User, then append to listUsers
+    public ArrayList<User> getListUsers() {
+        return this.listUsers;}
 
-    public void acceptTradeRequest() {}
+    public void createUser() {} //TODO Call the constructor for User, then append to listUsers
 
-    public void sendTradeRequest() {}
+    public void sendTradeRequest(User user1, User user2, //user1 is the one sending the request to user2
+                                 ArrayList<Item> itemsSentToUser1, ArrayList<Item> itemsSentToUser2,
+                                 LocalDateTime timeOfTrade, String meetingPlace) throws CannotBorrowException {
+        Trade trade = new Trade(user1, user2, itemsSentToUser1, itemsSentToUser2);
+        user2.requestQueue.add(trade);
+        trade.setTimeOfTrade(timeOfTrade);
+        trade.setMeetingPlace(meetingPlace);
+        trade.user1TradeConfirmed = true;
+    } //Does not remove item from user1 availableItems or user2 availableItems
 
-    public void sendValidationRequest(Item item) {AdminUser.itemValidationQueue.add(item);}
+    public void acceptTradeRequest(Trade trade, User user) {
+        if (trade.getUser1() == user) {
+            trade.user1AcceptedRequest = true;
+        }
+        else if (trade.getUser2() == user) {
+            trade.user2AcceptedRequest = true;
+        }
+    }
+
+    public void editTradeRequest(Trade trade, LocalDateTime timeOfTrade, String meetingPlace, User userEditing) {
+        trade.timeOfTrade = timeOfTrade;
+        trade.meetingPlace = meetingPlace;
+        if (userEditing == trade.user1) {
+            trade.user1AcceptedRequest = true;
+            trade.user2.requestQueue.add(trade);
+            trade.user2AcceptedRequest = false;
+        }
+        else if (userEditing == trade.user2) {
+            trade.user2AcceptedRequest = true;
+            trade.user1.requestQueue.add(trade);
+            trade.user1AcceptedRequest = false;
+        }
+    }
+
+    public void sendValidationRequest(String name, String description, String id, User owner) {
+        Item item = new Item(name, description, id, owner);
+        AdminUser.itemValidationQueue.add(item);}
 }
