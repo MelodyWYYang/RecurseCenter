@@ -71,6 +71,9 @@ public class User {
         return permission;
     }
 
+    public void requestUnfreeze(User user){ // user can request to unfreeze account whether it should be unfrozen or not
+
+    }
 
     public void addPartner(String username2){
         if (orderedPartners.containsValue(username2)){
