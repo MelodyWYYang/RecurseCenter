@@ -9,12 +9,15 @@ public class AdminUser {
 
     public static ArrayList<ItemValidationRequest> itemValidationQueue;
     public static ArrayList<User> accountsToFreezeQueue;
+    public static ArrayList<User> unfreezeRequestList; // list of accounts that have requested to be unfrozen
+    public static ArrayList<User> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
 
     public AdminUser(String username, String password) {
         this.username = username;
         this.password = password;
         itemValidationQueue = new ArrayList<ItemValidationRequest>();
         accountsToFreezeQueue = new ArrayList<User>();
+
     }
 
     public void setUsername(String username) {
@@ -47,6 +50,18 @@ public class AdminUser {
         // requires implementation of the User class
         user.permission = false;
         accountsToFreezeQueue.remove(0);
+    }
+
+    public void moveToUnfreeze(ArrayList<User> unfreezeRequestList) {
+        User user = unfreezeRequestList.get(0);
+        if(user.changePermission()){
+
+        };
+
+    public void dequeueAndUnfreeze(ArrayList<User> accountsToUnfreezeQueue){
+        User user = accountsToUnfreezeQueue.get(0);
+        user.permission = true;
+
     }
 
     public void changeThresholdForUser(int newThreshold) {
