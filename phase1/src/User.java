@@ -14,8 +14,8 @@ public class User {
         // Use Cases need to increase after each 1-way or 2-way trade; and reset each week
         stats.put("incompleteT", 0); // # incomplete transactions since creation
         this.username = username; // Admin needs to access to freeze; USerManager needs to access/search by User
-        this.password = password;
     }
+
     public String username;
     private String password; // private so no one can access except User; have setters and getters for change password function
 
