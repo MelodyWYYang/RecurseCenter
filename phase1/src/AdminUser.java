@@ -55,13 +55,16 @@ public class AdminUser {
 
     public void moveToUnfreeze(ArrayList<User> unfreezeRequestList) {
         User user = unfreezeRequestList.get(0);
-        if(user.checkPermission()){
-
-        };
+        if (user.checkPermission()) {
+            accountsToUnfreezeQueue.add(user);
+            unfreezeRequestList.remove(0);
+        }
+    }
 
     public void dequeueAndUnfreeze(ArrayList<User> accountsToUnfreezeQueue){
         User user = accountsToUnfreezeQueue.get(0);
         user.permission = true;
+        accountsToUnfreezeQueue.remove(0);
 
     }
 
