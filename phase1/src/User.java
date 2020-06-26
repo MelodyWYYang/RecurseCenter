@@ -14,6 +14,7 @@ public class User {
         // Use Cases need to increase after each 1-way or 2-way trade; and reset each week
         stats.put("incompleteT", 0); // # incomplete transactions since creation
         this.username = username; // Admin needs to access to freeze; USerManager needs to access/search by User
+        this.password = password;
     }
     public String username;
     private String password; // private so no one can access except User; have setters and getters for change password function
@@ -78,11 +79,11 @@ public class User {
         // most recent 3 transactions, access transactions list and take last 3
     // code for case where User hasn't traded w 3 ppl yet
 
-    public void addPartner(String user2){
-        if (partners.containsKey(user2)){
-            int old = partners.get(user2);
-            partners.put(user2, old + 1);}
-        else{partners.put(user2, 0);}
+    public void addPartner(String username2){
+        if (partners.containsKey(username2)){
+            int old = partners.get(username2);
+            partners.put(username2, old + 1);}
+        else{partners.put(username2, 0);}
     }
 
 //    public User Favourites(){
