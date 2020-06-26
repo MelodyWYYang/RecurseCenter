@@ -45,11 +45,14 @@ public class AdminUser {
     public void dequeueAndFreeze(ArrayList<User> accountsToFreezeQueue) {
         User user = accountsToFreezeQueue.get(0);
         // requires implementation of the User class
-        // user.isFrozen = true;
+        user.permission = false;
         accountsToFreezeQueue.remove(0);
     }
 
     public void changeThresholdForUser(int newThreshold) {
         Trade.numLendsForBorrowThreshold = newThreshold;
+    }
+
+
     }
 }
