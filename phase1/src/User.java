@@ -2,10 +2,10 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 public class User {
     //author: Melody Yang in group 0110 for CSC207H1 summer 2020 project
-
     //User constructor
     public User(String username) {
         stats.put("Lent", 0); // # lent items since creation
@@ -65,11 +65,10 @@ public class User {
         }
     }
 
-    public void changePermission(){ // wondering how to implement freeze function with this; or should this only be a ThresholdChecker?
-        if (stats.get("Lent") > stats.get("Borrowed") + Trade.numLendsForBorrowThreshold){
-            permission = true;} // no code to automatically freeze because design says admin needs to do this
-        else {
-            permission = false;}
+    public void checkPermission(){ // wondering how to implement freeze function with this; or should this only be a ThresholdChecker?
+        // no code to automatically freeze because design says admin needs to do this
+        permission = stats.get("incompleteT") < AdminUser.incompleteThreshold && stats.get("Lent") >
+                stats.get("Borrowed") + Trade.numLendsForBorrowThreshold;
     }
 
 
@@ -80,9 +79,12 @@ public class User {
         else{partners.put(username2, 0);}
     }
 
-//    public User Favourites(){
-//        partners.put()
-//    } // top 3 trading partners, access partners hashmap and find highest 3 trades(value) completed and return the 3 keys
+    public ArrayList<String> Favourites(){
+        TreeMap<String, Integer> top3 = new LinkedHashMap<String, Integer>();
+        //sort partners hashmap by values, append each into top 3
+        for partners.
+        partners.entrySet()
+    } // top 3 trading partners, access partners hashmap and find highest 3 trades(value) completed and return the 3 keys
 
 
 }

@@ -66,7 +66,7 @@ public class UserManager {
         transactions.add(trade);
     } // This is for adding completed transactions to the stored list - Mel
 
-    public ArrayList RecentTransactions(){
+    public ArrayList<Trade> RecentTransactions(){
         ArrayList<Trade> recents = new ArrayList<Trade>();
         if (transactions.size() > 3){
             recents.add(transactions.get(transactions.size()-1)); // most recent
