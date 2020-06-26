@@ -55,7 +55,7 @@ public class AdminUser {
 
     public void moveToUnfreeze(ArrayList<User> unfreezeRequestList) {
         User user = unfreezeRequestList.get(0);
-        if(user.changePermission()){
+        if(user.checkPermission()){
 
         };
 
