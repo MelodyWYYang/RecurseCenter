@@ -17,8 +17,8 @@ public class User {
     private String password; // private so no one can access except User; have setters and getters for change password function
 
     protected LinkedHashMap<String, Integer> stats = new LinkedHashMap<String, Integer>(); //LinkedHashMap maintains order, so always index-able
-    protected TreeMap<Integer, String> orderedPartners = new TreeMap<Integer, String>(); // list of all Users this User has traded with since creation
-    // key: integer, value: username String
+    protected HashMap<String, Integer> partners = new HashMap<String, Integer>(); // list of all Users this User has traded with since creation
+    //protected TreeMap<Integer, String> orderedPartners = new TreeMap<Integer, String>();
 
     public boolean permission = false; // false being frozen or Lent>Borrowed; true being no violations
 
@@ -73,13 +73,13 @@ public class User {
 
 
     public void addPartner(String username2){
-        if (orderedPartners.containsValue(username2)){
-            int old = orderedPartners.get(username2);
-            orderedPartners.put(username2, old + 1);}
-        else{orderedPartners.put(username2, 0);}
+        if (partners.containsKey(username2)){
+            int old = partners.get(username2);
+            partners.put(username2, old + 1);}
+        else{partners.put(username2, 0);}
     }
 
-    public ArrayList<String> sort(TreeMap<String, Integer> partners, Comparator<Integer> c){
+    public void sortPartners(){
         //sort partners hashmap by values, append each into top 3
 
     } // top 3 trading partners, access partners hashmap and find highest 3 trades(value) completed and return the 3 keys
