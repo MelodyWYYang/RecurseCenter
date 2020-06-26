@@ -4,6 +4,8 @@ import java.util.ArrayList;
 public class UserManager {
     //author: Jinyu Liu in group 0110 for CSC207H1 summer 2020 project
 
+    protected ArrayList<Trade> transactions; // list of all transactions this User has completed since creation - Mel
+
     public ArrayList<User> listUsers;
 
     public ArrayList<User> getListUsers() {
@@ -54,4 +56,19 @@ public class UserManager {
         Item item = new Item(name, id, owner);
         AdminUser.itemValidationQueue.add(new ItemValidationRequest(owner, item));
     }
+
+    public void AddTransaction(Trade trade){
+        transactions.add(trade);
+    }
+
+    public ArrayList RecentTransactions(){
+        ArrayList<Trade> recents = new ArrayList<Trade>();
+        if (transactions.size() > 3){
+            recents.add(transactions.get(transactions.size()-1)); // most recent
+            recents.add(transactions.get(transactions.size()-2)); // second most-recent
+            recents.add(transactions.get(transactions.size()-3)); // third most-recent
+            return recents;
+        }
+        else {return transactions;}
+    } // -Mel
 }

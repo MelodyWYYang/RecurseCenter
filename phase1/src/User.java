@@ -13,14 +13,13 @@ public class User {
         stats.put("weeklyT", 0); //// # completed transactions in this week; AdminUser can access;
         // Use Cases need to increase after each 1-way or 2-way trade; and reset each week
         stats.put("incompleteT", 0); // # incomplete transactions since creation
-        username = username; // Admin needs to access to freeze; USerManager needs to access/search by User
+        this.username = username; // Admin needs to access to freeze; USerManager needs to access/search by User
     }
-
+    public String username;
     private String password; // private so no one can access except User; have setters and getters for change password function
 
     protected LinkedHashMap<String, Integer> stats = new LinkedHashMap<String, Integer>(); //LinkedHashMap maintains order, so always index-able
-    protected ArrayList<Trade> transactions; // list of all transactions this User has completed since creation
-    protected HashMap<User, Integer> partners = new HashMap<User, Integer>(); // list of all Users this User has traded with since creation
+    protected HashMap<String, Integer> partners = new HashMap<String, Integer>(); // list of all Users this User has traded with since creation
 
     public boolean permission = false; // false being frozen or Lent>Borrowed; true being no violations
 
@@ -40,40 +39,34 @@ public class User {
     public void removeItemFromList(Item a, ArrayList<Item> list) {list.remove(a);}
 
     //for changing #items Borrowed and Lent by this User
-    public void increaseStat(String stat) {
+    public void increaseStat(String stat, int num) {
         // input BorL is Borrow or Lent
         switch (stat.toLowerCase()) {
             case "borrowed": {
                 int old = stats.get("Borrowed");
-                stats.put("Borrowed", (old + 1));
-                System.out.println("Successfully added to Borrowed statistics."); // need to check Lent>More -- make helper
-
+                stats.put("Borrowed", (old + num));
+                 // need to check Lent>More -- make helper
                 break;
             }
             case "lent": {
                 int old = stats.get("Lent");
-                stats.put("Lent", (old + 1));
-                System.out.println("Successfully added to Lent statistics.");
+                stats.put("Lent", (old + num));
                 break;
             }
             case "weeklyt": {
                 int old = stats.get("weeklyT");
-                stats.put("weeklyT", (old + 1));
-                System.out.println("Successfully added to weeklyT statistics.");
+                stats.put("weeklyT", (old + num));
                 break;
             }
             case "incompletet": {
                 int old = stats.get("incompleteT");
-                stats.put("incompleteT", (old + 1));
-                System.out.println("Successfully added to incompleteT statistics.");
+                stats.put("incompleteT", (old + num));
                 break;
             }
             default:
-                System.out.println("Please pass either 'borrowed', 'lent', 'weeklyt', or 'incompletet'.");
                 break;
         }
     }
-
 
     public void changePermission(){ // wondering how to implement freeze function with this; or should this only be a ThresholdChecker?
         if (stats.get("Lent") > stats.get("Borrowed") + Trade.numLendsForBorrowThreshold){
@@ -82,24 +75,10 @@ public class User {
             permission = false;}
     }
 
-    public void AddTransaction(Trade trade){
-        transactions.add(trade);
-    }
-
-    public ArrayList RecentTransactions(){
-        ArrayList<Trade> recents = new ArrayList<Trade>();
-        if (transactions.size() > 3){
-            recents.add(transactions.get(transactions.size()-1)); // most recent
-            recents.add(transactions.get(transactions.size()-2)); // second most-recent
-            recents.add(transactions.get(transactions.size()-3)); // third most-recent
-            return recents;
-        }
-        else {return transactions;}
-    }
         // most recent 3 transactions, access transactions list and take last 3
     // code for case where User hasn't traded w 3 ppl yet
 
-    public void addPartner(User user2){
+    public void addPartner(String user2){
         if (partners.containsKey(user2)){
             int old = partners.get(user2);
             partners.put(user2, old + 1);}
