@@ -65,10 +65,11 @@ public class User {
         }
     }
 
-    public void checkPermission(){ // wondering how to implement freeze function with this; or should this only be a ThresholdChecker?
+    public boolean checkPermission(){ // wondering how to implement freeze function with this; or should this only be a ThresholdChecker?
         // no code to automatically freeze because design says admin needs to do this
         permission = stats.get("incompleteT") < AdminUser.incompleteThreshold && stats.get("Lent") >
                 stats.get("Borrowed") + Trade.numLendsForBorrowThreshold;
+        return permission;
     }
 
 
@@ -80,10 +81,10 @@ public class User {
     }
 
     public ArrayList<String> Favourites(){
-        TreeMap<String, Integer> top3 = new LinkedHashMap<String, Integer>();
+        TreeMap<String, Integer> top3 = new TreeMap<String, Integer>();
         //sort partners hashmap by values, append each into top 3
-        for partners.
-        partners.entrySet()
+        ArrayList<User> temp = new ArrayList<User>;
+        temp.add(partners.entrySet());
     } // top 3 trading partners, access partners hashmap and find highest 3 trades(value) completed and return the 3 keys
 
 
