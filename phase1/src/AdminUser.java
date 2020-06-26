@@ -6,6 +6,7 @@ public class AdminUser {
 
     private String username;
     private String password;
+    public static int incompleteThreshold; // # of incomplete trades allowed
 
     public static ArrayList<ItemValidationRequest> itemValidationQueue;
     public static ArrayList<User> accountsToFreezeQueue;
@@ -66,8 +67,5 @@ public class AdminUser {
 
     public void changeThresholdForUser(int newThreshold) {
         Trade.numLendsForBorrowThreshold = newThreshold;
-    }
-
-
     }
 }
