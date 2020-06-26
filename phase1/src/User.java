@@ -23,11 +23,6 @@ public class User {
     protected HashMap<User, Integer> partners = new HashMap<User, Integer>(); // list of all Users this User has traded with since creation
 
     public boolean permission = false; // false being frozen or Lent>Borrowed; true being no violations
-    //call checker() before trade begins, then after trading Trade needs to call increaseStats(...) and checker()
-    //AdminUser access and changes permission
-    //RequestUnfreeze - Use Case
-    //RequestAddItem -- Use Case, calls on addItemtoList(User.availableItems)
-    //DisplayStatus -Use Case, displays frozen or Active
 
     public ArrayList<Item> availableItems; // if this was protected then our presenters can't access it
     public ArrayList<Item> wishlistItems; // presenter needs to access this as well
