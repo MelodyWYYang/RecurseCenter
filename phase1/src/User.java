@@ -1,8 +1,5 @@
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class User {
     //author: Melody Yang in group 0110 for CSC207H1 summer 2020 project
@@ -20,7 +17,8 @@ public class User {
     private String password; // private so no one can access except User; have setters and getters for change password function
 
     protected LinkedHashMap<String, Integer> stats = new LinkedHashMap<String, Integer>(); //LinkedHashMap maintains order, so always index-able
-    protected HashMap<String, Integer> partners = new HashMap<String, Integer>(); // list of all Users this User has traded with since creation
+    protected TreeMap<Integer, String> orderedPartners = new TreeMap<Integer, String>(); // list of all Users this User has traded with since creation
+    // key: integer, value: username String
 
     public boolean permission = false; // false being frozen or Lent>Borrowed; true being no violations
 
@@ -28,6 +26,7 @@ public class User {
     public ArrayList<Item> wishlistItems; // presenter needs to access this as well
 
     public void setPassword(String password) { this.password = password; }// may want to extend a use case to change password if forgotten
+    public String getPassword(String password) { return this.password;}
 
     //for adding and removing from wishlist and available-to-lend lists, and getters for this User's lists
     public ArrayList<Item> getAvailableItems() {return this.availableItems;}
@@ -74,17 +73,15 @@ public class User {
 
 
     public void addPartner(String username2){
-        if (partners.containsKey(username2)){
-            int old = partners.get(username2);
-            partners.put(username2, old + 1);}
-        else{partners.put(username2, 0);}
+        if (orderedPartners.containsValue(username2)){
+            int old = orderedPartners.get(username2);
+            orderedPartners.put(username2, old + 1);}
+        else{orderedPartners.put(username2, 0);}
     }
 
-    public ArrayList<String> Favourites(){
-        TreeMap<String, Integer> top3 = new TreeMap<String, Integer>();
+    public ArrayList<String> sort(TreeMap<String, Integer> partners, Comparator<Integer> c){
         //sort partners hashmap by values, append each into top 3
-        ArrayList<User> temp = new ArrayList<User>;
-        temp.add(partners.entrySet());
+
     } // top 3 trading partners, access partners hashmap and find highest 3 trades(value) completed and return the 3 keys
 
 
