@@ -37,9 +37,9 @@ public class Trade {
         this.itemsSentToUser1 = itemsSentToUser1;
         this.itemsSentToUser2 = itemsSentToUser2;
         //The description defines a one-way trade as "permanently borrowing", so the borrow/lending ratio still applies.
-        if(itemsSentToUser1.size() == 0 && user2.getNumBorrowed() < user2.getNumLent() + numLendsForBorrowThreshold){
+        if(itemsSentToUser1.size() == 0 && user2.permission){
             throw new CannotBorrowException("The receiving user has not lent enough!");
-        } else if (itemsSentToUser2.size() == 0 && user1.getNumBorrowed() < user2.getNumLent() + numLendsForBorrowThreshold){
+        } else if (itemsSentToUser2.size() == 0 && user1.permission){
             throw new CannotBorrowException("The receiving user has not lent enough!");
         }
     }
