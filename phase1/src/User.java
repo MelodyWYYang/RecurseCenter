@@ -3,6 +3,8 @@ import java.util.*;
 
 public class User {
     //author: Melody Yang in group 0110 for CSC207H1 summer 2020 project
+    // Sorting method sortPartners() is taken from https://howtodoinjava.com/sort/java-sort-map-by-values/
+
     //User constructor
     public User(String username) {
         stats.put("Lent", 0); // # lent items since creation
@@ -18,7 +20,7 @@ public class User {
 
     protected LinkedHashMap<String, Integer> stats = new LinkedHashMap<String, Integer>(); //LinkedHashMap maintains order, so always index-able
     protected HashMap<String, Integer> partners = new HashMap<String, Integer>(); // list of all Users this User has traded with since creation
-    //protected TreeMap<Integer, String> orderedPartners = new TreeMap<Integer, String>();
+    protected LinkedHashMap<String, Integer> orderedPartners = new LinkedHashMap<String, Integer>();
 
     public boolean permission = false; // false being frozen or Lent>Borrowed; true being no violations
 
@@ -80,12 +82,26 @@ public class User {
             int old = partners.get(username2);
             partners.put(username2, old + 1);}
         else{partners.put(username2, 0);}
+        this.orderPartners();
     }
 
-    public void sortPartners(){
-        //sort partners hashmap by values, append each into top 3
+    private void orderPartners(){
+        //sort partners hashmap by values in descending order, append each into LinkedHashMap orderedPartners
+        partners.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEachOrdered(lambda -> orderedPartners.put(lambda.getKey(), lambda.getValue()));
+    }
+    //orderPartners is called after every time a addPartner is called in order to update the top 3.
 
-    } // top 3 trading partners, access partners hashmap and find highest 3 trades(value) completed and return the 3 keys
+    public List favourites() {
+        List top3 = new ArrayList<String>();
+        for (int i = 0; i < 3; i++) {
+            top3.add(i, orderedPartners.get(i)); }
+        return top3;
+    }
+    // top 3 trading partners, access orderedPartners LinkedHashMap and return first three username Strings.
+    // this needs to be updated after every transaction.
 
 
 }
