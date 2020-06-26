@@ -8,6 +8,11 @@ public class UserManager {
 
     public ArrayList<User> listUsers;
 
+    protected ArrayList<Trade> requestQueue; // this stays protected because only the User needs it - Mel
+
+    //A stack of trade requests. Queue at the end and dequeue at index 0.
+    private ArrayList<Trade> tradeRequestQueue;
+
     public ArrayList<User> getListUsers() {
         return this.listUsers;}
 
@@ -17,7 +22,7 @@ public class UserManager {
                                  ArrayList<Item> itemsSentToUser1, ArrayList<Item> itemsSentToUser2,
                                  LocalDateTime timeOfTrade, String meetingPlace) throws CannotBorrowException {
         Trade trade = new Trade(user1, user2, itemsSentToUser1, itemsSentToUser2);
-        user2.requestQueue.add(trade);
+        this.requestQueue.add(trade);
         trade.setTimeOfTrade(timeOfTrade);
         trade.setMeetingPlace(meetingPlace);
         trade.user1TradeConfirmed = true;
@@ -59,7 +64,7 @@ public class UserManager {
 
     public void AddTransaction(Trade trade){
         transactions.add(trade);
-    }
+    } // This is for adding completed transactions to the stored list - Mel
 
     public ArrayList RecentTransactions(){
         ArrayList<Trade> recents = new ArrayList<Trade>();
@@ -70,5 +75,11 @@ public class UserManager {
             return recents;
         }
         else {return transactions;}
-    } // -Mel
+    }
+    // most recent 3 transactions, access transactions list and take last 3
+    // code for case where User hasn't traded w 3 ppl yet -Mel
+
+    public Trade dequeueTradeRequest(){
+        return this.tradeRequestQueue.remove(0);
+    }
 }

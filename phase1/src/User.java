@@ -25,10 +25,6 @@ public class User {
 
     public ArrayList<Item> availableItems; // if this was protected then our presenters can't access it
     public ArrayList<Item> wishlistItems; // presenter needs to access this as well
-    protected ArrayList<Trade> requestQueue; // this stays protected because only the User needs it
-
-    //A stack of trade requests. Queue at the end and dequeue at index 0.
-    private ArrayList<Trade> tradeRequestQueue;
 
     public void setPassword(String password) { this.password = password; }// may want to extend a use case to change password if forgotten
 
@@ -75,8 +71,6 @@ public class User {
             permission = false;}
     }
 
-        // most recent 3 transactions, access transactions list and take last 3
-    // code for case where User hasn't traded w 3 ppl yet
 
     public void addPartner(String user2){
         if (partners.containsKey(user2)){
@@ -90,7 +84,4 @@ public class User {
 //    } // top 3 trading partners, access partners hashmap and find highest 3 trades(value) completed and return the 3 keys
 
 
-    public Trade dequeueTradeRequest(){
-        return this.tradeRequestQueue.remove(0);
-    }
 }
