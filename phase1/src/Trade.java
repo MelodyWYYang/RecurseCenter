@@ -1,12 +1,11 @@
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Trade {
     //author: Murray Smith in group 0110 for CSC207H1 summer 2020 project
 
-    protected User user1;
-    protected User user2;
+    protected String username1;
+    protected String username2;
 
     //I read in the assignment details that the AdminUser should be able to
     //change how many times one should have to lend in order to borrow.
@@ -27,21 +26,15 @@ public class Trade {
 
     protected String meetingPlace;
 
-    protected ArrayList<Item> itemsSentToUser1;
-    protected ArrayList<Item> itemsSentToUser2;
+    protected ArrayList<String> itemIDsSentToUser1;
+    protected ArrayList<String> itemIDsSentToUser2;
 
-    public Trade(User user1, User user2,
-                 ArrayList<Item> itemsSentToUser1, ArrayList<Item> itemsSentToUser2) throws CannotBorrowException{
-        this.user1 = user1;
-        this.user2 = user2;
-        this.itemsSentToUser1 = itemsSentToUser1;
-        this.itemsSentToUser2 = itemsSentToUser2;
-        //The description defines a one-way trade as "permanently borrowing", so the borrow/lending ratio still applies.
-        if(itemsSentToUser1.size() == 0 && user2.permission){
-            throw new CannotBorrowException("The receiving user has not lent enough!");
-        } else if (itemsSentToUser2.size() == 0 && user1.permission){
-            throw new CannotBorrowException("The receiving user has not lent enough!");
-        }
+    public Trade(String username1, String username2,
+                 ArrayList<String> itemIDsSentToUser1, ArrayList<String> itemIDsSentToUser2){
+        this.username1 = username1;
+        this.username2 = username2;
+        this.itemIDsSentToUser1 = itemIDsSentToUser1;
+        this.itemIDsSentToUser2 = itemIDsSentToUser2;
     }
 
     /**
@@ -64,12 +57,12 @@ public class Trade {
 
     //Below is an assortment of getters and setters.
 
-    public User getUser1(){
-        return this.user1;
+    public String getUsername1(){
+        return this.username1;
     }
 
-    public User getUser2(){
-        return this.user2;
+    public String getUsername2(){
+        return this.username2;
     }
 
     public void setUser1AcceptedRequest(boolean user1AcceptedRequest) {
@@ -96,12 +89,12 @@ public class Trade {
         user2NumRequests+=1;
     }
 
-    public ArrayList<Item> getItemsSentToUser1(){
-        return (ArrayList<Item>)this.itemsSentToUser1.clone();
+    public ArrayList<String> getItemIDsSentToUser1(){
+        return (ArrayList<String>)this.itemIDsSentToUser1.clone();
     }
 
-    public ArrayList<Item> getItemsSentToUser2(){
-        return (ArrayList<Item>)this.itemsSentToUser2.clone();
+    public ArrayList<String> getItemIDsSentToUser2(){
+        return (ArrayList<String>)this.itemIDsSentToUser2.clone();
     }
 
     public LocalDateTime getTimeOfTrade(){

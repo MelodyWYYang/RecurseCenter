@@ -15,7 +15,7 @@ public class User {
         this.username = username; // Admin needs to access to freeze; USerManager needs to access/search by User
     }
 
-    public String username;
+    public final String username;
     private String password; // private so no one can access except User; have setters and getters for change password function
 
     protected LinkedHashMap<String, Integer> stats = new LinkedHashMap<String, Integer>(); //LinkedHashMap maintains order, so always index-able
