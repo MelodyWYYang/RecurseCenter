@@ -21,7 +21,15 @@ public class UserManager {
     public void sendTradeRequest(User user1, User user2, //user1 is the one sending the request to user2
                                  ArrayList<Item> itemsSentToUser1, ArrayList<Item> itemsSentToUser2,
                                  LocalDateTime timeOfTrade, String meetingPlace) throws CannotBorrowException {
-        Trade trade = new Trade(user1, user2, itemsSentToUser1, itemsSentToUser2);
+        ArrayList<String> itemIDsSentToUser1 = new ArrayList<String>();
+        for (int i = 0; i < itemsSentToUser1.size(); i++){
+            itemIDsSentToUser1.add(itemsSentToUser1.get(i).getId());
+        }
+        ArrayList<String> itemIDsSentToUser2 = new ArrayList<String>();
+        for (int i = 0; i < itemsSentToUser1.size(); i++){
+            itemIDsSentToUser2.add(itemsSentToUser2.get(i).getId());
+        }
+        Trade trade = new Trade(user1.username, user2.username, itemIDsSentToUser1, itemIDsSentToUser2);
         this.requestQueue.add(trade);
         trade.setTimeOfTrade(timeOfTrade);
         trade.setMeetingPlace(meetingPlace);
@@ -29,10 +37,10 @@ public class UserManager {
     } //Does not remove item from user1 availableItems or user2 availableItems
 
     public void acceptTradeRequest(Trade trade, User user) {
-        if (trade.getUser1() == user) {
+        if (trade.getUsername1().equals(user.username)) {
             trade.user1AcceptedRequest = true;
         }
-        else if (trade.getUser2() == user) {
+        else if (trade.getUsername2().equals(user.username)) {
             trade.user2AcceptedRequest = true;
         }
     }
@@ -40,13 +48,15 @@ public class UserManager {
     public void editTradeRequest(Trade trade, LocalDateTime timeOfTrade, String meetingPlace, User userEditing) {
         trade.timeOfTrade = timeOfTrade;
         trade.meetingPlace = meetingPlace;
-        if (userEditing == trade.user1) {
+        if (userEditing == trade.username1) {
             trade.user1AcceptedRequest = true;
-            trade.user2.requestQueue.add(trade);
+            //This code should be updated to use the new request Queue in this class
+            trade.username2.requestQueue.add(trade);
             trade.user2AcceptedRequest = false;
         }
-        else if (userEditing == trade.user2) {
+        else if (userEditing == trade.username2)) {
             trade.user2AcceptedRequest = true;
+            //This code should be updated to use the new request Queue in this class
             trade.user1.requestQueue.add(trade);
             trade.user1AcceptedRequest = false;
         }
