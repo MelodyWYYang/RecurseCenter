@@ -1,25 +1,31 @@
 public class ItemValidationRequest {
     //author: Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
-    protected User owner;
-    protected Item obj;
+    protected String usernameOfOwner;
+    protected String name;
     protected String description;
+    protected int itemID;
+    private static int idGenerator = 0;
 
-    public ItemValidationRequest(User owner, Item obj, String desc){
+    public ItemValidationRequest(String owner, String obj, String desc){
         this.description = desc;
-        this.obj = obj;
-        this.owner = owner;
+        this.name = obj;
+        this.usernameOfOwner = owner;
+        itemID = idGenerator;
+        idGenerator++;
     }
-    public ItemValidationRequest(User owner, Item obj){
-        this.obj = obj;
-        this.owner = owner;
+    public ItemValidationRequest(String owner, String obj){
+        this.name = obj;
+        this.usernameOfOwner = owner;
+        itemID = idGenerator;
+        idGenerator++;
     }
 
-    public Item getObj() {
-        return obj;
+    public String getObj() {
+        return name;
     }
 
-    public User getOwner() {
-        return owner;
+    public String getOwner() {
+        return usernameOfOwner;
     }
 
     public String getDescription() {
