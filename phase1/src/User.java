@@ -3,7 +3,7 @@ import java.util.*;
 
 public class User {
     //author: Melody Yang in group 0110 for CSC207H1 summer 2020 project
-    // Sorting method sortPartners() is taken from https://howtodoinjava.com/sort/java-sort-map-by-values/
+    // Sorting method orderPartners() is taken from https://howtodoinjava.com/sort/java-sort-map-by-values/
 
     //User constructor
     public User(String username) {
