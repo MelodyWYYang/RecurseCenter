@@ -1,37 +1,39 @@
+import javax.print.DocFlavor;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Item {
+public class Item implements Serializable {
     //author: Tian Yue Dong in group 0110 for CSC207H1 summer 2020 project
 
     private String name;
     private String description;
     private String id;
 
-    private User owner;
-    private User userThatHasPossession;
+    private String ownerUserName;
+    private String userThatHasPossession;
 
     protected ArrayList<String> tags;
 
-    public Item(String name, String description, String id, User owner){
+    public Item(String name, String description, String id, String owner){
         this.name = name;
         this.description = description;
         this.id = id;
-        this.owner = owner;
+        ownerUserName = owner;
         userThatHasPossession = owner;
     }
 
-    public Item(String name, String id, User owner){
+    public Item(String name, String id, String owner){
         this.name = name;
         this.id = id;
-        this.owner = owner;
+        ownerUserName = owner;
         userThatHasPossession = owner;
     }
 
     //setters
 
-    public void setOwner(User owner) { this.owner = owner; }
+    public void setOwner(String owner) { ownerUserName = owner; }
 
-    public void setUserThatHasPossession(User userThatHasPossession) {
+    public void setUserThatHasPossession(String userThatHasPossession) {
         this.userThatHasPossession = userThatHasPossession;
     }
 
@@ -65,11 +67,11 @@ public class Item {
         return id;
     }
 
-    public User getOwner() {
-        return owner;
+    public String getOwnerUserName() {
+        return ownerUserName;
     }
 
-    public User getUserThatHasPossession() {
+    public String getUserThatHasPossession() {
         return userThatHasPossession;
     }
 
