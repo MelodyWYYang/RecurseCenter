@@ -1,7 +1,8 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.io.Serializable
 
-public class UserManager {
+public class UserManager implements Serializable{
     //author: Jinyu Liu, Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
 
     protected ArrayList<Trade> transactions; // list of all transactions this User has completed since creation - Mel
