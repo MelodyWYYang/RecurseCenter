@@ -9,17 +9,17 @@ public class AdminUser {
     public static int incompleteThreshold; // # of incomplete trades allowed
 
     public static ArrayList<ItemValidationRequest> itemValidationQueue;
-    public static ArrayList<String> accountsToFreezeQueue;
-    public static ArrayList<String> unfreezeRequestList; // list of accounts that have requested to be unfrozen
-    public static ArrayList<String> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
+    public static ArrayList<User> accountsToFreezeQueue;
+    public static ArrayList<User> unfreezeRequestList; // list of accounts that have requested to be unfrozen
+    public static ArrayList<User> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
 
     public AdminUser(String username, String password) {
         this.username = username;
         this.password = password;
         itemValidationQueue = new ArrayList<ItemValidationRequest>();
-        accountsToFreezeQueue = new ArrayList<String>();
-        unfreezeRequestList = new ArrayList<String>();
-        accountsToUnfreezeQueue = new ArrayList<String>();
+        accountsToFreezeQueue = new ArrayList<User>();
+        unfreezeRequestList = new ArrayList<User>();
+        accountsToUnfreezeQueue = new ArrayList<User>();
     }
 
     public void setUsername(String username) {
@@ -47,24 +47,24 @@ public class AdminUser {
     }
 
 
-    public void dequeueAndFreeze(ArrayList<String> accountsToFreezeQueue) {
-        String user = accountsToFreezeQueue.get(0);
+    public void dequeueAndFreeze(ArrayList<User> accountsToFreezeQueue) {
+        User user = accountsToFreezeQueue.get(0);
         // requires implementation of the User class
-        user.checkPermission() = false;
+        user.permission = false;
         accountsToFreezeQueue.remove(0);
     }
 
-    public void moveToUnfreeze(ArrayList<String> unfreezeRequestList) {
-        String user = unfreezeRequestList.get(0);
+    public void moveToUnfreeze(ArrayList<User> unfreezeRequestList) {
+        User user = unfreezeRequestList.get(0);
         if (user.checkPermission()) {
             accountsToUnfreezeQueue.add(user);
             unfreezeRequestList.remove(0);
         }
     }
 
-    public void dequeueAndUnfreeze(ArrayList<String> accountsToUnfreezeQueue){
-        String user = accountsToUnfreezeQueue.get(0);
-        user.checkPermission() = true;
+    public void dequeueAndUnfreeze(ArrayList<User> accountsToUnfreezeQueue){
+        User user = accountsToUnfreezeQueue.get(0);
+        user.permission = true;
         accountsToUnfreezeQueue.remove(0);
 
     }
