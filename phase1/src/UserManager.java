@@ -35,7 +35,16 @@ public class UserManager implements Serializable{
         return pendingTradeRequests;
     }
 
-    public void createUser() {} //TODO Call the constructor for User, then append to listUsers
+    /** Method which creates a user and adds it to the list of users
+     * Author: Jinyu Liu
+     * @param username
+     * @param password
+     */
+    public void createUser(String username, String password) {
+        User newUser = new User(username);
+        newUser.setPassword(password);
+        listUsers.add(newUser);
+    }
 
     /** Method which creates a trade request and adds it to the list of pending trade requests.
      * Author: Jinyu Liu
@@ -126,6 +135,7 @@ public class UserManager implements Serializable{
         transactions.add(trade);
     } // This is for adding completed transactions to the stored list - Mel
      */
+
     //TODO fix this method and other stats methods
     public ArrayList<Trade> RecentTransactions(){
         ArrayList<Trade> recents = new ArrayList<Trade>();
