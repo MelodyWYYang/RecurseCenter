@@ -8,7 +8,7 @@ public class UserManager implements Serializable{
 
     protected ArrayList<Trade> completedTrades; // list of all trades which have been completed - Louis
 
-    protected ArrayList<User> listUsers; // List of all users - Jinyu
+    protected static ArrayList<User> listUsers; // List of all users - Jinyu
 
     protected ArrayList<Trade> pendingTradeRequests; // list of all trade requests which have not been accepted
     // by both parties - Louis
@@ -20,7 +20,7 @@ public class UserManager implements Serializable{
     // been exchanged but not returned -Louis
 
     public ArrayList<User> getListUsers() {
-        return this.listUsers;}
+        return UserManager.listUsers;}
 
     public ArrayList<Trade> getCompletedTrades() {
         return completedTrades;
@@ -141,15 +141,16 @@ public class UserManager implements Serializable{
 
     //TODO fix this method and other stats methods
     public ArrayList<Trade> RecentTransactions(User user){
-        ArrayList<Trade> recent = new ArrayList<Trade>();
-        if (user.favourites().size() > 3){
-            recent.add(transactions.get(transactions.size()-1)); // most recent
-            recent.add(transactions.get(transactions.size()-2)); // second most-recent
-            recent.add(transactions.get(transactions.size()-3)); // third most-recent
-            return recent;
-        }
-        else {return transactions;}
-    }
+        ArrayList<Trade> potentialRecent = new ArrayList<Trade>();
+        for (Trade trade: completedTrades) {
+            if (trade.getUsername1() == user.username & !trade.getItemIDsSentToUser1().isEmpty()) {
+                potentialRecent.add(trade);
+                }
+            else if (trade.getUsername2() == user.username & !trade.getItemIDsSentToUser2().isEmpty()) {
+                potentialRecent.add(trade);
+                }
+            }
+        } //there can be many items traded per single trade, how do we keep track of top three?
     // most recent 3 transactions, access transactions list and take last 3
     // code for case where User hasn't traded w 3 ppl yet -Mel
 
