@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class User {
@@ -25,7 +24,10 @@ public class User {
     public boolean permission = false; // false being frozen or Lent>Borrowed; true being no violations
 
     public ArrayList<Item> availableItems; // if this was protected then our presenters can't access it
+    public ArrayList<Item> borrowedItems; // items that the user is currently borrowing via TemporaryTrade - Louis
     public ArrayList<Item> wishlistItems; // presenter needs to access this as well
+
+
 
     public void setPassword(String password) { this.password = password; }// may want to extend a use case to change password if forgotten
     public String getPassword(String password) { return this.password;}
@@ -99,5 +101,33 @@ public class User {
     // top 3 trading partners, access orderedPartners LinkedHashMap and return first three username Strings.
     // this needs to be updated after every transaction.
 
+    //I added these getters and setters for use in UserManager - Louis
 
+    // Author: Louis Scheffer V
+    public Boolean getPermission(){
+        return permission;
+    }
+    // Author: Louis Scheffer V
+    public void setAvailableItems(ArrayList<Item> items){
+        availableItems = items;
+    }
+    // Author: Louis Scheffer V
+    public ArrayList<Item> getBorrowedItems() {
+        return borrowedItems;
+    }
+    //Author: Louis Scheffer V
+    public void addBorrowedItem(Item item){
+        borrowedItems.add(item);
+    }
+    //Author: Louis Scheffer V
+    public void removeBorrowedItem(Item item){
+        borrowedItems.remove(item);
+    }
+    // Author: Louis Scheffer V
+    public void addAvailableItem(Item item){
+        availableItems.remove(item);
+    }
+    public void removeAvailableItem(Item item){
+        availableItems.add(item);
+    }
 }

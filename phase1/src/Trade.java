@@ -26,11 +26,11 @@ public class Trade {
 
     protected String meetingPlace;
 
-    protected ArrayList<String> itemIDsSentToUser1;
-    protected ArrayList<String> itemIDsSentToUser2;
+    protected ArrayList<Integer> itemIDsSentToUser1;
+    protected ArrayList<Integer> itemIDsSentToUser2;
 
     public Trade(String username1, String username2,
-                 ArrayList<String> itemIDsSentToUser1, ArrayList<String> itemIDsSentToUser2){
+                 ArrayList<Integer> itemIDsSentToUser1, ArrayList<Integer> itemIDsSentToUser2){
         this.username1 = username1;
         this.username2 = username2;
         this.itemIDsSentToUser1 = itemIDsSentToUser1;
@@ -89,12 +89,12 @@ public class Trade {
         user2NumRequests+=1;
     }
 
-    public ArrayList<String> getItemIDsSentToUser1(){
-        return (ArrayList<String>)this.itemIDsSentToUser1.clone();
+    public ArrayList<Integer> getItemIDsSentToUser1(){
+        return (ArrayList<Integer>)this.itemIDsSentToUser1.clone();
     }
 
-    public ArrayList<String> getItemIDsSentToUser2(){
-        return (ArrayList<String>)this.itemIDsSentToUser2.clone();
+    public ArrayList<Integer> getItemIDsSentToUser2(){
+        return (ArrayList<Integer>)this.itemIDsSentToUser2.clone();
     }
 
     public LocalDateTime getTimeOfTrade(){
@@ -112,5 +112,21 @@ public class Trade {
         this.meetingPlace = meetingPlace;
     }
 
-
+    //I needed these four setters and getters for userManager
+    //Author: Louis Scheffer V
+    public void setUser1NumRequests(int user1NumRequests) {
+        this.user1NumRequests = user1NumRequests;
+    }
+    //Author: Louis Scheffer V
+    public void setUser2NumRequests(int user2NumRequests) {
+        this.user2NumRequests = user2NumRequests;
+    }
+    //Author: Louis Scheffer V
+    public int getUser1NumRequests() {
+        return user1NumRequests;
+    }
+    //Author: Louis Scheffer V
+    public int getUser2NumRequests() {
+        return user2NumRequests;
+    }
 }

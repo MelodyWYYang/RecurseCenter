@@ -7,26 +7,22 @@ public class Item implements Serializable {
 
     private String name;
     private String description;
-    private String id;
+    private final int id;
 
     private String ownerUserName;
     private String userThatHasPossession;
 
     protected ArrayList<String> tags;
 
-    public Item(String name, String description, String id, String owner){
+    public Item(String name, String description, int id){
         this.name = name;
         this.description = description;
         this.id = id;
-        ownerUserName = owner;
-        userThatHasPossession = owner;
     }
 
-    public Item(String name, String id, String owner){
+    public Item(String name, int id){
         this.name = name;
         this.id = id;
-        ownerUserName = owner;
-        userThatHasPossession = owner;
     }
 
     //setters
@@ -63,16 +59,8 @@ public class Item implements Serializable {
         return description;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
-    }
-
-    public String getOwnerUserName() {
-        return ownerUserName;
-    }
-
-    public String getUserThatHasPossession() {
-        return userThatHasPossession;
     }
 
     public ArrayList<String> getTags() {
