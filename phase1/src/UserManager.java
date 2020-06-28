@@ -49,34 +49,34 @@ public class UserManager implements Serializable{
         listUsers.add(newUser);
     }
 
+    //TODO: Make it so this method depends on item IDs (Integer) and not directly on items.
     /** Method which creates a trade request and adds it to the list of pending trade requests.
      * Author: Jinyu Liu
      * Slight rework by Louis Scheffer V 6/27/2020
      * @param user1 user1
      * @param user2 user2
-     * @param itemsSentToUser1 list of items which will be sent to user1
-     * @param itemsSentToUser2 list of items which will be sent to user2
+     * @param itemIDsSentToUser1 list of IDs of items which will be sent to user1
+     * @param itemIDsSentToUser2 list of IDs of items which will be sent to user2
      * @param timeOfTrade time & date of the trade
      * @param meetingPlace location of the trade
-     * @throws CannotBorrowException
      */
-    public void sendTradeRequest(User user1, User user2, //user1 is the one sending the request to user2
-                                 ArrayList<Item> itemsSentToUser1, ArrayList<Item> itemsSentToUser2,
-                                 LocalDateTime timeOfTrade, String meetingPlace) throws CannotBorrowException {
-        ArrayList<Integer> itemIDsSentToUser1 = new ArrayList<Integer>();
-        for (int i = 0; i < itemsSentToUser1.size(); i++){
-            itemIDsSentToUser1.add(itemsSentToUser1.get(i).getId());
-        }
-        ArrayList<Integer> itemIDsSentToUser2 = new ArrayList<Integer>();
-        for (int i = 0; i < itemsSentToUser1.size(); i++){
-            itemIDsSentToUser2.add(itemsSentToUser2.get(i).getId());
-        }
-        Trade trade = new Trade(user1.username, user2.username, itemIDsSentToUser1, itemIDsSentToUser2);
+    public void sendTradeRequest(User user1, User user2, //user1 is the one sending the request to user2.
+                                 ArrayList<Integer> itemIDsSentToUser1, ArrayList<Integer> itemIDsSentToUser2,
+                                 LocalDateTime timeOfTrade, String meetingPlace) {
+        int tradeCapacity = 1;
+
+        ArrayList<Integer> list1;
+        list1 = (ArrayList<Integer>)itemIDsSentToUser1.subList(0, tradeCapacity);
+        ArrayList<Integer> list2;
+        list2 = (ArrayList<Integer>)itemIDsSentToUser2.subList(0, tradeCapacity);
+
+        Trade trade = new Trade(user1.username, user2.username, list1, list2);
         pendingTradeRequests.add(trade);
         trade.setTimeOfTrade(timeOfTrade);
         trade.setMeetingPlace(meetingPlace);
         trade.user1TradeConfirmed = true;
     } //Does not remove item from user1 availableItems or user2 availableItems
+
 
     /** Method which allows a user to accept a trade request
      * Author: Jinyu Liu
@@ -142,17 +142,16 @@ public class UserManager implements Serializable{
      */
 
     //TODO fix this method and other stats methods
-    public ArrayList<Trade> RecentTransactions(User user){
+    public ArrayList<Trade> RecentTransactions(User user) {
         ArrayList<Trade> potentialRecent = new ArrayList<Trade>();
-        for (Trade trade: completedTrades) {
+        for (Trade trade : completedTrades) {
             if (trade.getUsername1() == user.username & !trade.getItemIDsSentToUser1().isEmpty()) {
                 potentialRecent.add(trade);
-                }
-            else if (trade.getUsername2() == user.username & !trade.getItemIDsSentToUser2().isEmpty()) {
+            } else if (trade.getUsername2() == user.username & !trade.getItemIDsSentToUser2().isEmpty()) {
                 potentialRecent.add(trade);
-                }
             }
-        } //there can be many items traded per single trade, how do we keep track of top three?
+        }
+    } //there can be many items traded per single trade, how do we keep track of top three?
     // most recent 3 transactions, access transactions list and take last 3
     // code for case where User hasn't traded w 3 ppl yet -Mel
 
@@ -215,7 +214,7 @@ public class UserManager implements Serializable{
      * @return Boolean
      */
     public Boolean beforeTrade(User u1, User u2){
-        return u1.checkPermission() && u2.checkPermission();
+        return !(u1.getFrozen() || u1.getFrozen());
     }
     /** FYI: variable has been changed to use method checkPermission.
      * Author: Melody Yang
@@ -233,11 +232,14 @@ public class UserManager implements Serializable{
         pendingTrades.remove(trade);
         if (trade instanceof TemporaryTrade){
             currentTemporaryTrades.add((TemporaryTrade) trade);
+            //TODO: if the borrowing user now has more borrows than loans + threshold, send
+            // a freeze request to the adminUser (through the dispatching function).
+            //TODO: if you're
+
         }
         else{
             completedTrades.add(trade);
         }
-
     }
 
     /** Method which exchanges the items in the trade system after a trade has been marked as completed
@@ -253,6 +255,7 @@ public class UserManager implements Serializable{
             user1.increaseStat("borrowed", 1);
             user2.increaseStat("lent", 1);
             user2.removeItemFromList(item, user2.availableItems);
+            if (trade instanceof TemporaryTrade){
                 user1.addItemToList(item, user1.borrowedItems);
             }
             else {
@@ -264,7 +267,7 @@ public class UserManager implements Serializable{
             //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
             user2.increaseStat("borrowed", 1);
             user1.increaseStat("lent", 1);
-            user1.removeAvailableItem(item);
+            user1.removeItemFromList(item, user1.availableItems);
             if (trade instanceof TemporaryTrade){
                 user2.addItemToList(item, user2.borrowedItems);
             }

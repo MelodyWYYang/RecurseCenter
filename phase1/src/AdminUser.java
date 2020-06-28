@@ -67,14 +67,14 @@ public class AdminUser {
     public void dequeueAndFreeze() {
         User user = UserManager.searchUser(accountsToFreezeQueue.get(0));
         if (user != null) {
-            user.permission = false;    // freeze User only when it is found
+            user.setFrozen(false);    // freeze User only when it is found
         }
         accountsToFreezeQueue.remove(0);
     }
 
     public void moveToUnfreeze(ArrayList<String> unfreezeRequestList) {
         String user = unfreezeRequestList.get(0);
-        if (user.checkPermission()) {
+        if (!user.gblahblahblah im done with this{
             accountsToUnfreezeQueue.add(user);
             unfreezeRequestList.remove(0);
         }

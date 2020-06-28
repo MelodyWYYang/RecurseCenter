@@ -8,7 +8,6 @@ public class User {
     public User(String username) {
         stats.put("Lent", 0); // # lent items since creation
         stats.put("Borrowed", 0); // # borrowed items since creation
-        stats.put("weeklyT", 0); //// # completed transactions in this week; AdminUser can access;
         // Use Cases need to increase after each 1-way or 2-way trade; and reset each week
         stats.put("incompleteT", 0); // # incomplete transactions since creation
         this.username = username; // Admin needs to access to freeze; USerManager needs to access/search by User
@@ -21,7 +20,7 @@ public class User {
     protected HashMap<String, Integer> partners = new HashMap<String, Integer>(); // list of all Users this User has traded with since creation
     protected LinkedHashMap<String, Integer> orderedPartners = new LinkedHashMap<String, Integer>();
 
-    public boolean permission = false; // false being frozen or Lent>Borrowed; true being no violations
+    public boolean frozen = false; // false being frozen or Lent>Borrowed; true being no violations
 
     public ArrayList<Item> availableItems; // if this was protected then our presenters can't access it
     public ArrayList<Item> borrowedItems; // items that the user is currently borrowing via TemporaryTrade - Louis
@@ -66,11 +65,7 @@ public class User {
                 stats.put("Lent", (old + num));
                 break;
             }
-            case "weeklyt": {
-                int old = stats.get("weeklyT");
-                stats.put("weeklyT", (old + num));
-                break;
-            }
+
             case "incompletet": {
                 int old = stats.get("incompleteT");
                 stats.put("incompleteT", (old + num));
@@ -81,12 +76,15 @@ public class User {
         }
     }
 
-    public boolean checkPermission(){ // wondering how to implement freeze function with this; or should this only be a ThresholdChecker?
+    public boolean getFrozen(){ // wondering how to implement freeze function with this; or should this only be a ThresholdChecker?
         // no code to automatically freeze because design says admin needs to do this
-        permission = stats.get("incompleteT") < AdminUser.incompleteThreshold && stats.get("Lent") >
-                stats.get("Borrowed") + Trade.numLendsForBorrowThreshold;
-        return permission;
+        return frozen;
     }
+
+    public void setFrozen(boolean frozen){
+    this.frozen = frozen;
+    }
+
 
     public void requestUnfreeze(User user){ // user can request to unfreeze account whether it should be unfrozen or not
 
