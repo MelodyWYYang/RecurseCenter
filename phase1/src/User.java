@@ -125,9 +125,9 @@ public class User {
     }
     // Author: Louis Scheffer V
     public void addAvailableItem(Item item){
-        availableItems.remove(item);
+        availableItems.add(item);
     }
     public void removeAvailableItem(Item item){
-        availableItems.add(item);
+        availableItems.remove(item);
     }
 }

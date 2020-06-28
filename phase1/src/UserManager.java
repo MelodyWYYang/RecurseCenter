@@ -34,6 +34,8 @@ public class UserManager implements Serializable{
         return pendingTradeRequests;
     }
 
+    public static ArrayList<ItemValidationRequest> itemValidationRequestQueue;
+
     /** Method which creates a user and adds it to the list of users
      * Author: Jinyu Liu
      * @param username username of user
@@ -118,7 +120,8 @@ public class UserManager implements Serializable{
      * @param owner username of the user who will own the item
      */
     public void sendValidationRequest(String name, String description, String owner) {
-        AdminUser.itemValidationQueue.add(new ItemValidationRequest(owner, name, description));
+        // reworked by Tingyu since the itemValidationRequestQueue has been moved to UserManager
+        itemValidationRequestQueue.add(new ItemValidationRequest(owner, name, description));
     }
 
     /** 2-arg method which creates and instantiates an ItemvalidationRequest.
@@ -127,7 +130,7 @@ public class UserManager implements Serializable{
      * @param owner username of the user who will own the item
      */
     public void sendValidationRequest(String name, String owner) {
-        AdminUser.itemValidationQueue.add(new ItemValidationRequest(name, owner));
+        itemValidationRequestQueue.add(new ItemValidationRequest(name, owner));
     }
 
     /* No longer neccessary - Louis
@@ -161,7 +164,7 @@ public class UserManager implements Serializable{
      * @param username username of the user
      * @return user object
      */
-    public User searchUser(String username){
+    public static User searchUser(String username){
         for(User user: listUsers){
             if (user.username.equals(username)){
                 return user;
