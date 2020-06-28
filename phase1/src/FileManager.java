@@ -8,7 +8,7 @@ public class FileManager {
 
     public static void saveUserToFile(User usr) {
         try {
-            FileOutputStream file = new FileOutputStream("/files/" + usr.username + ".ser");
+            FileOutputStream file = new FileOutputStream("/serFiles/" + usr.username + ".ser");
             ObjectOutputStream out = new ObjectOutputStream(file);
             out.writeObject(usr);
             out.close();
@@ -17,5 +17,23 @@ public class FileManager {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static User loadUserFromFile(String fileName) {
+        //need to decide if fileName should be whole path, just the file, or just the name without .ser;
+        //is currently the whole path
+        User usr;
+        try {
+            FileInputStream file = new FileInputStream(fileName);
+            ObjectInputStream in = new ObjectInputStream(file);
+            usr = (User) in.readObject();
+            in.close();
+            file.close();
+        }
+        catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return usr;
     }
 }
