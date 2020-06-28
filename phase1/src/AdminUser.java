@@ -8,7 +8,7 @@ public class AdminUser {
     private String password;
     public static int incompleteThreshold; // # of incomplete trades allowed
 
-    public static ArrayList<ItemValidationRequest> itemValidationQueue;
+    // public static ArrayList<ItemValidationRequest> itemValidationQueue;
     public static ArrayList<String> accountsToFreezeQueue;
     public static ArrayList<String> unfreezeRequestList; // list of accounts that have requested to be unfrozen
     public static ArrayList<String> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
@@ -16,7 +16,7 @@ public class AdminUser {
     public AdminUser(String username, String password) {
         this.username = username;
         this.password = password;
-        itemValidationQueue = new ArrayList<ItemValidationRequest>();
+        // itemValidationQueue = new ArrayList<ItemValidationRequest>();
         accountsToFreezeQueue = new ArrayList<String>();
         unfreezeRequestList = new ArrayList<String>();
         accountsToUnfreezeQueue = new ArrayList<String>();
@@ -39,11 +39,19 @@ public class AdminUser {
     }
 
     public void pollValidationRequest(boolean accepted) {
-        ItemValidationRequest request = itemValidationQueue.get(0);
+        ItemValidationRequest request = UserManager.itemValidationRequestQueue.get(0);
         if (accepted) {
-            request.getOwner().availableItems.add(request.getObj());
+            User user = UserManager.searchUser(request.usernameOfOwner);
+            Item item = new Item(request.name, request.itemID);
+            item.setOwner(request.usernameOfOwner);
+            item.setUserThatHasPossession(request.usernameOfOwner);
+            item.setDescription(request.description);
+            if (user != null) {
+                user.addAvailableItem(item);    // add item only when User is found
+            }
+            // request.getOwner().availableItems.add(request.getObj());
         }
-        AdminUser.itemValidationQueue.remove(0);
+        UserManager.itemValidationRequestQueue.remove(0);
     }
 
 
