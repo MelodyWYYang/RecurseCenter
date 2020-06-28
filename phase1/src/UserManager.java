@@ -1,7 +1,6 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 public class UserManager implements Serializable{
     //author: Jinyu Liu, Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
@@ -9,7 +8,7 @@ public class UserManager implements Serializable{
 
     protected ArrayList<Trade> completedTrades; // list of all trades which have been completed - Louis
 
-    protected ArrayList<User> listUsers; // List of all users
+    protected ArrayList<User> listUsers; // List of all users - Jinyu
 
     protected ArrayList<Trade> pendingTradeRequests; // list of all trade requests which have not been accepted
     // by both parties - Louis
@@ -37,8 +36,8 @@ public class UserManager implements Serializable{
 
     /** Method which creates a user and adds it to the list of users
      * Author: Jinyu Liu
-     * @param username
-     * @param password
+     * @param username username of user
+     * @param password password of user
      */
     public void createUser(String username, String password) {
         User newUser = new User(username);
@@ -100,12 +99,12 @@ public class UserManager implements Serializable{
     public void editTradeRequest(Trade trade, LocalDateTime timeOfTrade, String meetingPlace, User userEditing) {
         trade.timeOfTrade = timeOfTrade;
         trade.meetingPlace = meetingPlace;
-        if (userEditing.equals(trade.getUsername1())) {
+        if (userEditing.username.equals(trade.getUsername1())) {
             trade.user1AcceptedRequest = true;
             trade.user2AcceptedRequest = false;
             trade.incrementUser1NumRequests();
         }
-        else if (userEditing.equals(trade.getUsername2())) {
+        else if (userEditing.username.equals(trade.getUsername2())) {
             trade.user2AcceptedRequest = true;
             trade.user1AcceptedRequest = false;
             trade.incrementUser2NumRequests();
@@ -113,7 +112,7 @@ public class UserManager implements Serializable{
     }
 
     /** 3-arg method which creates and instantiates an ItemvalidationRequest.
-     *
+     * Author: Jinyu Liu
      * @param name name of the item
      * @param description description of the item
      * @param owner username of the user who will own the item
@@ -122,7 +121,7 @@ public class UserManager implements Serializable{
         AdminUser.itemValidationQueue.add(new ItemValidationRequest(owner, name, description));
     }
 
-    /** 3-arg method which creates and instantiates an ItemvalidationRequest.
+    /** 2-arg method which creates and instantiates an ItemvalidationRequest.
      * Author: Jinyu Liu
      * @param name name of the item
      * @param owner username of the user who will own the item
@@ -130,6 +129,7 @@ public class UserManager implements Serializable{
     public void sendValidationRequest(String name, String owner) {
         AdminUser.itemValidationQueue.add(new ItemValidationRequest(name, owner));
     }
+
     /* No longer neccessary - Louis
     public void AddTransaction(Trade trade){
         transactions.add(trade);
@@ -137,13 +137,13 @@ public class UserManager implements Serializable{
      */
 
     //TODO fix this method and other stats methods
-    public ArrayList<Trade> RecentTransactions(){
-        ArrayList<Trade> recents = new ArrayList<Trade>();
-        if (transactions.size() > 3){
-            recents.add(transactions.get(transactions.size()-1)); // most recent
-            recents.add(transactions.get(transactions.size()-2)); // second most-recent
-            recents.add(transactions.get(transactions.size()-3)); // third most-recent
-            return recents;
+    public ArrayList<Trade> RecentTransactions(User user){
+        ArrayList<Trade> recent = new ArrayList<Trade>();
+        if (user.favourites().size() > 3){
+            recent.add(transactions.get(transactions.size()-1)); // most recent
+            recent.add(transactions.get(transactions.size()-2)); // second most-recent
+            recent.add(transactions.get(transactions.size()-3)); // third most-recent
+            return recent;
         }
         else {return transactions;}
     }
