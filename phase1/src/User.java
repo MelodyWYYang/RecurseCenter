@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class User {
+public class User implements Serializable {
     //author: Melody Yang in group 0110 for CSC207H1 summer 2020 project
     // Sorting method orderPartners() is taken from https://howtodoinjava.com/sort/java-sort-map-by-values/
 
@@ -26,7 +27,7 @@ public class User {
     public ArrayList<Item> borrowedItems; // items that the user is currently borrowing via TemporaryTrade - Louis
     public ArrayList<Item> wishlistItems; // presenter needs to access this as well
 
-
+    public ArrayList<String> alertQueue;
 
     public void setPassword(String password) { this.password = password; }// may want to extend a use case to change password if forgotten
     public String getPassword(String password) { return this.password;}
@@ -113,6 +114,7 @@ public class User {
             top3.add(i, orderedPartners.get(i)); }
         return top3;
     }
+}
     // top 3 trading partners, access orderedPartners LinkedHashMap and return first three username Strings.
     // this needs to be updated after every transaction.
 

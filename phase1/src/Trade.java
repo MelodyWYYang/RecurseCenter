@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Trade {
+public class Trade implements Serializable {
     //author: Murray Smith in group 0110 for CSC207H1 summer 2020 project
 
     protected String username1;

@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 
-public class TemporaryTrade extends Trade{
+public class TemporaryTrade extends Trade implements Serializable {
 
     private LocalDateTime tradeUntil;
 

@@ -277,6 +277,30 @@ public class UserManager implements Serializable{
 
         }
     }
+    /**
+     * Check to see if any TemporaryTrades have expired and if so, add an alert to the User's alertQueue.
+     * Author: Murray Smith
+     */
+    public void checkForExpiredTempTrades(){
+        for (TemporaryTrade tempTrade : currentTemporaryTrades) {
+            if (LocalDateTime.now().isAfter(tempTrade.getDueDate())) {
+                User borrowingUser;
+                String otherUserName;
+                if (tempTrade.itemIDsSentToUser1.size() == 0){
+                    borrowingUser = searchUser(tempTrade.getUsername2());
+                    otherUserName = tempTrade.getUsername1();
+                } else {
+                    borrowingUser = searchUser(tempTrade.getUsername1());
+                    otherUserName = tempTrade.getUsername2();
+                }
+                borrowingUser.alertQueue.add("Your items to " + otherUserName + " are due back, request to meet them?");
+                //TODO: In the presenter layer, add an input to the user after this line is printed to prompt for "yes"
+                // or "no" to the above question, the input should call another method to create this returnRequest.
+                
+            }
+        }
+    }
+
 
     /** Method which returns items to their owners after the expiration of a temporary trade
      * Author: Louis Scheffer V
