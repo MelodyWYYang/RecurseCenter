@@ -1,12 +1,12 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.HashMap;
 
 public class AdminUser implements Serializable {
     //author: Tingyu Liang, Riya Razdan in group 0110 for CSC207H1 summer 2020 project
 
-    private String username;
-    private String password;
+    private HashMap<String, String> loginInfo = new HashMap<String, String>();
     public static int incompleteThreshold; // # of incomplete trades allowed
     public static int completeThreshold; // # of complete trades allowed per week
 
@@ -16,20 +16,15 @@ public class AdminUser implements Serializable {
     public static ArrayList<String> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
 
     public AdminUser(String username, String password) {
-        this.username = username;
-        this.password = password;
+        this.loginInfo.put(username, password);
         // itemValidationQueue = new ArrayList<ItemValidationRequest>();
         accountsToFreezeQueue = new ArrayList<String>();
         unfreezeRequestList = new ArrayList<String>();
         accountsToUnfreezeQueue = new ArrayList<String>();
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void addLogin(String username, String password){
+        this.loginInfo.put(username, password);
     }
 
     public static void setIncompleteThreshold(int incompleteThreshold) {
@@ -40,12 +35,8 @@ public class AdminUser implements Serializable {
         AdminUser.completeThreshold = completeThreshold;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
+    public HashMap<String, String> getLogInInfo(){
+        return this.loginInfo;
     }
 
     public void pollValidationRequest(boolean accepted) {
