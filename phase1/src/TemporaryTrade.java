@@ -8,14 +8,14 @@ public class TemporaryTrade extends Trade{
     //Two constructors, one that takes a date for the object to be returned and annother that sets it by
     //default to thirty days after the present.
 
-    public TemporaryTrade(String username1, String username2, ArrayList<String> itemIDsSentToUser1,
-                          ArrayList<String> itemIDsSentToUser2, LocalDateTime tradeUntil) {
+    public TemporaryTrade(String username1, String username2, ArrayList<Integer> itemIDsSentToUser1,
+                          ArrayList<Integer> itemIDsSentToUser2, LocalDateTime tradeUntil) {
         super(username1, username2, itemIDsSentToUser1, itemIDsSentToUser2);
         this.tradeUntil = tradeUntil;
     }
 
-    public TemporaryTrade(String username1, String username2, ArrayList<String> itemIDsSentToUser1,
-                          ArrayList<String> itemIDsSentToUser2){
+    public TemporaryTrade(String username1, String username2, ArrayList<Integer> itemIDsSentToUser1,
+                          ArrayList<Integer> itemIDsSentToUser2){
         super(username1, username2, itemIDsSentToUser1, itemIDsSentToUser2);
         LocalDateTime now = LocalDateTime.now();
         this.tradeUntil = now.plusDays(30);

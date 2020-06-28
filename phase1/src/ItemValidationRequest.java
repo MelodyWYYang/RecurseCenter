@@ -5,7 +5,7 @@ public class ItemValidationRequest implements Serializable{
     protected String usernameOfOwner;
     protected String name;
     protected String description;
-    protected int itemID;
+    protected final int itemID;
     private static int idGenerator = 0;
 
     public ItemValidationRequest(String owner, String obj, String desc){
