@@ -7,6 +7,7 @@ public class AdminUser {
     private String username;
     private String password;
     public static int incompleteThreshold; // # of incomplete trades allowed
+    public static int completeThreshold; // # of complete trades allowed per week
 
     // public static ArrayList<ItemValidationRequest> itemValidationQueue;
     public static ArrayList<String> accountsToFreezeQueue;
@@ -28,6 +29,14 @@ public class AdminUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public static void setIncompleteThreshold(int incompleteThreshold) {
+        AdminUser.incompleteThreshold = incompleteThreshold;
+    }
+
+    public static void setCompleteThreshold(int completeThreshold) {
+        AdminUser.completeThreshold = completeThreshold;
     }
 
     public String getUsername() {
@@ -55,10 +64,11 @@ public class AdminUser {
     }
 
 
-    public void dequeueAndFreeze(ArrayList<String> accountsToFreezeQueue) {
-        String user = accountsToFreezeQueue.get(0);
-        // requires implementation of the User class
-        user.checkPermission() = false;
+    public void dequeueAndFreeze() {
+        User user = UserManager.searchUser(accountsToFreezeQueue.get(0));
+        if (user != null) {
+            user.permission = false;    // freeze User only when it is found
+        }
         accountsToFreezeQueue.remove(0);
     }
 
