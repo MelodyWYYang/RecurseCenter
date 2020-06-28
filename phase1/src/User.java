@@ -35,7 +35,20 @@ public class User {
     //for adding and removing from wishlist and available-to-lend lists, and getters for this User's lists
     public ArrayList<Item> getAvailableItems() {return this.availableItems;}
     public ArrayList<Item> getWishlistItems() {return this.wishlistItems;}
-    public void addItemToList(Item a, ArrayList<Item> list) {list.add(a);}
+
+    /**Method to add an item to one of the AvailableItems, WishlistItems, or borrowedItems lists,
+     * and remove it from the other 2 lists.
+     * @param a </Item>
+     * Author: Melody Yang
+     */
+    public void addItemToList(Item a, ArrayList<Item> list) {
+        list.add(a);
+    }
+
+    private void searchAndRemoveItem(Item item){
+
+    }
+
     public void removeItemFromList(Item a, ArrayList<Item> list) {list.remove(a);}
 
     //for changing #items Borrowed and Lent by this User
@@ -105,33 +118,5 @@ public class User {
     // top 3 trading partners, access orderedPartners LinkedHashMap and return first three username Strings.
     // this needs to be updated after every transaction.
 
-    //I added these getters and setters for use in UserManager - Louis
-
-    // Author: Louis Scheffer V
-    public Boolean getPermission(){
-        return permission;
-    }
-    // Author: Louis Scheffer V
-    public void setAvailableItems(ArrayList<Item> items){
-        availableItems = items;
-    }
-    // Author: Louis Scheffer V
-    public ArrayList<Item> getBorrowedItems() {
-        return borrowedItems;
-    }
-    //Author: Louis Scheffer V
-    public void addBorrowedItem(Item item){
-        borrowedItems.add(item);
-    }
-    //Author: Louis Scheffer V
-    public void removeBorrowedItem(Item item){
-        borrowedItems.remove(item);
-    }
-    // Author: Louis Scheffer V
-    public void addAvailableItem(Item item){
-        availableItems.add(item);
-    }
-    public void removeAvailableItem(Item item){
-        availableItems.remove(item);
-    }
-}
+    //I added these getters and setters for use in UserManager - Louis --> these were already made under different names,
+    // I've modified your UserManager code so they work for you. :) - Melody

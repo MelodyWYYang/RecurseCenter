@@ -6,6 +6,8 @@ public class UserManager implements Serializable{
     //author: Jinyu Liu, Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
     //All methods written by Jinyu Liu except where noted
 
+    protected ArrayList<Trade> transactions; // list of all transactions this User has completed since creation - Mel
+
     protected ArrayList<Trade> completedTrades; // list of all trades which have been completed - Louis
 
     protected ArrayList<User> listUsers; // List of all users - Jinyu
@@ -212,8 +214,11 @@ public class UserManager implements Serializable{
      * @return Boolean
      */
     public Boolean beforeTrade(User u1, User u2){
-        return u1.getPermission() && u2.getPermission();
+        return u1.checkPermission() && u2.checkPermission();
     }
+    /** FYI: variable has been changed to use method checkPermission.
+     * Author: Melody Yang
+     */
 
     /** Method which executes all item swaps and checks all pending trades and pending trade requests after a trade has
      * been completed. Trade is moved to completed trades if it is a
@@ -246,12 +251,11 @@ public class UserManager implements Serializable{
             //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
             user1.increaseStat("borrowed", 1);
             user2.increaseStat("lent", 1);
-            user2.removeAvailableItem(item);
-            if (trade instanceof TemporaryTrade){
-                user1.addBorrowedItem(item);
+            user2.removeItemFromList(item, user2.availableItems);
+                user1.addItemToList(item, user1.borrowedItems);
             }
             else {
-                user1.addAvailableItem(item);
+                user1.addItemToList(item, user1.availableItems);
             }
         }
         for(int itemID : trade.getItemIDsSentToUser2()){
@@ -261,10 +265,10 @@ public class UserManager implements Serializable{
             user1.increaseStat("lent", 1);
             user1.removeAvailableItem(item);
             if (trade instanceof TemporaryTrade){
-                user2.addBorrowedItem(item);
+                user2.addItemToList(item, user2.borrowedItems);
             }
             else{
-                user2.addAvailableItem(item);
+                user2.addItemToList(item, user2.availableItems);
             }
 
         }
@@ -281,13 +285,13 @@ public class UserManager implements Serializable{
             User user2 = searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()) {
                 Item item = searchItem(user2, itemID);
-                user1.removeBorrowedItem(item);
-                user2.addAvailableItem(item);
+                user1.removeItemFromList(item, user1.borrowedItems);
+                user2.addItemToList(item, user2.availableItems);
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
                 Item item = searchItem(user1, itemID);
-                user2.removeBorrowedItem(item);
-                user2.addAvailableItem(item);
+                user2.removeItemFromList(item, user2.borrowedItems);
+                user2.addItemToList(item, user2.availableItems);
             }
         }
     }

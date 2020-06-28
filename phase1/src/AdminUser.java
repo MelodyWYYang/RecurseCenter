@@ -56,7 +56,7 @@ public class AdminUser {
             item.setUserThatHasPossession(request.usernameOfOwner);
             item.setDescription(request.description);
             if (user != null) {
-                user.addAvailableItem(item);    // add item only when User is found
+                user.addItemToList(item, user.availableItems);    // add item only when User is found
             }
             // request.getOwner().availableItems.add(request.getObj());
         }
