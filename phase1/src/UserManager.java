@@ -142,18 +142,68 @@ public class UserManager implements Serializable{
      */
 
     //TODO fix this method and other stats methods
-    public ArrayList<Trade> RecentTransactions(User user) {
-        ArrayList<Trade> potentialRecent = new ArrayList<Trade>();
+    public ArrayList<Item> RecentTransactions(User user) {
+        ArrayList<Trade> potentialRecentCompleted = new ArrayList<Trade>();
+        ArrayList<TemporaryTrade> potentialRecentIncompleted = new ArrayList<TemporaryTrade>();
+        ArrayList<Item> recents = new ArrayList<Item>();
         for (Trade trade : completedTrades) {
-            if (trade.getUsername1() == user.username & !trade.getItemIDsSentToUser1().isEmpty()) {
-                potentialRecent.add(trade);
-            } else if (trade.getUsername2() == user.username & !trade.getItemIDsSentToUser2().isEmpty()) {
-                potentialRecent.add(trade);
+            if (trade.getUsername1().equals(user.username) & !trade.getItemIDsSentToUser2().isEmpty()) {
+                potentialRecentCompleted.add(trade);
+            } else if (trade.getUsername2().equals(user.username) & !trade.getItemIDsSentToUser1().isEmpty()) {
+                potentialRecentCompleted.add(trade);
             }
         }
+        for (TemporaryTrade tTrade: currentTemporaryTrades) {
+            if (tTrade.getUsername1().equals(user.username) & !tTrade.getItemIDsSentToUser2().isEmpty()) {
+                potentialRecentIncompleted.add(tTrade);
+            } else if (tTrade.getUsername2().equals(user.username) & !tTrade.getItemIDsSentToUser1().isEmpty()) {
+                potentialRecentIncompleted.add(tTrade);
+            }
+        }
+        while (recents.size() < 3 & (!potentialRecentCompleted.isEmpty() | !potentialRecentIncompleted.isEmpty())) {
+            Trade mostRecentComp = potentialRecentCompleted.get(potentialRecentCompleted.size() - 1);
+            Trade mostRecentIncomp = potentialRecentIncompleted.get(potentialRecentIncompleted.size() - 1);
+            if (mostRecentComp.getTimeOfTrade().isAfter(mostRecentIncomp.getTimeOfTrade())) {
+                if (mostRecentComp.getUsername1().equals(user.username)) {
+                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
+                } else if (mostRecentComp.getUsername2().equals(user.username)) {
+                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
+                }
+            } else if (mostRecentIncomp.getTimeOfTrade().isAfter(mostRecentComp.getTimeOfTrade())) {
+                if (mostRecentComp.getUsername1().equals(user.username)) {
+                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
+                } else if (mostRecentComp.getUsername2().equals(user.username)) {
+                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
+                }
+            }
+        }
+        return recents;
     } //there can be many items traded per single trade, how do we keep track of top three?
     // most recent 3 transactions, access transactions list and take last 3
     // code for case where User hasn't traded w 3 ppl yet -Mel
+    // I realize this code does not cover cases where incomp/comp lists are empty or become empty. I'm fixing that right
+    // now in another test file - Jinyu
+    public int getNumTradesThisWeek(User user) {
+        int numTransactions = 0;
+        LocalDateTime timeNow = LocalDateTime.now(); //gets the current time
+        LocalDateTime timeNowBeginning = timeNow.withHour(0).withMinute(0).withSecond(0).withNano(0); //set time 00:00
+        LocalDateTime startOfWeek = timeNowBeginning.minusDays(timeNowBeginning.getDayOfWeek().getValue()); //get Sunday
+        for (Trade trade : completedTrades) {
+            if (trade.getUsername1().equals(user.username) & trade.getTimeOfTrade().isAfter(startOfWeek)) {
+                numTransactions++;
+            } else if (trade.getUsername2().equals(user.username) & trade.getTimeOfTrade().isAfter(startOfWeek)) {
+                numTransactions++;
+            }
+        }
+        for (TemporaryTrade tTrade: currentTemporaryTrades) {
+            if (tTrade.getUsername1().equals(user.username) & tTrade.getTimeOfTrade().isAfter(startOfWeek)) {
+                numTransactions++;
+            } else if (tTrade.getUsername2().equals(user.username) & tTrade.getTimeOfTrade().isAfter(startOfWeek)) {
+                numTransactions++;
+            }
+        }
+        return numTransactions;
+    }
 
     /* i don't think this is neccessary anymore - Louis
     public Trade dequeueTradeRequest(){
