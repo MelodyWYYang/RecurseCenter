@@ -2,6 +2,7 @@ public class TradeRequestAlert {
     protected String userName;
 
     public TradeRequestAlert(String userName){
+        super();
         this.userName = userName;
     }
 

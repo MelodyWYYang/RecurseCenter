@@ -7,6 +7,7 @@ public class FrozenAlert extends Alert {
     protected int threshholdNumofUser;
 
     public FrozenAlert(LocalDateTime timeOfFreeze, int numBorrowed, int numLent, int threshholdNum){
+        super();
         this.timeOfFreeze = timeOfFreeze;
         numBorrowedofUser = numBorrowed;
         numLentofUser = numLent;

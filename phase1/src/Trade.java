@@ -1,3 +1,4 @@
+import javax.print.DocFlavor;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -130,4 +131,5 @@ public class Trade implements Serializable {
     public int getUser2NumRequests() {
         return user2NumRequests;
     }
+
 }

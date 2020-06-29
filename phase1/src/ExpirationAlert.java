@@ -5,6 +5,7 @@ public class ExpirationAlert extends Alert{
     protected int tradeID;
 
     public ExpirationAlert(LocalDateTime dueDate, int tradeId){
+        super();
         this.dueDate = dueDate;
         this.tradeID = tradeId;
     }

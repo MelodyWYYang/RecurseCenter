@@ -3,6 +3,7 @@ public class MessageAlert extends Alert{
     protected String senderUsername;
 
     public MessageAlert(String message, String senderUsername){
+        super();
         this.message = message;
         this.senderUsername = senderUsername;
     }
@@ -13,6 +14,7 @@ public class MessageAlert extends Alert{
     public String getMessage() {
         return message;
     }
+    @Override
     public String toString(){
         return "From: " + senderUsername + "/n" + message;
     }
