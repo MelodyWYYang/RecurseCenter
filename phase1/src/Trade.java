@@ -5,6 +5,9 @@ import java.util.ArrayList;
 public class Trade implements Serializable {
     //author: Murray Smith in group 0110 for CSC207H1 summer 2020 project
 
+    protected int tradeID;
+    private static int ID_generator = 1;
+
     protected String username1;
     protected String username2;
 
@@ -36,6 +39,7 @@ public class Trade implements Serializable {
         this.username2 = username2;
         this.itemIDsSentToUser1 = itemIDsSentToUser1;
         this.itemIDsSentToUser2 = itemIDsSentToUser2;
+        this.tradeID = ID_generator++;
     }
 
     /**
