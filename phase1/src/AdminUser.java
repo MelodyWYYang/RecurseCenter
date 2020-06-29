@@ -1,6 +1,5 @@
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.HashMap;
 
 public class AdminUser implements Serializable {
@@ -64,19 +63,32 @@ public class AdminUser implements Serializable {
         accountsToFreezeQueue.remove(0);
     }
 
+    // The function below made by Tingyu, contact me if this is unnecessary or wrong
+    public void pollUnfreezeRequest(boolean accepted) {
+        String username = unfreezeRequestList.get(0);
+        if (accepted) {
+            User user = UserManager.searchUser(username);
+            if (user != null) {
+                user.setFrozen(true);
+            }
+        }
+        unfreezeRequestList.remove(0);
+    }
+
     public void moveToUnfreeze(ArrayList<String> unfreezeRequestList) {
-        String user = unfreezeRequestList.get(0);
-        if (!user.gblahblahblah im done with this{
-            accountsToUnfreezeQueue.add(user);
+        String username = unfreezeRequestList.get(0);
+        if (username != null) {
+            accountsToUnfreezeQueue.add(username);
             unfreezeRequestList.remove(0);
         }
     }
 
     public void dequeueAndUnfreeze(ArrayList<String> accountsToUnfreezeQueue){
-        String user = accountsToUnfreezeQueue.get(0);
-        user.checkPermission() = true;
+        User user = UserManager.searchUser(accountsToUnfreezeQueue.get(0));
+        if (user != null) {
+            user.setFrozen(true);
+        }
         accountsToUnfreezeQueue.remove(0);
-
     }
 
     public void changeThresholdForUser(int newThreshold) {
