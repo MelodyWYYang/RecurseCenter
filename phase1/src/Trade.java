@@ -134,4 +134,6 @@ public class Trade implements Serializable {
     public int getUser2NumRequests() {
         return user2NumRequests;
     }
+
+    public int getTradeID(){return tradeID;}
 }
