@@ -1,11 +1,11 @@
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.HashMap;
 
-public class AdminUser {
+public class AdminUser implements Serializable {
     //author: Tingyu Liang, Riya Razdan in group 0110 for CSC207H1 summer 2020 project
 
-    private String username;
-    private String password;
+    private HashMap<String, String> loginInfo = new HashMap<String, String>();
     public static int incompleteThreshold; // # of incomplete trades allowed
     public static int completeThreshold; // # of complete trades allowed per week
 
@@ -15,20 +15,15 @@ public class AdminUser {
     public static ArrayList<String> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
 
     public AdminUser(String username, String password) {
-        this.username = username;
-        this.password = password;
+        this.loginInfo.put(username, password);
         // itemValidationQueue = new ArrayList<ItemValidationRequest>();
         accountsToFreezeQueue = new ArrayList<String>();
         unfreezeRequestList = new ArrayList<String>();
         accountsToUnfreezeQueue = new ArrayList<String>();
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void addLogin(String username, String password){
+        this.loginInfo.put(username, password);
     }
 
     public static void setIncompleteThreshold(int incompleteThreshold) {
@@ -39,12 +34,8 @@ public class AdminUser {
         AdminUser.completeThreshold = completeThreshold;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
+    public HashMap<String, String> getLogInInfo(){
+        return this.loginInfo;
     }
 
     public void pollValidationRequest(boolean accepted) {
@@ -56,7 +47,7 @@ public class AdminUser {
             item.setUserThatHasPossession(request.usernameOfOwner);
             item.setDescription(request.description);
             if (user != null) {
-                user.addAvailableItem(item);    // add item only when User is found
+                user.addItemToList(item, user.availableItems);    // add item only when User is found
             }
             // request.getOwner().availableItems.add(request.getObj());
         }
@@ -67,24 +58,37 @@ public class AdminUser {
     public void dequeueAndFreeze() {
         User user = UserManager.searchUser(accountsToFreezeQueue.get(0));
         if (user != null) {
-            user.permission = false;    // freeze User only when it is found
+            user.setFrozen(false);    // freeze User only when it is found
         }
         accountsToFreezeQueue.remove(0);
     }
 
+    // The function below made by Tingyu, contact me if this is unnecessary or wrong
+    public void pollUnfreezeRequest(boolean accepted) {
+        String username = unfreezeRequestList.get(0);
+        if (accepted) {
+            User user = UserManager.searchUser(username);
+            if (user != null) {
+                user.setFrozen(true);
+            }
+        }
+        unfreezeRequestList.remove(0);
+    }
+
     public void moveToUnfreeze(ArrayList<String> unfreezeRequestList) {
-        String user = unfreezeRequestList.get(0);
-        if (user.checkPermission()) {
-            accountsToUnfreezeQueue.add(user);
+        String username = unfreezeRequestList.get(0);
+        if (username != null) {
+            accountsToUnfreezeQueue.add(username);
             unfreezeRequestList.remove(0);
         }
     }
 
     public void dequeueAndUnfreeze(ArrayList<String> accountsToUnfreezeQueue){
-        String user = accountsToUnfreezeQueue.get(0);
-        user.checkPermission() = true;
+        User user = UserManager.searchUser(accountsToUnfreezeQueue.get(0));
+        if (user != null) {
+            user.setFrozen(true);
+        }
         accountsToUnfreezeQueue.remove(0);
-
     }
 
     public void changeThresholdForUser(int newThreshold) {

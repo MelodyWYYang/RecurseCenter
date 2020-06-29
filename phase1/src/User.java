@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class User {
+public class User implements Serializable {
     //author: Melody Yang in group 0110 for CSC207H1 summer 2020 project
     // Sorting method orderPartners() is taken from https://howtodoinjava.com/sort/java-sort-map-by-values/
 
@@ -8,7 +9,6 @@ public class User {
     public User(String username) {
         stats.put("Lent", 0); // # lent items since creation
         stats.put("Borrowed", 0); // # borrowed items since creation
-        stats.put("weeklyT", 0); //// # completed transactions in this week; AdminUser can access;
         // Use Cases need to increase after each 1-way or 2-way trade; and reset each week
         stats.put("incompleteT", 0); // # incomplete transactions since creation
         this.username = username; // Admin needs to access to freeze; USerManager needs to access/search by User
@@ -21,13 +21,13 @@ public class User {
     protected HashMap<String, Integer> partners = new HashMap<String, Integer>(); // list of all Users this User has traded with since creation
     protected LinkedHashMap<String, Integer> orderedPartners = new LinkedHashMap<String, Integer>();
 
-    public boolean permission = false; // false being frozen or Lent>Borrowed; true being no violations
+    public boolean frozen = false; // false being frozen or Lent>Borrowed; true being no violations
 
     public ArrayList<Item> availableItems; // if this was protected then our presenters can't access it
     public ArrayList<Item> borrowedItems; // items that the user is currently borrowing via TemporaryTrade - Louis
     public ArrayList<Item> wishlistItems; // presenter needs to access this as well
 
-
+    public ArrayList<String> alertQueue;
 
     public void setPassword(String password) { this.password = password; }// may want to extend a use case to change password if forgotten
     public String getPassword(String password) { return this.password;}
@@ -35,7 +35,20 @@ public class User {
     //for adding and removing from wishlist and available-to-lend lists, and getters for this User's lists
     public ArrayList<Item> getAvailableItems() {return this.availableItems;}
     public ArrayList<Item> getWishlistItems() {return this.wishlistItems;}
-    public void addItemToList(Item a, ArrayList<Item> list) {list.add(a);}
+
+    /**Method to add an item to one of the AvailableItems, WishlistItems, or borrowedItems lists,
+     * and remove it from the other 2 lists.
+     * @param a </Item>
+     * Author: Melody Yang
+     */
+    public void addItemToList(Item a, ArrayList<Item> list) {
+        list.add(a);
+    }
+
+    private void searchAndRemoveItem(Item item){
+
+    }
+
     public void removeItemFromList(Item a, ArrayList<Item> list) {list.remove(a);}
 
     //for changing #items Borrowed and Lent by this User
@@ -53,11 +66,7 @@ public class User {
                 stats.put("Lent", (old + num));
                 break;
             }
-            case "weeklyt": {
-                int old = stats.get("weeklyT");
-                stats.put("weeklyT", (old + num));
-                break;
-            }
+
             case "incompletet": {
                 int old = stats.get("incompleteT");
                 stats.put("incompleteT", (old + num));
@@ -68,11 +77,18 @@ public class User {
         }
     }
 
-    public boolean checkPermission(){ // wondering how to implement freeze function with this; or should this only be a ThresholdChecker?
+    public boolean getFrozen(){ // wondering how to implement freeze function with this; or should this only be a ThresholdChecker?
         // no code to automatically freeze because design says admin needs to do this
-        permission = stats.get("incompleteT") < AdminUser.incompleteThreshold && stats.get("Lent") >
-                stats.get("Borrowed") + Trade.numLendsForBorrowThreshold;
-        return permission;
+        return frozen;
+    }
+
+    public void setFrozen(boolean frozen){
+    this.frozen = frozen;
+    }
+
+
+    public void requestUnfreeze(User user){ // user can request to unfreeze account whether it should be unfrozen or not
+
     }
 
     public void addPartner(String username2){
@@ -98,36 +114,9 @@ public class User {
             top3.add(i, orderedPartners.get(i)); }
         return top3;
     }
+}
     // top 3 trading partners, access orderedPartners LinkedHashMap and return first three username Strings.
     // this needs to be updated after every transaction.
 
-    //I added these getters and setters for use in UserManager - Louis
-
-    // Author: Louis Scheffer V
-    public Boolean getPermission(){
-        return permission;
-    }
-    // Author: Louis Scheffer V
-    public void setAvailableItems(ArrayList<Item> items){
-        availableItems = items;
-    }
-    // Author: Louis Scheffer V
-    public ArrayList<Item> getBorrowedItems() {
-        return borrowedItems;
-    }
-    //Author: Louis Scheffer V
-    public void addBorrowedItem(Item item){
-        borrowedItems.add(item);
-    }
-    //Author: Louis Scheffer V
-    public void removeBorrowedItem(Item item){
-        borrowedItems.remove(item);
-    }
-    // Author: Louis Scheffer V
-    public void addAvailableItem(Item item){
-        availableItems.add(item);
-    }
-    public void removeAvailableItem(Item item){
-        availableItems.remove(item);
-    }
-}
+    //I added these getters and setters for use in UserManager - Louis --> these were already made under different names,
+    // I've modified your UserManager code so they work for you. :) - Melody

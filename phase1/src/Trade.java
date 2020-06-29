@@ -1,8 +1,12 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Trade {
+public class Trade implements Serializable {
     //author: Murray Smith in group 0110 for CSC207H1 summer 2020 project
+
+    protected int tradeID;
+    private static int ID_generator = 1;
 
     protected String username1;
     protected String username2;
@@ -35,6 +39,7 @@ public class Trade {
         this.username2 = username2;
         this.itemIDsSentToUser1 = itemIDsSentToUser1;
         this.itemIDsSentToUser2 = itemIDsSentToUser2;
+        this.tradeID = ID_generator++;
     }
 
     /**
@@ -129,4 +134,6 @@ public class Trade {
     public int getUser2NumRequests() {
         return user2NumRequests;
     }
+
+    public int getTradeID(){return tradeID;}
 }

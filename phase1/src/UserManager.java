@@ -6,9 +6,11 @@ public class UserManager implements Serializable{
     //author: Jinyu Liu, Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
     //All methods written by Jinyu Liu except where noted
 
+    protected ArrayList<Trade> transactions; // list of all transactions this User has completed since creation - Mel
+
     protected ArrayList<Trade> completedTrades; // list of all trades which have been completed - Louis
 
-    protected ArrayList<User> listUsers; // List of all users - Jinyu
+    protected static ArrayList<User> listUsers; // List of all users - Jinyu
 
     protected ArrayList<Trade> pendingTradeRequests; // list of all trade requests which have not been accepted
     // by both parties - Louis
@@ -20,7 +22,7 @@ public class UserManager implements Serializable{
     // been exchanged but not returned -Louis
 
     public ArrayList<User> getListUsers() {
-        return this.listUsers;}
+        return UserManager.listUsers;}
 
     public ArrayList<Trade> getCompletedTrades() {
         return completedTrades;
@@ -47,34 +49,34 @@ public class UserManager implements Serializable{
         listUsers.add(newUser);
     }
 
+    //TODO: Make it so this method depends on item IDs (Integer) and not directly on items.
     /** Method which creates a trade request and adds it to the list of pending trade requests.
      * Author: Jinyu Liu
      * Slight rework by Louis Scheffer V 6/27/2020
      * @param user1 user1
      * @param user2 user2
-     * @param itemsSentToUser1 list of items which will be sent to user1
-     * @param itemsSentToUser2 list of items which will be sent to user2
+     * @param itemIDsSentToUser1 list of IDs of items which will be sent to user1
+     * @param itemIDsSentToUser2 list of IDs of items which will be sent to user2
      * @param timeOfTrade time & date of the trade
      * @param meetingPlace location of the trade
-     * @throws CannotBorrowException
      */
-    public void sendTradeRequest(User user1, User user2, //user1 is the one sending the request to user2
-                                 ArrayList<Item> itemsSentToUser1, ArrayList<Item> itemsSentToUser2,
-                                 LocalDateTime timeOfTrade, String meetingPlace) throws CannotBorrowException {
-        ArrayList<Integer> itemIDsSentToUser1 = new ArrayList<Integer>();
-        for (int i = 0; i < itemsSentToUser1.size(); i++){
-            itemIDsSentToUser1.add(itemsSentToUser1.get(i).getId());
-        }
-        ArrayList<Integer> itemIDsSentToUser2 = new ArrayList<Integer>();
-        for (int i = 0; i < itemsSentToUser1.size(); i++){
-            itemIDsSentToUser2.add(itemsSentToUser2.get(i).getId());
-        }
-        Trade trade = new Trade(user1.username, user2.username, itemIDsSentToUser1, itemIDsSentToUser2);
+    public void sendTradeRequest(User user1, User user2, //user1 is the one sending the request to user2.
+                                 ArrayList<Integer> itemIDsSentToUser1, ArrayList<Integer> itemIDsSentToUser2,
+                                 LocalDateTime timeOfTrade, String meetingPlace) {
+        int tradeCapacity = 1;
+
+        ArrayList<Integer> list1;
+        list1 = (ArrayList<Integer>)itemIDsSentToUser1.subList(0, tradeCapacity);
+        ArrayList<Integer> list2;
+        list2 = (ArrayList<Integer>)itemIDsSentToUser2.subList(0, tradeCapacity);
+
+        Trade trade = new Trade(user1.username, user2.username, list1, list2);
         pendingTradeRequests.add(trade);
         trade.setTimeOfTrade(timeOfTrade);
         trade.setMeetingPlace(meetingPlace);
         trade.user1TradeConfirmed = true;
     } //Does not remove item from user1 availableItems or user2 availableItems
+
 
     /** Method which allows a user to accept a trade request
      * Author: Jinyu Liu
@@ -140,16 +142,16 @@ public class UserManager implements Serializable{
      */
 
     //TODO fix this method and other stats methods
-    public ArrayList<Trade> RecentTransactions(User user){
-        ArrayList<Trade> recent = new ArrayList<Trade>();
-        if (user.favourites().size() > 3){
-            recent.add(transactions.get(transactions.size()-1)); // most recent
-            recent.add(transactions.get(transactions.size()-2)); // second most-recent
-            recent.add(transactions.get(transactions.size()-3)); // third most-recent
-            return recent;
+    public ArrayList<Trade> RecentTransactions(User user) {
+        ArrayList<Trade> potentialRecent = new ArrayList<Trade>();
+        for (Trade trade : completedTrades) {
+            if (trade.getUsername1() == user.username & !trade.getItemIDsSentToUser1().isEmpty()) {
+                potentialRecent.add(trade);
+            } else if (trade.getUsername2() == user.username & !trade.getItemIDsSentToUser2().isEmpty()) {
+                potentialRecent.add(trade);
+            }
         }
-        else {return transactions;}
-    }
+    } //there can be many items traded per single trade, how do we keep track of top three?
     // most recent 3 transactions, access transactions list and take last 3
     // code for case where User hasn't traded w 3 ppl yet -Mel
 
@@ -212,8 +214,11 @@ public class UserManager implements Serializable{
      * @return Boolean
      */
     public Boolean beforeTrade(User u1, User u2){
-        return u1.getPermission() && u2.getPermission();
+        return !(u1.getFrozen() || u1.getFrozen());
     }
+    /** FYI: variable has been changed to use method checkPermission.
+     * Author: Melody Yang
+     */
 
     /** Method which executes all item swaps and checks all pending trades and pending trade requests after a trade has
      * been completed. Trade is moved to completed trades if it is a
@@ -227,11 +232,14 @@ public class UserManager implements Serializable{
         pendingTrades.remove(trade);
         if (trade instanceof TemporaryTrade){
             currentTemporaryTrades.add((TemporaryTrade) trade);
+            //TODO: if the borrowing user now has more borrows than loans + threshold, send
+            // a freeze request to the adminUser (through the dispatching function).
+            //TODO: if you're
+
         }
         else{
             completedTrades.add(trade);
         }
-
     }
 
     /** Method which exchanges the items in the trade system after a trade has been marked as completed
@@ -246,12 +254,12 @@ public class UserManager implements Serializable{
             //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
             user1.increaseStat("borrowed", 1);
             user2.increaseStat("lent", 1);
-            user2.removeAvailableItem(item);
+            user2.removeItemFromList(item, user2.availableItems);
             if (trade instanceof TemporaryTrade){
-                user1.addBorrowedItem(item);
+                user1.addItemToList(item, user1.borrowedItems);
             }
             else {
-                user1.addAvailableItem(item);
+                user1.addItemToList(item, user1.availableItems);
             }
         }
         for(int itemID : trade.getItemIDsSentToUser2()){
@@ -259,16 +267,40 @@ public class UserManager implements Serializable{
             //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
             user2.increaseStat("borrowed", 1);
             user1.increaseStat("lent", 1);
-            user1.removeAvailableItem(item);
+            user1.removeItemFromList(item, user1.availableItems);
             if (trade instanceof TemporaryTrade){
-                user2.addBorrowedItem(item);
+                user2.addItemToList(item, user2.borrowedItems);
             }
             else{
-                user2.addAvailableItem(item);
+                user2.addItemToList(item, user2.availableItems);
             }
 
         }
     }
+    /**
+     * Check to see if any TemporaryTrades have expired and if so, add an alert to the User's alertQueue.
+     * Author: Murray Smith
+     */
+    public void checkForExpiredTempTrades(){
+        for (TemporaryTrade tempTrade : currentTemporaryTrades) {
+            if (LocalDateTime.now().isAfter(tempTrade.getDueDate())) {
+                User borrowingUser;
+                String otherUserName;
+                if (tempTrade.itemIDsSentToUser1.size() == 0){
+                    borrowingUser = searchUser(tempTrade.getUsername2());
+                    otherUserName = tempTrade.getUsername1();
+                } else {
+                    borrowingUser = searchUser(tempTrade.getUsername1());
+                    otherUserName = tempTrade.getUsername2();
+                }
+                borrowingUser.alertQueue.add("Your items to " + otherUserName + " are due back, request to meet them?");
+                //TODO: In the presenter layer, add an input to the user after this line is printed to prompt for "yes"
+                // or "no" to the above question, the input should call another method to create this returnRequest.
+                
+            }
+        }
+    }
+
 
     /** Method which returns items to their owners after the expiration of a temporary trade
      * Author: Louis Scheffer V
@@ -281,13 +313,13 @@ public class UserManager implements Serializable{
             User user2 = searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()) {
                 Item item = searchItem(user2, itemID);
-                user1.removeBorrowedItem(item);
-                user2.addAvailableItem(item);
+                user1.removeItemFromList(item, user1.borrowedItems);
+                user2.addItemToList(item, user2.availableItems);
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
                 Item item = searchItem(user1, itemID);
-                user2.removeBorrowedItem(item);
-                user2.addAvailableItem(item);
+                user2.removeItemFromList(item, user2.borrowedItems);
+                user2.addItemToList(item, user2.availableItems);
             }
         }
     }

@@ -25,6 +25,15 @@ public class Item implements Serializable {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "Item{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", id=" + id +
+                '}';
+    }
+
     //setters
 
     public void setOwner(String owner) { ownerUserName = owner; }
