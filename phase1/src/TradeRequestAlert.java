@@ -1,13 +1,15 @@
 public class TradeRequestAlert {
     protected String userName;
+    protected String tradeString;
 
-    public TradeRequestAlert(String userName){
+    public TradeRequestAlert(String userName, String tradeString){
         super();
         this.userName = userName;
+        this.tradeString = tradeString;
     }
 
     @Override
     public String toString() {
-        return userName + " has made a trade request with you/edited an existing trade";
+        return userName + " has proposed the following trade: /n" + tradeString;
     }
 }
