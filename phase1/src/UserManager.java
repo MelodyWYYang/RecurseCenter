@@ -333,20 +333,15 @@ public class UserManager implements Serializable{
     /**
      * Check to see if any TemporaryTrades have expired and if so, add an alert to the User's alertQueue.
      * Author: Murray Smith
+     * Rework by Louis Scheffer V 6/30/20 // modifications made to work with the alert system.
      */
     public void checkForExpiredTempTrades(){
         for (TemporaryTrade tempTrade : currentTemporaryTrades) {
             if (LocalDateTime.now().isAfter(tempTrade.getDueDate())) {
-                User borrowingUser;
-                String otherUserName;
-                if (tempTrade.itemIDsSentToUser1.size() == 0){
-                    borrowingUser = searchUser(tempTrade.getUsername2());
-                    otherUserName = tempTrade.getUsername1();
-                } else {
-                    borrowingUser = searchUser(tempTrade.getUsername1());
-                    otherUserName = tempTrade.getUsername2();
-                }
-                borrowingUser.alertQueue.add("Your items to " + otherUserName + " are due back, request to meet them?");
+                String tradeString = tradeToString(tempTrade);
+                Alert alert = new ExpirationAlert(tempTrade.getDueDate(), tradeString);
+                alertUser(tempTrade.getUsername1(), alert);
+                alertUser(tempTrade.getUsername2(), alert);
                 //TODO: In the presenter layer, add an input to the user after this line is printed to prompt for "yes"
                 // or "no" to the above question, the input should call another method to create this returnRequest.
                 
@@ -354,6 +349,24 @@ public class UserManager implements Serializable{
         }
     }
 
+    /** Method which allows a user to confirm the re-exchange of items has occured in the real world. If the other
+     * user has already confirmed, then the reExchangeItems method will be called to reExahange the items within the
+     * trade system.
+     * Author: Louis Scheffer V
+     * @param user user who is confirming the re-exchange of items.
+     * @param temporaryTrade the temporary trade object.
+     */
+    public void confirmReExchange(User user, TemporaryTrade temporaryTrade){
+        if(user.getUsername().equals(temporaryTrade.getUsername1())){
+            temporaryTrade.setUser1ItemReturnRequestAccepted(true);
+        }
+        else if (user.getUsername().equals(temporaryTrade.getUsername2())){
+            temporaryTrade.setUser2ItemReturnRequestAccepted(true);
+        }
+        if (temporaryTrade.getUser1ItemReturnRequestAccepted() && temporaryTrade.getUser2ItemReturnRequestAccepted()){
+            reExchangeItems(temporaryTrade);
+        }
+    }
 
     /** Method which returns items to their owners after the expiration of a temporary trade
      * Author: Louis Scheffer V
