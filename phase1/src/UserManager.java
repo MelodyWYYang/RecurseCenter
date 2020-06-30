@@ -1,6 +1,7 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class UserManager implements Serializable{
     //author: Jinyu Liu, Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
@@ -20,6 +21,8 @@ public class UserManager implements Serializable{
 
     protected ArrayList<TemporaryTrade> currentTemporaryTrades; //list of all temporary trades where items have
     // been exchanged but not returned -Louis
+
+    protected HashMap<String, ArrayList<Alert>> alertSystem;
 
     public ArrayList<User> getListUsers() {
         return UserManager.listUsers;}
@@ -142,18 +145,68 @@ public class UserManager implements Serializable{
      */
 
     //TODO fix this method and other stats methods
-    public ArrayList<Trade> RecentTransactions(User user) {
-        ArrayList<Trade> potentialRecent = new ArrayList<Trade>();
+    public ArrayList<Item> RecentTransactions(User user) {
+        ArrayList<Trade> potentialRecentCompleted = new ArrayList<Trade>();
+        ArrayList<TemporaryTrade> potentialRecentIncompleted = new ArrayList<TemporaryTrade>();
+        ArrayList<Item> recents = new ArrayList<Item>();
         for (Trade trade : completedTrades) {
-            if (trade.getUsername1() == user.username & !trade.getItemIDsSentToUser1().isEmpty()) {
-                potentialRecent.add(trade);
-            } else if (trade.getUsername2() == user.username & !trade.getItemIDsSentToUser2().isEmpty()) {
-                potentialRecent.add(trade);
+            if (trade.getUsername1().equals(user.username) & !trade.getItemIDsSentToUser2().isEmpty()) {
+                potentialRecentCompleted.add(trade);
+            } else if (trade.getUsername2().equals(user.username) & !trade.getItemIDsSentToUser1().isEmpty()) {
+                potentialRecentCompleted.add(trade);
             }
         }
+        for (TemporaryTrade tTrade: currentTemporaryTrades) {
+            if (tTrade.getUsername1().equals(user.username) & !tTrade.getItemIDsSentToUser2().isEmpty()) {
+                potentialRecentIncompleted.add(tTrade);
+            } else if (tTrade.getUsername2().equals(user.username) & !tTrade.getItemIDsSentToUser1().isEmpty()) {
+                potentialRecentIncompleted.add(tTrade);
+            }
+        }
+        while (recents.size() < 3 & (!potentialRecentCompleted.isEmpty() | !potentialRecentIncompleted.isEmpty())) {
+            Trade mostRecentComp = potentialRecentCompleted.get(potentialRecentCompleted.size() - 1);
+            Trade mostRecentIncomp = potentialRecentIncompleted.get(potentialRecentIncompleted.size() - 1);
+            if (mostRecentComp.getTimeOfTrade().isAfter(mostRecentIncomp.getTimeOfTrade())) {
+                if (mostRecentComp.getUsername1().equals(user.username)) {
+                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
+                } else if (mostRecentComp.getUsername2().equals(user.username)) {
+                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
+                }
+            } else if (mostRecentIncomp.getTimeOfTrade().isAfter(mostRecentComp.getTimeOfTrade())) {
+                if (mostRecentComp.getUsername1().equals(user.username)) {
+                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
+                } else if (mostRecentComp.getUsername2().equals(user.username)) {
+                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
+                }
+            }
+        }
+        return recents;
     } //there can be many items traded per single trade, how do we keep track of top three?
     // most recent 3 transactions, access transactions list and take last 3
     // code for case where User hasn't traded w 3 ppl yet -Mel
+    // I realize this code does not cover cases where incomp/comp lists are empty or become empty. I'm fixing that right
+    // now in another test file - Jinyu
+    public int getNumTradesThisWeek(User user) {
+        int numTransactions = 0;
+        LocalDateTime timeNow = LocalDateTime.now(); //gets the current time
+        LocalDateTime timeNowBeginning = timeNow.withHour(0).withMinute(0).withSecond(0).withNano(0); //set time 00:00
+        LocalDateTime startOfWeek = timeNowBeginning.minusDays(timeNowBeginning.getDayOfWeek().getValue()); //get Sunday
+        for (Trade trade : completedTrades) {
+            if (trade.getUsername1().equals(user.username) & trade.getTimeOfTrade().isAfter(startOfWeek)) {
+                numTransactions++;
+            } else if (trade.getUsername2().equals(user.username) & trade.getTimeOfTrade().isAfter(startOfWeek)) {
+                numTransactions++;
+            }
+        }
+        for (TemporaryTrade tTrade: currentTemporaryTrades) {
+            if (tTrade.getUsername1().equals(user.username) & tTrade.getTimeOfTrade().isAfter(startOfWeek)) {
+                numTransactions++;
+            } else if (tTrade.getUsername2().equals(user.username) & tTrade.getTimeOfTrade().isAfter(startOfWeek)) {
+                numTransactions++;
+            }
+        }
+        return numTransactions;
+    }
 
     /* i don't think this is neccessary anymore - Louis
     public Trade dequeueTradeRequest(){
@@ -280,20 +333,15 @@ public class UserManager implements Serializable{
     /**
      * Check to see if any TemporaryTrades have expired and if so, add an alert to the User's alertQueue.
      * Author: Murray Smith
+     * Rework by Louis Scheffer V 6/30/20 // modifications made to work with the alert system.
      */
     public void checkForExpiredTempTrades(){
         for (TemporaryTrade tempTrade : currentTemporaryTrades) {
             if (LocalDateTime.now().isAfter(tempTrade.getDueDate())) {
-                User borrowingUser;
-                String otherUserName;
-                if (tempTrade.itemIDsSentToUser1.size() == 0){
-                    borrowingUser = searchUser(tempTrade.getUsername2());
-                    otherUserName = tempTrade.getUsername1();
-                } else {
-                    borrowingUser = searchUser(tempTrade.getUsername1());
-                    otherUserName = tempTrade.getUsername2();
-                }
-                borrowingUser.alertQueue.add("Your items to " + otherUserName + " are due back, request to meet them?");
+                String tradeString = tradeToString(tempTrade);
+                Alert alert = new ExpirationAlert(tempTrade.getDueDate(), tradeString);
+                alertUser(tempTrade.getUsername1(), alert);
+                alertUser(tempTrade.getUsername2(), alert);
                 //TODO: In the presenter layer, add an input to the user after this line is printed to prompt for "yes"
                 // or "no" to the above question, the input should call another method to create this returnRequest.
                 
@@ -301,14 +349,30 @@ public class UserManager implements Serializable{
         }
     }
 
+    /** Method which allows a user to confirm the re-exchange of items has occured in the real world. If the other
+     * user has already confirmed, then the reExchangeItems method will be called to reExahange the items within the
+     * trade system.
+     * Author: Louis Scheffer V
+     * @param user user who is confirming the re-exchange of items.
+     * @param temporaryTrade the temporary trade object.
+     */
+    public void confirmReExchange(User user, TemporaryTrade temporaryTrade){
+        if(user.getUsername().equals(temporaryTrade.getUsername1())){
+            temporaryTrade.setUser1ItemReturnRequestAccepted(true);
+        }
+        else if (user.getUsername().equals(temporaryTrade.getUsername2())){
+            temporaryTrade.setUser2ItemReturnRequestAccepted(true);
+        }
+        if (temporaryTrade.getUser1ItemReturnRequestAccepted() && temporaryTrade.getUser2ItemReturnRequestAccepted()){
+            reExchangeItems(temporaryTrade);
+        }
+    }
 
     /** Method which returns items to their owners after the expiration of a temporary trade
      * Author: Louis Scheffer V
-     * Design decision is neccessary: should items automatically return to their owner at the expiry of the trade?
-     * @param trade
+     * @param trade Temporary Trade Object
      */
     public void reExchangeItems(TemporaryTrade trade){
-        if(LocalDateTime.now().isAfter(trade.getDueDate())){
             User user1 = searchUser(trade.getUsername1());
             User user2 = searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()) {
@@ -321,7 +385,6 @@ public class UserManager implements Serializable{
                 user2.removeItemFromList(item, user2.borrowedItems);
                 user2.addItemToList(item, user2.availableItems);
             }
-        }
     }
 
     /** Method which checks all pending trades to see if the items are still available.If they are not then the trade
@@ -336,14 +399,20 @@ public class UserManager implements Serializable{
                 Item item = searchItem(user2, itemID);
                 if (item == null){
                     pendingTrades.remove(trade);
-                    //in the future we might message the users involved here - Louis
+                    String tradeString = tradeToString(trade);
+                    Alert alert = new TradeCancelledAlert(tradeString);
+                    alertUser(user1, alert);
+                    alertUser(user2, alert);
                 }
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
                 Item item = searchItem(user1, itemID);
                 if (item == null) {
                     pendingTrades.remove(trade);
-                    //in the future we might message the users involved here - Louis
+                    String tradeString = tradeToString(trade);
+                    Alert alert = new TradeCancelledAlert(tradeString);
+                    alertUser(user1, alert);
+                    alertUser(user2, alert);
                 }
             }
         }
@@ -360,16 +429,87 @@ public class UserManager implements Serializable{
                 Item item = searchItem(user2, itemID);
                 if (item == null){
                     pendingTradeRequests.remove(trade);
-                    //in the future we might message the users involved here - Louis
+                    String tradeString = tradeToString(trade);
+                    Alert alert = new TradeRequestCancelledAlert(tradeString);
+                    alertUser(user1, alert);
+                    alertUser(user2, alert);
                 }
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
                 Item item = searchItem(user1, itemID);
                 if (item == null) {
                     pendingTradeRequests.remove(trade);
-                    //in the future we might message the users involved here - Louis
+                    String tradeString = tradeToString(trade);
+                    Alert alert = new TradeRequestCancelledAlert(tradeString);
+                    alertUser(user1, alert);
+                    alertUser(user2, alert);
                 }
             }
         }
+    }
+
+    /**
+     *
+     * @param trade a trade object
+     * @return a string which describes the two users involved in the trade and the Time & date of the trade.
+     */
+    public String tradeToString(Trade trade){
+        return "User 1: " + trade.getUsername1() + "/nUser 2: " + trade.getUsername2() +
+                "/nItems being traded from user 1 to user 2: " + GetItemNamesFromUser1ToUser2(trade) +
+                "/nItems being traded from user 2 to user 1: " + GetItemNamesFromUser1ToUser2(trade) +
+                "/n Time & Date of item exchange: " + trade.getTimeOfTrade().toString() +
+                "/n Location of Trade: " + trade.getMeetingPlace();
+    }
+    // helper method which lists the names of the items going from user 1 to user 2 - Louis
+    private String GetItemNamesFromUser1ToUser2(Trade trade){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int itemID: trade.getItemIDsSentToUser2()){
+            Item item = searchItem(searchUser(trade.getUsername1()), itemID);
+            stringBuilder.append(item.getName()).append(" ");
+            return stringBuilder.toString();
+        }
+        return null;
+    }
+    // helper method which lists the names of the items going from user 2 to user 1 - Louis
+    private String GetItemNamesFromUser2ToUser1(Trade trade){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int itemID: trade.getItemIDsSentToUser1()){
+            Item item = searchItem(searchUser(trade.getUsername2()), itemID);
+            stringBuilder.append(item.getName()).append(" ");
+            return stringBuilder.toString();
+        }
+        return null;
+    }
+
+    /** Overloaded method to send an alert to a user. This one uses a user object.
+     * Author: Louis Scheffer V
+     * @param user object of the user who will be receiving the alert
+     * @param alert alert object to send to the user
+     */
+    public void alertUser(User user, Alert alert){
+        String username = user.getUsername();
+        alertUser(username, alert);
+    }
+
+    /** Overloaded method to send an alert to a user. This one uses a username.
+     * Author: Louis Scheffer V
+     * @param username username of the user receiving the alert
+     * @param alert alert object to send to the user
+     */
+    public void alertUser(String username, Alert alert){
+        ArrayList<Alert> alerts = alertSystem.get(username);
+        alerts.add(alert);
+        alertSystem.put(username, alerts);
+    }
+
+    /** Method which allows a user to send a message to another user, using the alert system.
+     * Author: Louis Scheffer V
+     * @param sender user object who is sending the message.
+     * @param recipient user object who is receiving the message.
+     * @param message message text.
+     */
+    public void sendMessageToUser(User sender, User recipient, String message){
+        Alert alert = new MessageAlert(sender.getUsername(), message);
+        alertUser(recipient, alert);
     }
 }

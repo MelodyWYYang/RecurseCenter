@@ -81,6 +81,10 @@ public class User implements Serializable {
         // no code to automatically freeze because design says admin needs to do this
         return frozen;
     }
+    //I needed this for UserManager - Louis
+    public String getUsername() {
+        return username;
+    }
 
     public void setFrozen(boolean frozen){
     this.frozen = frozen;
