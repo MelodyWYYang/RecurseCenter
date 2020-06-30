@@ -30,6 +30,10 @@ public class FrozenAlert extends Alert {
         return threshholdNumofUser;
     }
 
+    /**
+     *
+     * @return the final text of the alert.
+     */
     @Override
     public String toString() {
         return "Your account has been frozen by administrator at " + timeOfFreeze.toString() +

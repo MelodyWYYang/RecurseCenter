@@ -6,6 +6,18 @@ public class TradeCancelledAlert extends Alert {
         this.tradeString = tradeString;
     }
 
+    /**
+     *
+     * @return String which details information about the trade.
+     */
+    public String getTradeString() {
+        return tradeString;
+    }
+
+    /**
+     *
+     * @return the final text of the alert.
+     */
     @Override
     public String toString() {
         return " The following pending trade has been cancelled as one of the users is no longer in possession of " +

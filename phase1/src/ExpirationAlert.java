@@ -18,6 +18,10 @@ public class ExpirationAlert extends Alert{
         return tradeString;
     }
 
+    /**
+     *
+     * @return the final text of the alert.
+     */
     @Override
     public String toString() {
         return "The following TemporaryTrade has expired at" + dueDate + "/n" + tradeString;
