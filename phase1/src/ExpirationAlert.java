@@ -1,7 +1,7 @@
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class ExpirationAlert extends Alert implements Serializable {
+public class ExpirationAlert extends UserAlert implements Serializable {
     protected LocalDateTime dueDate;
     protected String tradeString;
 

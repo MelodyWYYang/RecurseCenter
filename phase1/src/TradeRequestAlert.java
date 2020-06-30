@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class TradeRequestAlert extends Alert implements Serializable {
+public class TradeRequestAlert extends UserAlert implements Serializable {
     protected String userName;
     protected String tradeString;
 

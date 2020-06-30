@@ -2,7 +2,7 @@ import java.awt.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class FrozenAlert extends Alert implements Serializable {
+public class FrozenAlert extends UserAlert implements Serializable {
     protected LocalDateTime timeOfFreeze;
     protected int numBorrowedofUser;
     protected int numLentofUser;
