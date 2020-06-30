@@ -9,12 +9,34 @@ public class FileManager {
     //used https://stackoverflow.com/questions/4917326/how-to-iterate-over-the-files-of-a-certain-directory-in-java
     //as a reference for iterating over files in loadAllUsers
 
+    /**
+     * Saves a user object to a .ser file
+     * @param usr user which is being saved to a file
+     */
     public static void saveUserToFile(User usr) {
         //serializes the given user's information in a .ser file with the title of their username
         try {
-            FileOutputStream file = new FileOutputStream("/serFiles/" + usr.username + ".ser");
+            FileOutputStream file = new FileOutputStream("/data/users/" + usr.username + ".ser");
             ObjectOutputStream out = new ObjectOutputStream(file);
             out.writeObject(usr);
+            out.close();
+            file.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Saves an admin object to a .ser file
+     * @param admin admin which is being saved to a file
+     */
+    public static void saveAdminToFile(AdminUser admin) {
+        //serializes the given user's information in a .ser file with the title of their username
+        try {
+            FileOutputStream file = new FileOutputStream("/data/admins/" + admin.getLogInInfo().get(username) + ".ser");
+            ObjectOutputStream out = new ObjectOutputStream(file);
+            out.writeObject(admin);
             out.close();
             file.close();
         }
