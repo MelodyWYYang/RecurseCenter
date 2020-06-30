@@ -1,12 +1,15 @@
+import java.awt.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class FrozenAlert extends Alert {
+public class FrozenAlert extends Alert implements Serializable {
     protected LocalDateTime timeOfFreeze;
     protected int numBorrowedofUser;
     protected int numLentofUser;
     protected int threshholdNumofUser;
 
     public FrozenAlert(LocalDateTime timeOfFreeze, int numBorrowed, int numLent, int threshholdNum){
+        super();
         this.timeOfFreeze = timeOfFreeze;
         numBorrowedofUser = numBorrowed;
         numLentofUser = numLent;
@@ -29,6 +32,10 @@ public class FrozenAlert extends Alert {
         return threshholdNumofUser;
     }
 
+    /**
+     *
+     * @return the final text of the alert.
+     */
     @Override
     public String toString() {
         return "Your account has been frozen by administrator at " + timeOfFreeze.toString() +

@@ -22,18 +22,34 @@ public class ItemValidationRequest implements Serializable{
         idGenerator++;
     }
 
+    /**
+     *
+     * @return the name or title of the item.
+     */
     public String getObj() {
         return name;
     }
 
+    /**
+     *
+     * @return the username of the user who is submitting the item validation request.
+     */
     public String getOwner() {
         return usernameOfOwner;
     }
 
+    /**
+     *
+     * @return the description of the item.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     *
+     * @param description description of the item.
+     */
     public void setDescription(String description) {
         this.description = description;
     }

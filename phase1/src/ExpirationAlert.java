@@ -1,24 +1,30 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class ExpirationAlert extends Alert{
+public class ExpirationAlert extends Alert implements Serializable {
     protected LocalDateTime dueDate;
-    protected int tradeID;
+    protected String tradeString;
 
-    public ExpirationAlert(LocalDateTime dueDate, int tradeId){
+    public ExpirationAlert(LocalDateTime dueDate, String tradeString){
+        super();
         this.dueDate = dueDate;
-        this.tradeID = tradeId;
+        this.tradeString = tradeString;
     }
 
     public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public int getTradeID() {
-        return tradeID;
+    public String getTradeString() {
+        return tradeString;
     }
 
+    /**
+     *
+     * @return the final text of the alert.
+     */
     @Override
     public String toString() {
-        return "This TemporaryTrade (" + tradeID + ") has expired at" + dueDate;
+        return "The following TemporaryTrade has expired at" + dueDate + "/n" + tradeString;
     }
 }

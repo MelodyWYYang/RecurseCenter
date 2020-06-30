@@ -81,15 +81,15 @@ public class User implements Serializable {
         // no code to automatically freeze because design says admin needs to do this
         return frozen;
     }
+    //I needed this for UserManager - Louis
+    public String getUsername() {
+        return username;
+    }
 
-    public void setFrozen(boolean frozen){
+    public void isFrozen(boolean frozen){
     this.frozen = frozen;
-    }
+    } // whether the account is set to frozen or not
 
-
-    public void requestUnfreeze(User user){ // user can request to unfreeze account whether it should be unfrozen or not
-
-    }
 
     public void addPartner(String username2){
         if (partners.containsKey(username2)){
