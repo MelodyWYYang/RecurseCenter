@@ -161,19 +161,39 @@ public class UserManager implements Serializable{
             }
         }
         while (recents.size() < 3 & (!potentialRecentCompleted.isEmpty() | !potentialRecentIncompleted.isEmpty())) {
-            Trade mostRecentComp = potentialRecentCompleted.get(potentialRecentCompleted.size() - 1);
-            Trade mostRecentIncomp = potentialRecentIncompleted.get(potentialRecentIncompleted.size() - 1);
-            if (mostRecentComp.getTimeOfTrade().isAfter(mostRecentIncomp.getTimeOfTrade())) {
+            if (!potentialRecentCompleted.isEmpty() & potentialRecentIncompleted.isEmpty()) {
+                Trade mostRecentComp = potentialRecentCompleted.get(potentialRecentCompleted.size() - 1);
                 if (mostRecentComp.getUsername1().equals(user.username)) {
                     recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
+                    potentialRecentCompleted.remove(mostRecentComp);
                 } else if (mostRecentComp.getUsername2().equals(user.username)) {
                     recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
+                    potentialRecentCompleted.remove(mostRecentComp);
                 }
-            } else if (mostRecentIncomp.getTimeOfTrade().isAfter(mostRecentComp.getTimeOfTrade())) {
-                if (mostRecentComp.getUsername1().equals(user.username)) {
-                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
-                } else if (mostRecentComp.getUsername2().equals(user.username)) {
-                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
+            } else if (!potentialRecentIncompleted.isEmpty() & potentialRecentCompleted.isEmpty()) {
+                Trade mostRecentIncomp = potentialRecentIncompleted.get(potentialRecentCompleted.size() - 1);
+                if (mostRecentIncomp.getUsername1().equals(user.username)) {
+                    recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser2().get(0)));
+                    potentialRecentIncompleted.remove(mostRecentIncomp);
+                } else if (mostRecentIncomp.getUsername2().equals(user.username)) {
+                    recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser1().get(0)));
+                    potentialRecentIncompleted.remove(mostRecentIncomp);
+                }
+            } else {
+                Trade mostRecentComp = potentialRecentCompleted.get(potentialRecentCompleted.size() - 1);
+                Trade mostRecentIncomp = potentialRecentIncompleted.get(potentialRecentIncompleted.size() - 1);
+                if (mostRecentComp.getTimeOfTrade().isAfter(mostRecentIncomp.getTimeOfTrade())) {
+                    if (mostRecentComp.getUsername1().equals(user.username)) {
+                        recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
+                    } else if (mostRecentComp.getUsername2().equals(user.username)) {
+                        recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
+                    }
+                } else if (mostRecentIncomp.getTimeOfTrade().isAfter(mostRecentComp.getTimeOfTrade())) {
+                    if (mostRecentIncomp.getUsername1().equals(user.username)) {
+                        recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser2().get(0)));
+                    } else if (mostRecentIncomp.getUsername2().equals(user.username)) {
+                        recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser1().get(0)));
+                    }
                 }
             }
         }
@@ -183,6 +203,7 @@ public class UserManager implements Serializable{
     // code for case where User hasn't traded w 3 ppl yet -Mel
     // I realize this code does not cover cases where incomp/comp lists are empty or become empty. I'm fixing that right
     // now in another test file - Jinyu
+
     public int getNumTradesThisWeek(User user) {
         int numTransactions = 0;
         LocalDateTime timeNow = LocalDateTime.now(); //gets the current time
