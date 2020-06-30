@@ -103,7 +103,7 @@ public class AdminUser implements Serializable {
         }
         accountsToFreezeQueue.remove(0);
     }
-
+    /*
     // The function below made by Tingyu, contact me if this is unnecessary or wrong
     public void rejectUnfreezeRequest(boolean accepted) {
         // from what i understand, this is rejecting the unfreeze request - riya
@@ -117,6 +117,8 @@ public class AdminUser implements Serializable {
         unfreezeRequestList.remove(0);
     }
 
+     */
+
     public void moveToUnfreeze(ArrayList<String> unfreezeRequestList) {
         String username = unfreezeRequestList.get(0);
         if (username != null) {
@@ -125,12 +127,8 @@ public class AdminUser implements Serializable {
         }
     }
 
-    public void dequeueAndUnfreeze(ArrayList<String> accountsToUnfreezeQueue){
-        User user = UserManager.searchUser(accountsToUnfreezeQueue.get(0));
-        if (user != null) {
-            user.isFrozen(false);
-        }
-        accountsToUnfreezeQueue.remove(0);
+    public void unfreezeAccount(User user){
+        user.isFrozen(false);
     }
 
     public void changeThresholdForUser(int newThreshold) {

@@ -95,6 +95,8 @@ public class UserManager implements Serializable{
         else if (trade.getUsername2().equals(user.username)) {
             trade.user2AcceptedRequest = true;
         }
+        pendingTradeRequests.remove(trade);
+        pendingTrades.add(trade);
     }
 
     /** Method which allows a user to counter-offer by changing the details of a trade request
