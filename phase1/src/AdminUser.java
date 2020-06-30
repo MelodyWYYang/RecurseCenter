@@ -95,14 +95,18 @@ public class AdminUser implements Serializable {
         }
         UserManager.itemValidationRequestQueue.remove(0);
     }
-
-
+    public void freezeUser(User user){
+        user.isFrozen(true);
+    }
+    /*
     public void dequeueAndFreeze() {
         User user = UserManager.searchUser(accountsToFreezeQueue.get(0));
         if (user != null) { user.isFrozen(false);    // freeze User only when it is found
         }
         accountsToFreezeQueue.remove(0);
     }
+
+     */
     /*
     // The function below made by Tingyu, contact me if this is unnecessary or wrong
     public void rejectUnfreezeRequest(boolean accepted) {
