@@ -86,7 +86,7 @@ public class AdminUser implements Serializable {
     public void dequeueAndUnfreeze(ArrayList<String> accountsToUnfreezeQueue){
         User user = UserManager.searchUser(accountsToUnfreezeQueue.get(0));
         if (user != null) {
-            user.setFrozen(true);
+            user.setFrozen(false);
         }
         accountsToUnfreezeQueue.remove(0);
     }
