@@ -34,7 +34,9 @@ public class FileManager {
     public static void saveAdminToFile(AdminUser admin) {
         //serializes the given user's information in a .ser file with the title of their username
         try {
-            FileOutputStream file = new FileOutputStream("/data/admins/" + admin.getLogInInfo().get(username) + ".ser");
+            // Line below commented by Tingyu
+            // FileOutputStream file = new FileOutputStream("/data/admins/" + admin.getLogInInfo().get(username) + ".ser");
+            FileOutputStream file = new FileOutputStream("/data/admins/" + admin.getUsername() + ".ser");
             ObjectOutputStream out = new ObjectOutputStream(file);
             out.writeObject(admin);
             out.close();
