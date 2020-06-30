@@ -144,6 +144,12 @@ public class UserManager implements Serializable{
     } // This is for adding completed transactions to the stored list - Mel
      */
 
+    public void requestUnfreeze(String username){
+        // user can request to unfreeze account whether it should be unfrozen or not
+        // moved by Riya from User
+        // unfreezeRequestList.add(username);
+    }
+
     //TODO fix this method and other stats methods
     public ArrayList<Item> RecentTransactions(User user) {
         ArrayList<Trade> potentialRecentCompleted = new ArrayList<Trade>();

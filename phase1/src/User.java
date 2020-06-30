@@ -91,10 +91,6 @@ public class User implements Serializable {
     } // whether the account is set to frozen or not
 
 
-    public void requestUnfreeze(String username){ // user can request to unfreeze account whether it should be unfrozen or not
-        // unfreezeRequestList
-    }
-
     public void addPartner(String username2){
         if (partners.containsKey(username2)){
             int old = partners.get(username2);
