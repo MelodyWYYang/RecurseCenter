@@ -1,6 +1,8 @@
+import java.awt.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class FrozenAlert extends Alert {
+public class FrozenAlert extends Alert implements Serializable {
     protected LocalDateTime timeOfFreeze;
     protected int numBorrowedofUser;
     protected int numLentofUser;

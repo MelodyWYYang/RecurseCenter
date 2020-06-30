@@ -1,4 +1,7 @@
-public class TradeRequestCancelledAlert extends Alert{
+import java.io.Serializable;
+
+public class TradeRequestCancelledAlert extends Alert implements Serializable {
+    //author: Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
     protected String tradeString;
 
     public TradeRequestCancelledAlert(String tradeString){

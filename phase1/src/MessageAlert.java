@@ -1,4 +1,7 @@
-public class MessageAlert extends Alert{
+import java.io.Serializable;
+
+public class MessageAlert extends Alert implements Serializable {
+    //author: Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
     protected String message;
     protected String senderUsername;
 
