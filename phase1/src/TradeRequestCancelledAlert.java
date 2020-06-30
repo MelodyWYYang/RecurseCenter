@@ -1,7 +1,7 @@
-public class TradeRequestCancelledAlert {
+public class TradeRequestCancelledAlert extends Alert{
     protected String tradeString;
 
-    public TradeRequestCancelledAlert(String userName, String tradeString){
+    public TradeRequestCancelledAlert(String tradeString){
         super();
         this.tradeString = tradeString;
     }

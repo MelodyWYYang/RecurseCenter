@@ -1,6 +1,7 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class UserManager implements Serializable{
     //author: Jinyu Liu, Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
@@ -20,6 +21,8 @@ public class UserManager implements Serializable{
 
     protected ArrayList<TemporaryTrade> currentTemporaryTrades; //list of all temporary trades where items have
     // been exchanged but not returned -Louis
+
+    protected HashMap<String, ArrayList<Alert>> alertSystem;
 
     public ArrayList<User> getListUsers() {
         return UserManager.listUsers;}
@@ -354,11 +357,9 @@ public class UserManager implements Serializable{
 
     /** Method which returns items to their owners after the expiration of a temporary trade
      * Author: Louis Scheffer V
-     * Design decision is neccessary: should items automatically return to their owner at the expiry of the trade?
-     * @param trade
+     * @param trade Temporary Trade Object
      */
     public void reExchangeItems(TemporaryTrade trade){
-        if(LocalDateTime.now().isAfter(trade.getDueDate())){
             User user1 = searchUser(trade.getUsername1());
             User user2 = searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()) {
@@ -371,7 +372,6 @@ public class UserManager implements Serializable{
                 user2.removeItemFromList(item, user2.borrowedItems);
                 user2.addItemToList(item, user2.availableItems);
             }
-        }
     }
 
     /** Method which checks all pending trades to see if the items are still available.If they are not then the trade
@@ -386,14 +386,20 @@ public class UserManager implements Serializable{
                 Item item = searchItem(user2, itemID);
                 if (item == null){
                     pendingTrades.remove(trade);
-                    //in the future we might message the users involved here - Louis
+                    String tradeString = tradeToString(trade);
+                    Alert alert = new TradeCancelledAlert(tradeString);
+                    alertUser(user1, alert);
+                    alertUser(user2, alert);
                 }
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
                 Item item = searchItem(user1, itemID);
                 if (item == null) {
                     pendingTrades.remove(trade);
-                    //in the future we might message the users involved here - Louis
+                    String tradeString = tradeToString(trade);
+                    Alert alert = new TradeCancelledAlert(tradeString);
+                    alertUser(user1, alert);
+                    alertUser(user2, alert);
                 }
             }
         }
@@ -410,14 +416,20 @@ public class UserManager implements Serializable{
                 Item item = searchItem(user2, itemID);
                 if (item == null){
                     pendingTradeRequests.remove(trade);
-                    //in the future we might message the users involved here - Louis
+                    String tradeString = tradeToString(trade);
+                    Alert alert = new TradeRequestCancelledAlert(tradeString);
+                    alertUser(user1, alert);
+                    alertUser(user2, alert);
                 }
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
                 Item item = searchItem(user1, itemID);
                 if (item == null) {
                     pendingTradeRequests.remove(trade);
-                    //in the future we might message the users involved here - Louis
+                    String tradeString = tradeToString(trade);
+                    Alert alert = new TradeRequestCancelledAlert(tradeString);
+                    alertUser(user1, alert);
+                    alertUser(user2, alert);
                 }
             }
         }
@@ -454,5 +466,37 @@ public class UserManager implements Serializable{
             return stringBuilder.toString();
         }
         return null;
+    }
+
+    /** Overloaded method to send an alert to a user. This one uses a user object.
+     * Author: Louis Scheffer V
+     * @param user object of the user who will be receiving the alert
+     * @param alert alert object to send to the user
+     */
+    public void alertUser(User user, Alert alert){
+        String username = user.getUsername();
+        alertUser(username, alert);
+    }
+
+    /** Overloaded method to send an alert to a user. This one uses a username.
+     * Author: Louis Scheffer V
+     * @param username username of the user receiving the alert
+     * @param alert alert object to send to the user
+     */
+    public void alertUser(String username, Alert alert){
+        ArrayList<Alert> alerts = alertSystem.get(username);
+        alerts.add(alert);
+        alertSystem.put(username, alerts);
+    }
+
+    /** Method which allows a user to send a message to another user, using the alert system.
+     * Author: Louis Scheffer V
+     * @param sender user object who is sending the message.
+     * @param recipient user object who is receiving the message.
+     * @param message message text.
+     */
+    public void sendMessageToUser(User sender, User recipient, String message){
+        Alert alert = new MessageAlert(sender.getUsername(), message);
+        alertUser(recipient, alert);
     }
 }

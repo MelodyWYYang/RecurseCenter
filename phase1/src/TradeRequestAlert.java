@@ -1,4 +1,4 @@
-public class TradeRequestAlert {
+public class TradeRequestAlert extends Alert{
     protected String userName;
     protected String tradeString;
 
