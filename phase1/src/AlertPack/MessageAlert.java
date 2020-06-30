@@ -1,3 +1,5 @@
+package AlertPack;
+
 import java.io.Serializable;
 
 public class MessageAlert extends UserAlert implements Serializable {

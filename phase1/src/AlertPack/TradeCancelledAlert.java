@@ -1,3 +1,5 @@
+package AlertPack;
+
 import java.io.Serializable;
 
 public class TradeCancelledAlert extends UserAlert implements Serializable {

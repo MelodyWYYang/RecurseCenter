@@ -1,3 +1,5 @@
+package AlertPack;
+
 import java.io.Serializable;
 
 public class TradeDeclinedAlert extends UserAlert implements Serializable {

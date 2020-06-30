@@ -1,3 +1,5 @@
+package AlertPack;
+
 import java.io.Serializable;
 public abstract class Alert implements Serializable{
     //author: Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
