@@ -58,18 +58,19 @@ public class AdminUser implements Serializable {
     public void dequeueAndFreeze() {
         User user = UserManager.searchUser(accountsToFreezeQueue.get(0));
         if (user != null) {
-            user.setFrozen(false);    // freeze User only when it is found
+            user.isFrozen(false);    // freeze User only when it is found
         }
         accountsToFreezeQueue.remove(0);
     }
 
     // The function below made by Tingyu, contact me if this is unnecessary or wrong
-    public void pollUnfreezeRequest(boolean accepted) {
+    public void rejectUnfreezeRequest(boolean accepted) {
+        // from what i understand, this is rejecting the unfreeze request - riya
         String username = unfreezeRequestList.get(0);
         if (accepted) {
             User user = UserManager.searchUser(username);
             if (user != null) {
-                user.setFrozen(true);
+                user.isFrozen(true);
             }
         }
         unfreezeRequestList.remove(0);
@@ -86,7 +87,7 @@ public class AdminUser implements Serializable {
     public void dequeueAndUnfreeze(ArrayList<String> accountsToUnfreezeQueue){
         User user = UserManager.searchUser(accountsToUnfreezeQueue.get(0));
         if (user != null) {
-            user.setFrozen(false);
+            user.isFrozen(false);
         }
         accountsToUnfreezeQueue.remove(0);
     }

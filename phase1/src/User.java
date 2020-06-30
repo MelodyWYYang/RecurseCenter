@@ -86,13 +86,13 @@ public class User implements Serializable {
         return username;
     }
 
-    public void setFrozen(boolean frozen){
+    public void isFrozen(boolean frozen){
     this.frozen = frozen;
-    }
+    } // whether the account is set to frozen or not
 
 
-    public void requestUnfreeze(User user){ // user can request to unfreeze account whether it should be unfrozen or not
-
+    public void requestUnfreeze(String username){ // user can request to unfreeze account whether it should be unfrozen or not
+        // unfreezeRequestList
     }
 
     public void addPartner(String username2){
