@@ -1,18 +1,10 @@
 import java.io.Serializable;
 import java.util.*;
+import AlertPack.Alert;
 
 public class User implements Serializable {
     //author: Melody Yang in group 0110 for CSC207H1 summer 2020 project
     // Sorting method orderPartners() is taken from https://howtodoinjava.com/sort/java-sort-map-by-values/
-
-    //User constructor
-    public User(String username) {
-        stats.put("Lent", 0); // # lent items since creation
-        stats.put("Borrowed", 0); // # borrowed items since creation
-        // Use Cases need to increase after each 1-way or 2-way trade; and reset each week
-        stats.put("incompleteT", 0); // # incomplete transactions since creation
-        this.username = username; // Admin needs to access to freeze; USerManager needs to access/search by User
-    }
 
     public final String username;
     private String password; // private so no one can access except User; have setters and getters for change password function
@@ -23,11 +15,20 @@ public class User implements Serializable {
 
     public boolean frozen = false; // false being frozen or Lent>Borrowed; true being no violations
 
-    public ArrayList<Item> availableItems; // if this was protected then our presenters can't access it
-    public ArrayList<Item> borrowedItems; // items that the user is currently borrowing via TemporaryTrade - Louis
-    public ArrayList<Item> wishlistItems; // presenter needs to access this as well
+    public ArrayList<Item> availableItems = new ArrayList<Item>(); // if this was protected then our presenters can't access it
+    public ArrayList<Item> borrowedItems = new ArrayList<Item>();// items that the user is currently borrowing via TemporaryTrade - Louis
+    public ArrayList<Item> wishlistItems = new ArrayList<Item>();// presenter needs to access this as well
 
-    public ArrayList<String> alertQueue;
+    public ArrayList<Alert> alertQueue = new ArrayList<Alert>();
+
+    //User constructor
+    public User(String username) {
+        stats.put("Lent", 0); // # lent items since creation
+        stats.put("Borrowed", 0); // # borrowed items since creation
+        // Use Cases need to increase after each 1-way or 2-way trade; and reset each week
+        stats.put("incompleteT", 0); // # incomplete transactions since creation
+        this.username = username; // Admin needs to access to freeze; USerManager needs to access/search by User
+    }
 
     public void setPassword(String password) { this.password = password; }// may want to extend a use case to change password if forgotten
     public String getPassword(String password) { return this.password;}

@@ -12,7 +12,7 @@ public class AdminUser implements Serializable {
     public static int completeThreshold; // # of complete trades allowed per week
 
     // public static ArrayList<ItemValidationRequest> itemValidationQueue;
-    public static ArrayList<AdminUser> adminList;
+
     public ArrayList<String> accountsToFreezeQueue;
     public ArrayList<String> unfreezeRequestList; // list of accounts that have requested to be unfrozen
     public ArrayList<String> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
@@ -25,7 +25,7 @@ public class AdminUser implements Serializable {
         accountsToFreezeQueue = new ArrayList<String>();
         unfreezeRequestList = new ArrayList<String>();
         accountsToUnfreezeQueue = new ArrayList<String>();
-        adminList.add(this);
+
     }
 
     /**Temporarily abandon the function below by Tingyu
@@ -47,10 +47,6 @@ public class AdminUser implements Serializable {
 
     public String getPassword() {
         return password;
-    }
-
-    public static ArrayList<AdminUser> getAdminList() {
-        return adminList;
     }
 
     public void setUsername(String username) {
@@ -89,7 +85,7 @@ public class AdminUser implements Serializable {
             item.setUserThatHasPossession(request.usernameOfOwner);
             item.setDescription(request.description);
             if (user != null) {
-                user.addItemToList(item, user.availableItems);    // add item only when User is found
+                user.availableItems.add(item);   // add item only when User is found
             }
             // request.getOwner().availableItems.add(request.getObj());
         }

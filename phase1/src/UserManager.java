@@ -9,22 +9,22 @@ public class UserManager implements Serializable{
     //author: Jinyu Liu, Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
     //All methods written by Jinyu Liu except where noted
 
-    protected ArrayList<Trade> transactions; // list of all transactions this User has completed since creation - Mel
+    protected ArrayList<Trade> transactions = new ArrayList<Trade>(); // list of all transactions this User has completed since creation - Mel
 
-    protected ArrayList<Trade> completedTrades; // list of all trades which have been completed - Louis
+    protected ArrayList<Trade> completedTrades = new ArrayList<Trade>(); // list of all trades which have been completed - Louis
 
-    protected static ArrayList<User> listUsers; // List of all users - Jinyu
+    protected static ArrayList<User> listUsers = new ArrayList<User>(); // List of all users - Jinyu
 
-    protected ArrayList<Trade> pendingTradeRequests; // list of all trade requests which have not been accepted
+    protected ArrayList<Trade> pendingTradeRequests = new ArrayList<Trade>(); // list of all trade requests which have not been accepted
     // by both parties - Louis
 
 
-    protected ArrayList<Trade> pendingTrades; // list of all trades which have been accepted but not completed - Louis
+    protected ArrayList<Trade> pendingTrades = new ArrayList<Trade>(); // list of all trades which have been accepted but not completed - Louis
 
-    protected ArrayList<TemporaryTrade> currentTemporaryTrades; //list of all temporary trades where items have
+    protected ArrayList<TemporaryTrade> currentTemporaryTrades = new ArrayList<TemporaryTrade>(); //list of all temporary trades where items have
     // been exchanged but not returned -Louis
 
-    protected HashMap<String, ArrayList<Alert>> alertSystem;
+    protected HashMap<String, ArrayList<Alert>> alertSystem = new HashMap<String, ArrayList<Alert>>();
 
     public ArrayList<User> getListUsers() {
         return UserManager.listUsers;}
@@ -41,7 +41,7 @@ public class UserManager implements Serializable{
         return pendingTradeRequests;
     }
 
-    public static ArrayList<ItemValidationRequest> itemValidationRequestQueue;
+    public static ArrayList<ItemValidationRequest> itemValidationRequestQueue = new ArrayList<ItemValidationRequest>();
 
     /** Method which creates a user and adds it to the list of users
      * Author: Jinyu Liu
@@ -53,6 +53,7 @@ public class UserManager implements Serializable{
         newUser.setPassword(password);
         listUsers.add(newUser);
     }
+
 
     //TODO: Make it so this method depends on item IDs (Integer) and not directly on items.
     /** Method which creates a trade request and adds it to the list of pending trade requests.
@@ -80,8 +81,58 @@ public class UserManager implements Serializable{
         trade.setTimeOfTrade(timeOfTrade);
         trade.setMeetingPlace(meetingPlace);
         trade.user1TradeConfirmed = true;
+
+        //Creating and adding an alert for user2
+        TradeRequestAlert alert = createTradeRequestAlert(trade, user1);
+        alertSystem.get(user2.getUsername()).add(alert);
+
     } //Does not remove item from user1 availableItems or user2 availableItems
 
+
+    /**
+     * Creates a TradeRequstAlert for <trade> object sent by <user1>. This method does not add said TradeRequestAlert
+     *  to the alertSystem.
+     * @param trade the Trade object for the Alert.
+     * @param user1 the User who is sending the Trade request.
+     * @return A TradeRequestAlert corresponding to <trade>
+     */
+    public TradeRequestAlert createTradeRequestAlert(Trade trade, User user1){
+
+        StringBuilder tradeString = new StringBuilder("Their: ");
+
+        if (trade.getItemIDsSentToUser1().size() == 0){
+            tradeString.append("nothing");
+        }else {
+            if (trade.getItemIDsSentToUser1().size() > 1){
+                for (int i = 0; i < trade.getItemIDsSentToUser1().size() - 1; i++){
+                    tradeString.append(searchItem(trade.getItemIDsSentToUser1().get(i)).getName()).append(", ");
+                }
+                tradeString.append(searchItem(trade.getItemIDsSentToUser1().get(trade.getItemIDsSentToUser1().size()-1)).getName());
+            } else {
+                tradeString.append(searchItem(trade.getItemIDsSentToUser1().get(0)).getName());
+            }
+
+        }
+        tradeString.append(" for your: ");
+
+        if (trade.getItemIDsSentToUser2().size() == 0){
+            tradeString.append("nothing");
+        }else {
+            if (trade.getItemIDsSentToUser2().size() > 1){
+                for (int i = 0; i < trade.getItemIDsSentToUser2().size() - 1; i++){
+                    tradeString.append(searchItem(trade.getItemIDsSentToUser2().get(i)).getName()).append(", ");
+                }
+                tradeString.append(searchItem(trade.getItemIDsSentToUser2().get(trade.getItemIDsSentToUser2().size()-1)).getName());
+            } else {
+                tradeString.append(searchItem(trade.getItemIDsSentToUser2().get(0)).getName());
+            }
+
+        }
+
+
+        return new TradeRequestAlert(user1.getUsername(), tradeString.toString());
+
+    }
 
     /** Method which allows a user to accept a trade request
      * Author: Jinyu Liu

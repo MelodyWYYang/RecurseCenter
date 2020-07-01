@@ -94,12 +94,10 @@ public class Trade implements Serializable {
         user2NumRequests+=1;
     }
 
-    public ArrayList<Integer> getItemIDsSentToUser1(){
-        return (ArrayList<Integer>)this.itemIDsSentToUser1.clone();
-    }
+    public ArrayList<Integer> getItemIDsSentToUser1(){ return this.itemIDsSentToUser1; }
 
     public ArrayList<Integer> getItemIDsSentToUser2(){
-        return (ArrayList<Integer>)this.itemIDsSentToUser2.clone();
+        return this.itemIDsSentToUser2;
     }
 
     public LocalDateTime getTimeOfTrade(){

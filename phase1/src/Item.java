@@ -12,7 +12,7 @@ public class Item implements Serializable {
     private String ownerUserName;
     private String userThatHasPossession;
 
-    protected ArrayList<String> tags;
+    protected ArrayList<String> tags = new ArrayList<String>();
 
     public Item(String name, String description, int id){
         this.name = name;
