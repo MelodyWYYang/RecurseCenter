@@ -6,11 +6,13 @@ import java.time.LocalDateTime;
 public class ExpirationAlert extends UserAlert implements Serializable {
     protected LocalDateTime dueDate;
     protected String tradeString;
+    protected String username;
 
-    public ExpirationAlert(LocalDateTime dueDate, String tradeString){
+    public ExpirationAlert(LocalDateTime dueDate, String tradeString, String username){
         super();
         this.dueDate = dueDate;
         this.tradeString = tradeString;
+        this.username = username;
     }
 
     public LocalDateTime getDueDate() {
@@ -19,6 +21,10 @@ public class ExpirationAlert extends UserAlert implements Serializable {
 
     public String getTradeString() {
         return tradeString;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     /**

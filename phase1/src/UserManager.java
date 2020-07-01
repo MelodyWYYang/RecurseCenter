@@ -52,6 +52,7 @@ public class UserManager implements Serializable{
         User newUser = new User(username);
         newUser.setPassword(password);
         listUsers.add(newUser);
+        alertSystem.put(username, new ArrayList<Alert>());
     }
 
 
@@ -416,16 +417,22 @@ public class UserManager implements Serializable{
      * Check to see if any TemporaryTrades have expired and if so, add an alert to the User's alertQueue.
      * Author: Murray Smith
      * Rework by Louis Scheffer V 6/30/20 // modifications made to work with the alert system.
+     * Rework by Tian Yue Dong 7/1/2020 ; made it so it only sends alert to user who didnt confirm the reexchange
      */
     public void checkForExpiredTempTrades(){
         for (TemporaryTrade tempTrade : currentTemporaryTrades) {
             if (LocalDateTime.now().isAfter(tempTrade.getDueDate())) {
                 String tradeString = tradeToString(tempTrade);
-                Alert alert = new ExpirationAlert(tempTrade.getDueDate(), tradeString);
-                alertUser(tempTrade.getUsername1(), alert);
-                alertUser(tempTrade.getUsername2(), alert);
-                //TODO: In the presenter layer, add an input to the user after this line is printed to prompt for "yes"
-                // or "no" to the above question, the input should call another method to create this returnRequest.
+                LocalDateTime dueDate = tempTrade.getDueDate();
+
+                if (!tempTrade.getUser1ItemReturnRequestAccepted()){
+                    Alert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername1());
+                    alertUser(tempTrade.getUsername1(), alert);
+                }
+                if (!tempTrade.getUser2ItemReturnRequestAccepted()){
+                    Alert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername2());
+                    alertUser(tempTrade.getUsername2(), alert);
+                }
                 
             }
         }
@@ -469,10 +476,12 @@ public class UserManager implements Serializable{
             }
     }
 
+
     /** Method which checks all pending trades to see if the items are still available.If they are not then the trade
      * request is deleted.
      * Author: Louis Scheffer V
      */
+
     public void checkPendingTrades(){
         for(Trade trade: pendingTrades){
             User user1 = searchUser(trade.getUsername1());
@@ -594,4 +603,5 @@ public class UserManager implements Serializable{
         Alert alert = new MessageAlert(sender.getUsername(), message);
         alertUser(recipient, alert);
     }
+
 }

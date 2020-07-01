@@ -1,3 +1,5 @@
+import AlertPack.FrozenAlert;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,6 +95,11 @@ public class AdminUser implements Serializable {
     }
     public void freezeUser(User user){
         user.isFrozen(true);
+        int numBorrowed = user.stats.get("Borrowed");
+        int numLent = user.stats.get("Lent");
+        FrozenAlert alert = new FrozenAlert(numBorrowed, numLent, numBorrowed - numLent);
+        user.alertQueue.add(alert);
+        // need to add ^ to Usermanager
     }
     /*
     public void dequeueAndFreeze() {
