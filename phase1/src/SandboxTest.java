@@ -5,7 +5,16 @@ import java.util.ArrayList;
 public class SandboxTest {
 
     public static void main(String[] args){
+        testSearchUser1();
 
+        testSearchItem1();
+
+        generalTest1();
+
+
+    }
+
+    private static void generalTest1(){
         UserManager um = new UserManager();
         AdminUser au = new AdminUser("Epic_Admin_69", "password");
 
@@ -35,5 +44,23 @@ public class SandboxTest {
         //something about this sequence is fucked. I think its the use of searchItem in createTradeRequestAlert.
         TradeRequestAlert alert = um.createTradeRequestAlert(trade, UserManager.searchUser("Jerry"));
         System.out.println(alert.getTradeString());
+    }
+
+    private static void testSearchUser1(){
+        UserManager um = new UserManager();
+        User barry = um.createUser("Barry", "password");
+
+        assert um.searchUser("Barry") == barry;
+    }
+
+    private static void testSearchItem1(){
+        UserManager um = new UserManager();
+        User larry = um.createUser("Larry", "password");
+
+        Item larrysBike = new Item("Bike", 1);
+
+        larry.availableItems.add(larrysBike);
+
+        assert um.searchItem(1) == larrysBike;
     }
 }

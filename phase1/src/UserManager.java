@@ -48,11 +48,15 @@ public class UserManager implements Serializable{
      * @param username username of user
      * @param password password of user
      */
-    public void createUser(String username, String password) {
+    public User createUser(String username, String password) {
+        // TODO: Whenever and wherever this is called from the controller/presenter layer, there MUST be a check first
+        //  to see if the passed <username> is taken by annother user. A major assumption of our backend is that
+        //  usernames are distinct and unique.
         User newUser = new User(username);
         newUser.setPassword(password);
         listUsers.add(newUser);
         alertSystem.put(username, new ArrayList<Alert>());
+        return newUser;
     }
 
 
@@ -99,6 +103,13 @@ public class UserManager implements Serializable{
      */
     public TradeRequestAlert createTradeRequestAlert(Trade trade, User user1){
 
+        String tradeString = createTradeString(trade);
+
+        return new TradeRequestAlert(user1.getUsername(), trade.getTradeID(), tradeString);
+
+    }
+
+    private String createTradeString(Trade trade){
         StringBuilder tradeString = new StringBuilder("Their: ");
 
         if (trade.getItemIDsSentToUser1().size() == 0){
@@ -129,10 +140,9 @@ public class UserManager implements Serializable{
             }
 
         }
+        tradeString.append(". Meet at ").append(trade.getMeetingPlace()).append(" at ").append(trade.getTimeOfTrade());
 
-
-        return new TradeRequestAlert(user1.getUsername(), tradeString.toString());
-
+        return tradeString.toString();
     }
 
     /** Method which allows a user to accept a trade request
@@ -149,6 +159,33 @@ public class UserManager implements Serializable{
         }
         pendingTradeRequests.remove(trade);
         pendingTrades.add(trade);
+    }
+
+    /**
+     * Decline trade request <trade> sent to User <user>. Also sends a TradeDeclinedAlert to send to the requesting
+     * User.
+     * @param trade The trade request to be declined.
+     * @param decliningUser The User declining the request.
+     */
+    public void declineTradeRequest(Trade trade, User decliningUser){
+
+        pendingTradeRequests.remove(trade);
+        //Murray will handle the below TODO after discussing it next meeting:
+        //TODO: sort out which tradestring we should use. Ask the group. Do the same for editTradeRequest and sendTrade
+        // Request.
+
+        String tradeString = createTradeString(trade);
+
+        TradeDeclinedAlert alert = new TradeDeclinedAlert(tradeString, decliningUser.getUsername());
+
+        String otherUserName;
+
+        if (trade.getUsername1().equals(decliningUser.getUsername())){
+            otherUserName = trade.getUsername2();
+        }else{
+            otherUserName = trade.getUsername1();
+        }
+        alertSystem.get(otherUserName).add(alert);
     }
 
     /** Method which allows a user to counter-offer by changing the details of a trade request
@@ -172,6 +209,18 @@ public class UserManager implements Serializable{
             trade.user1AcceptedRequest = false;
             trade.incrementUser2NumRequests();
         }
+
+        TradeRequestAlert alert = createTradeRequestAlert(trade, userEditing);
+
+        String otherUserName;
+
+        if (trade.getUsername1().equals(userEditing.getUsername())){
+            otherUserName = trade.getUsername2();
+        } else{
+            otherUserName = trade.getUsername1();
+        }
+
+        alertSystem.get(otherUserName).add(alert);
     }
 
     /** 3-arg method which creates and instantiates an ItemvalidationRequest.
@@ -343,6 +392,15 @@ public class UserManager implements Serializable{
         return null;
     }
 
+    public Trade searchPendingTradeRequest(int tradeID){
+        for (Trade trade : pendingTradeRequests){
+            if (trade.getTradeID() == tradeID){
+                return trade;
+            }
+        }
+        return null;
+    }
+
     /** Method which ensures that neither user account is frozen.
      * Author: Louis Scheffer V
      * @param u1 user1
@@ -369,8 +427,7 @@ public class UserManager implements Serializable{
         if (trade instanceof TemporaryTrade){
             currentTemporaryTrades.add((TemporaryTrade) trade);
             //TODO: if the borrowing user now has more borrows than loans + threshold, send
-            // a freeze request to the adminUser (through the dispatching function).
-            //TODO: if you're
+            // a freeze request
 
         }
         else{

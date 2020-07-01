@@ -60,6 +60,7 @@ public class Trade implements Serializable {
         return user1AcceptedRequest && user2AcceptedRequest;
     }
 
+
     //Below is an assortment of getters and setters.
 
     public String getUsername1(){

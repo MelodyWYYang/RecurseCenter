@@ -3,17 +3,17 @@ package AlertPack;
 import java.io.Serializable;
 
 public class TradeDeclinedAlert extends UserAlert implements Serializable {
-    protected String userName;
+    protected String decliningUserName;
     protected String tradeString;
 
-    public TradeDeclinedAlert(String userName, String tradeString){
+    public TradeDeclinedAlert(String decliningUserName, String tradeString){
         super();
-        this.userName = userName;
+        this.decliningUserName = decliningUserName;
         this.tradeString = tradeString;
     }
 
     @Override
     public String toString() {
-        return userName + " has declined the following trade request. /n" + tradeString ;
+        return decliningUserName + " has declined the following trade request: /n" + tradeString ;
     }
 }

@@ -86,9 +86,9 @@ public class AdminUser implements Serializable {
             item.setOwner(request.usernameOfOwner);
             item.setUserThatHasPossession(request.usernameOfOwner);
             item.setDescription(request.description);
-            if (user != null) {
-                user.availableItems.add(item);   // add item only when User is found
-            }
+            assert user != null;
+            user.availableItems.add(item);   //Changed this to fail when user is null. We don't want the program to
+            // fail silently.
             // request.getOwner().availableItems.add(request.getObj());
         }
         UserManager.itemValidationRequestQueue.remove(0);

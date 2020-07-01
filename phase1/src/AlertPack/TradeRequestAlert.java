@@ -3,12 +3,14 @@ package AlertPack;
 import java.io.Serializable;
 
 public class TradeRequestAlert extends UserAlert implements Serializable {
-    protected String userName;
+    protected String senderUserName;
     protected String tradeString;
+    protected int tradeID;
 
-    public TradeRequestAlert(String userName, String tradeString){
+    public TradeRequestAlert(String senderUserName, int tradeID, String tradeString){
         super();
-        this.userName = userName;
+        this.senderUserName = senderUserName;
+        this.tradeID = tradeID;
         this.tradeString = tradeString;
     }
 
@@ -24,9 +26,11 @@ public class TradeRequestAlert extends UserAlert implements Serializable {
      *
      * @return username of the person who has proposed the trade.
      */
-    public String getUserName() {
-        return userName;
+    public String getSenderUserName() {
+        return senderUserName;
     }
+
+    public int getTradeID(){ return tradeID; }
 
     /**
      *
@@ -34,6 +38,6 @@ public class TradeRequestAlert extends UserAlert implements Serializable {
      */
     @Override
     public String toString() {
-        return userName + " has proposed the following trade: /n" + tradeString;
+        return senderUserName + " has proposed the following trade: /n" + tradeString + "\n";
     }
 }
