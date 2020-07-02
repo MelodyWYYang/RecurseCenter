@@ -55,44 +55,6 @@ public class UserAlertManager {
         }
     }
 
-    private void handleFreezeUserAlert(FreezeUserAlert alert){
-        // author: Callan Murphy
-        boolean flag = true;
-        int input = 0;
-        while (flag) {
-            Scanner scan = new Scanner(System.in);
-            System.out.println("(1) Freeze User");
-            System.out.println("(2) Dismiss");
-            input = scan.nextInt();
-            if (input == 1) {
-                User user = UserManager.searchUser(alert.getUsername());
-                AdminUser tempAdmin = new AdminUser("temp", "temp");
-                tempAdmin.freezeUser(user);
-                flag = false;
-            }
-            if (input == 2) flag = false;
-        }
-    }
-
-    private void handleUnfreezeRequestAlert(UnfreezeRequestAlert alert){
-        // author: Callan Murphy
-        boolean flag = true;
-        int input = 0;
-        while (flag) {
-            Scanner scan = new Scanner(System.in);
-            System.out.println("(1) Unfreeze User");
-            System.out.println("(2) Dismiss");
-            input = scan.nextInt();
-            if (input == 1) {
-                User user = UserManager.searchUser(alert.getUsername());
-                AdminUser tempAdmin = new AdminUser("temp", "temp");
-                tempAdmin.unfreezeAccount(user);
-                flag = false;
-            }
-            if (input == 2) flag = false;
-        }
-    }
-
     private void handleExpirationAlert(ExpirationAlert alert){
         boolean flag = true;
         int input = 0;
