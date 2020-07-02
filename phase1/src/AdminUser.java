@@ -93,13 +93,18 @@ public class AdminUser implements Serializable {
         }
         UserManager.itemValidationRequestQueue.remove(0);
     }
+
+
+    /** Method which freeze the user account and sends a FrozenAlert to the user
+     * author: tian
+     * @param username user object
+     */
     public void freezeUser(User user){
         user.isFrozen(true);
         int numBorrowed = user.stats.get("Borrowed");
         int numLent = user.stats.get("Lent");
         FrozenAlert alert = new FrozenAlert(numBorrowed, numLent, numBorrowed - numLent);
-        user.alertQueue.add(alert);
-        // need to add ^ to Usermanager
+        TradeSystem.userManager.alertUser(user.getUsername(), alert);
     }
     /*
     public void dequeueAndFreeze() {

@@ -7,12 +7,14 @@ public class ExpirationAlert extends UserAlert implements Serializable {
     protected LocalDateTime dueDate;
     protected String tradeString;
     protected String username;
+    protected int tradeId;
 
-    public ExpirationAlert(LocalDateTime dueDate, String tradeString, String username){
+    public ExpirationAlert(LocalDateTime dueDate, String tradeString, String username, int tradeId){
         super();
         this.dueDate = dueDate;
         this.tradeString = tradeString;
         this.username = username;
+        this.tradeId = tradeId;
     }
 
     public LocalDateTime getDueDate() {
@@ -25,6 +27,10 @@ public class ExpirationAlert extends UserAlert implements Serializable {
 
     public String getUsername() {
         return username;
+    }
+
+    public int getTradeId() {
+        return tradeId;
     }
 
     /**

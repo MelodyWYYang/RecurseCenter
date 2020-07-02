@@ -17,19 +17,13 @@ public class UserAlertManager {
         }
     }
 
-    private void handleAlert(UserAlert alert ) {
-        boolean flag = true;
+    private void handleAlert(UserAlert alert) {
         System.out.println(alert); //All alerts have a toString description
-        int input = 0;
 
         if (alert instanceof FrozenAlert) {
-
             handleFrozenAlert();
-
         } else if (alert instanceof ExpirationAlert) {
-
-            handleExpirationAlert();
-
+            handleExpirationAlert((ExpirationAlert) alert);
         } else if (alert instanceof TradeRequestAlert){
 
             handleTradeRequestAlert((TradeRequestAlert) alert);
@@ -37,7 +31,6 @@ public class UserAlertManager {
         } else if (alert instanceof TradeDeclinedAlert){
             handleTradeDeclinedAlert();
         }
-
 
             //Each alert needs a handle method for its type, which prints/takes input and calls corresponding functions to
             //  handle the alert on the enduser side of things. See google doccument for specifics on alerts and their
@@ -56,9 +49,8 @@ public class UserAlertManager {
         }
     }
 
-    private void handleExpirationAlert(){
+    private void handleExpirationAlert(ExpirationAlert alert){
         boolean flag = true;
-
         int input = 0;
 
         while (flag) {
@@ -70,8 +62,10 @@ public class UserAlertManager {
         if (input == 1) {
             // report the other user
         } else {
-            //UserManager.confirmReExchange(searchUser(trade.getUsername1()), trade)
-            //dependent on usermanager
+            User user = UserManager.searchUser(alert.getUsername());
+            TemporaryTrade trade = TradeSystem.userManager.serachTemporaryTrade(alert.getTradeId());
+            TradeSystem.userManager.confirmReExchange(user, trade);
+            System.out.println("Trade ReExchange confirmed");
         }
     }
 

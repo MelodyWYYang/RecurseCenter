@@ -392,6 +392,15 @@ public class UserManager implements Serializable{
         return null;
     }
 
+    public TemporaryTrade serachTemporaryTrade(int tradeID) {
+        for (TemporaryTrade tempTrade : currentTemporaryTrades){
+            if (tempTrade.getTradeID() == tradeID){
+                return tempTrade;
+            }
+        }
+        return null;
+    }
+
     public Trade searchPendingTradeRequest(int tradeID){
         for (Trade trade : pendingTradeRequests){
             if (trade.getTradeID() == tradeID){
@@ -481,19 +490,22 @@ public class UserManager implements Serializable{
             if (LocalDateTime.now().isAfter(tempTrade.getDueDate())) {
                 String tradeString = tradeToString(tempTrade);
                 LocalDateTime dueDate = tempTrade.getDueDate();
+                int tradeID = tempTrade.getTradeID();
 
                 if (!tempTrade.getUser1ItemReturnRequestAccepted()){
-                    Alert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername1());
+                    Alert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername1(), tradeID);
                     alertUser(tempTrade.getUsername1(), alert);
                 }
                 if (!tempTrade.getUser2ItemReturnRequestAccepted()){
-                    Alert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername2());
+                    Alert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername2(), tradeID);
                     alertUser(tempTrade.getUsername2(), alert);
                 }
                 
             }
         }
     }
+
+
 
     /** Method which allows a user to confirm the re-exchange of items has occured in the real world. If the other
      * user has already confirmed, then the reExchangeItems method will be called to reExahange the items within the
