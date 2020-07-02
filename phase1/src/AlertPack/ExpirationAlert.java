@@ -39,6 +39,6 @@ public class ExpirationAlert extends UserAlert implements Serializable {
      */
     @Override
     public String toString() {
-        return "The following TemporaryTrade has expired at" + dueDate + "/n" + tradeString;
+        return "The following TemporaryTrade has expired at" + dueDate + "\n" + tradeString;
     }
 }

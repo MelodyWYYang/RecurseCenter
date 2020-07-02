@@ -619,11 +619,11 @@ public class UserManager implements Serializable{
      * @return a string which describes the two users involved in the trade and the Time & date of the trade.
      */
     public String tradeToString(Trade trade){
-        return "User 1: " + trade.getUsername1() + "/nUser 2: " + trade.getUsername2() +
-                "/nItems being traded from user 1 to user 2: " + GetItemNamesFromUser1ToUser2(trade) +
-                "/nItems being traded from user 2 to user 1: " + GetItemNamesFromUser1ToUser2(trade) +
-                "/n Time & Date of item exchange: " + trade.getTimeOfTrade().toString() +
-                "/n Location of Trade: " + trade.getMeetingPlace();
+        return "User 1: " + trade.getUsername1() + "\nUser 2: " + trade.getUsername2() +
+                "\nItems being traded from user 1 to user 2: " + GetItemNamesFromUser1ToUser2(trade) +
+                "\nItems being traded from user 2 to user 1: " + GetItemNamesFromUser1ToUser2(trade) +
+                "\n Time & Date of item exchange: " + trade.getTimeOfTrade().toString() +
+                "\n Location of Trade: " + trade.getMeetingPlace();
     }
     // helper method which lists the names of the items going from user 1 to user 2 - Louis
     private String GetItemNamesFromUser1ToUser2(Trade trade){

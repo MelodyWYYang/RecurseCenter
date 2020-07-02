@@ -65,7 +65,7 @@ public class ItemValidationRequestAlert extends AdminAlert implements Serializab
     }
     @Override
     public String toString(){
-        return "Item validation request/nUser: " + usernameOfOwner + "Item name: " + name + "/nItem description: " +
-                description + "/nItem ID number: " + itemID;
+        return "Item validation request\nUser: " + usernameOfOwner + "\nItem name: " + name + "\nItem description: " +
+                description + "\nItem ID number: " + itemID;
     }
 }

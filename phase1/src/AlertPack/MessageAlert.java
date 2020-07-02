@@ -35,6 +35,6 @@ public class MessageAlert extends UserAlert implements Serializable {
      */
     @Override
     public String toString(){
-        return "From: " + senderUsername + "/n" + message;
+        return "From: " + senderUsername + "\n" + message;
     }
 }

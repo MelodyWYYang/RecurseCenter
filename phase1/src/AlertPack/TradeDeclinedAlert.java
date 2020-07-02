@@ -14,6 +14,6 @@ public class TradeDeclinedAlert extends UserAlert implements Serializable {
 
     @Override
     public String toString() {
-        return decliningUserName + " has declined the following trade request: /n" + tradeString ;
+        return decliningUserName + " has declined the following trade request: \n" + tradeString ;
     }
 }

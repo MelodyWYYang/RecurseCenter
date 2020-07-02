@@ -26,6 +26,6 @@ public class TradeRequestCancelledAlert extends UserAlert implements Serializabl
     @Override
     public String toString() {
         return " The following trade request has been cancelled as one of the users is no longer in possession of " +
-                "a item in the proposed trade. /n" + tradeString ;
+                "a item in the proposed trade. \n" + tradeString ;
     }
 }

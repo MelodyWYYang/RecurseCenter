@@ -65,7 +65,7 @@ public class ItemValidationDeclinedAlert extends UserAlert implements Serializab
     }
     @Override
     public String toString(){
-        return "Item validation request/nUser: " + usernameOfOwner + "Item name: " + name + "/nItem description: " +
-                description + "/nItem ID number: " + itemID;
+        return "Your item validation request has been declined for the following reason: \n" +message+ "\nUser: " + usernameOfOwner + "Item name: " + name + "\nItem description: " +
+                description + "\nItem ID number: " + itemID ;
     }
 }

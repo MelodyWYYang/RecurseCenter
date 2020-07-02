@@ -38,6 +38,6 @@ public class TradeRequestAlert extends UserAlert implements Serializable {
      */
     @Override
     public String toString() {
-        return senderUserName + " has proposed the following trade: /n" + tradeString + "\n";
+        return senderUserName + " has proposed the following trade: \n" + tradeString + "\n";
     }
 }
