@@ -7,11 +7,13 @@ public class FreezeUserAlert extends AdminAlert implements Serializable {
     private String username; // username of the user
     private String lent; // amount user has lent
     private String borrowed; // amount user has borrowed
+    private String thresholdRequired; // difference needed between lent and borrowed
 
-    public FreezeUserAlert(String username, String lent, String borrowed){
+    public FreezeUserAlert(String username, String lent, String borrowed, String thresholdRequired){
         this.username = username;
         this.lent = lent;
         this.borrowed = borrowed;
+        this.thresholdRequired = thresholdRequired;
     }
 
     public String getUsername(){ return username; }
@@ -34,6 +36,7 @@ public class FreezeUserAlert extends AdminAlert implements Serializable {
     public String toString() {
         return "Freeze User Alert" +
                 "\n" + username + " has lent: " + lent + " items" +
-                "\n" + username + " has borrowed: " + borrowed + " items";
+                "\n" + username + " has borrowed: " + borrowed + " items" +
+                "\n" + "Required to lend" + thresholdRequired + " more items than borrowed";
     }
 }

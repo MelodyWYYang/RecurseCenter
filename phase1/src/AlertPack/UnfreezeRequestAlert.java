@@ -7,9 +7,10 @@ public class UnfreezeRequestAlert extends FreezeUserAlert implements Serializabl
     private String username; // username of the user
     private String lent; // amount user has lent
     private String borrowed; // amount user has borrowed
+    private String thresholdRequired; // difference needed between lent and borrowed
 
-    public UnfreezeRequestAlert(String username, String lent, String borrowed) {
-        super(username, lent, borrowed);
+    public UnfreezeRequestAlert(String username, String lent, String borrowed, String thresholdRequired) {
+        super(username, lent, borrowed, thresholdRequired);
     }
 
     /**
@@ -20,7 +21,8 @@ public class UnfreezeRequestAlert extends FreezeUserAlert implements Serializabl
     public String toString() {
         return "Unfreeze User Request Alert" +
                 "\n" + username + " has lent: " + lent + " items" +
-                "\n" + username + " has borrowed: " + borrowed + " items";
+                "\n" + username + " has borrowed: " + borrowed + " items" +
+                "\n" + "Required to lend" + thresholdRequired + " more items than borrowed";
     }
 
 }
