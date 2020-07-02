@@ -36,6 +36,8 @@ public class UserAlertManager {
             handleTradeRequestCancelledAlert();
         }else if (alert instanceof ItemValidationDeclinedAlert){
             handleItemValidationDeclinedAlert((ItemValidationDeclinedAlert) alert);
+        } else if (alert instanceof TradePastDateAlert) {
+            handleTradePastDateAlert((TradePastDateAlert) alert);
         }
 
             //Each alert needs a handle method for its type, which prints/takes input and calls corresponding functions to
@@ -194,6 +196,26 @@ public class UserAlertManager {
             //TODO finish this method by sending a new item validation request - Louis
         }
     }
+
+    public void handleTradePastDateAlert(TradePastDateAlert alert){
+
+        boolean flag = true;
+        int input = 0;
+        while (flag) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("(1) Report the other user \n (2) Confirm Trade");
+            input = scan.nextInt();
+            if (input == 1) {
+                // report the other user. rendReport not implemented. will update
+            }
+            if (input == 2){
+                User user = UserManager.searchUser(alert.getUsername());
+                // confirm trade
+        }
+
+        }
+    }
+
     //helper method to ensure the user picks a valid choice, options are between 1 and x - Louis
     private int optionChoice(int x){
         Scanner scanner = new Scanner(System.in);
