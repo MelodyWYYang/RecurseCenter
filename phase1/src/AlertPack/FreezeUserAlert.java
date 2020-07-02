@@ -34,9 +34,6 @@ public class FreezeUserAlert extends AdminAlert implements Serializable {
     public String toString() {
         return "Freeze User Alert" +
                 "\n" + username + " has lent: " + lent + " items" +
-                "\n" + username + " has borrowed: " + borrowed + " items" +
-                "\n" + "Please select an option below:" +
-                "\n" + "1) Freeze User" +
-                "\n" + "2) Ignore";
+                "\n" + username + " has borrowed: " + borrowed + " items";
     }
 }
