@@ -37,6 +37,6 @@ public class FreezeUserAlert extends AdminAlert implements Serializable {
         return "Freeze User Alert" +
                 "\n" + username + " has lent: " + lent + " items" +
                 "\n" + username + " has borrowed: " + borrowed + " items" +
-                "\n" + "Required to lend" + thresholdRequired + " more items than borrowed";
+                "\n" + "Required to lend " + thresholdRequired + " more items than borrowed";
     }
 }

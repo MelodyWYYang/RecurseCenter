@@ -22,7 +22,7 @@ public class UnfreezeRequestAlert extends FreezeUserAlert implements Serializabl
         return "Unfreeze User Request Alert" +
                 "\n" + username + " has lent: " + lent + " items" +
                 "\n" + username + " has borrowed: " + borrowed + " items" +
-                "\n" + "Required to lend" + thresholdRequired + " more items than borrowed";
+                "\n" + "Required to lend " + thresholdRequired + " more items than borrowed";
     }
 
 }
