@@ -53,15 +53,47 @@ public class AdminAlertManager {
         int choice = optionChoice(2);
         adminUser.pollValidationRequest(choice == 1, alert);
     }
+
     public void handleReportAlert(ReportAlert alert){
 
     }
-    public void handleFreezeUserAlert(FreezeUserAlert alert){
 
+    private void handleFreezeUserAlert(FreezeUserAlert alert){
+        // author: Callan Murphy
+        boolean flag = true;
+        int input = 0;
+        while (flag) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("(1) Freeze User");
+            System.out.println("(2) Dismiss");
+            input = scan.nextInt();
+            if (input == 1) {
+                User user = UserManager.searchUser(alert.getUsername());
+                adminUser.freezeUser(user);
+                flag = false;
+            }
+            if (input == 2) flag = false;
+        }
     }
-    public void handleUnfreezeRequestAlert(UnfreezeRequestAlert a){
 
+    private void handleUnfreezeRequestAlert(UnfreezeRequestAlert alert){
+        // author: Callan Murphy
+        boolean flag = true;
+        int input = 0;
+        while (flag) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("(1) Unfreeze User");
+            System.out.println("(2) Dismiss");
+            input = scan.nextInt();
+            if (input == 1) {
+                User user = UserManager.searchUser(alert.getUsername());
+                adminUser.unfreezeAccount(user);
+                flag = false;
+            }
+            if (input == 2) flag = false;
+        }
     }
+
     //helper method to ensure the user picks a valid choice, options are between 1 and x - Louis
     private int optionChoice(int x){
         Scanner scanner = new Scanner(System.in);
