@@ -76,8 +76,8 @@ public class UserAlertManager {
             // report the other user
         } else {
             User user = UserManager.searchUser(alert.getUsername());
-            TemporaryTrade trade = TradeSystem.userManager.serachTemporaryTrade(alert.getTradeId());
-            TradeSystem.userManager.confirmReExchange(user, trade);
+            TemporaryTrade trade = TradeSystem.adminUser.userManager.serachTemporaryTrade(alert.getTradeId());
+            TradeSystem.adminUser.userManager.confirmReExchange(user, trade);
             System.out.println("Trade ReExchange confirmed");
         }
     }
@@ -88,17 +88,17 @@ public class UserAlertManager {
         int input = 0;
 
         Scanner scan = new Scanner(System.in);
-        Trade trade = TradeSystem.userManager.searchPendingTradeRequest(a.getTradeID());
+        Trade trade = TradeSystem.adminUser.userManager.searchPendingTradeRequest(a.getTradeID());
 
         User thisUser;
 
         int numEditsRemaining;
         if (a.getSenderUserName().equals(trade.getUsername1())){
             numEditsRemaining = 3 - trade.getUser2NumRequests();
-            thisUser = TradeSystem.userManager.searchUser(trade.getUsername2());
+            thisUser = TradeSystem.adminUser.userManager.searchUser(trade.getUsername2());
         }else{
             numEditsRemaining = 3 - trade.getUser1NumRequests();
-            thisUser = TradeSystem.userManager.searchUser(trade.getUsername1());
+            thisUser = TradeSystem.adminUser.userManager.searchUser(trade.getUsername1());
         }
 
         if (numEditsRemaining == 0){
@@ -113,11 +113,11 @@ public class UserAlertManager {
         assert thisUser != null;
 
         if (input == 1){
-            TradeSystem.userManager.acceptTradeRequest(trade, thisUser);
+            TradeSystem.adminUser.userManager.acceptTradeRequest(trade, thisUser);
             System.out.println("Trade Request Accepted. Meet up with the person at the time and place specified above."+
                     "Remember to login to confirm the trade afterwords!");
         } else if (input == 2){
-            TradeSystem.userManager.declineTradeRequest(trade, thisUser);
+            TradeSystem.adminUser.userManager.declineTradeRequest(trade, thisUser);
             System.out.println("Trade Request Declined.");
         } else if (input == 3){
             System.out.println("Editing Trade Request. \n Enter new meeting time (format: yyyy-MM-dd HH:mm: \n");
@@ -141,7 +141,7 @@ public class UserAlertManager {
 
             //TODO: Ensure that this is not always null (the compiler complains that it is but I have my doubts).
             assert meetingTime != null;
-            TradeSystem.userManager.editTradeRequest(trade, meetingTime, inputMeetingPlace, thisUser);
+            TradeSystem.adminUser.userManager.editTradeRequest(trade, meetingTime, inputMeetingPlace, thisUser);
             System.out.println("Trade successfully edited. Meeting at " + inputMeetingPlace + " at " + meetingTime +
                     ".");
         }

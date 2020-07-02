@@ -104,47 +104,12 @@ public class UserManager implements Serializable{
      */
     public TradeRequestAlert createTradeRequestAlert(Trade trade, User user1){
 
-        String tradeString = createTradeString(trade);
+        String tradeString = tradeToString(trade);
 
         return new TradeRequestAlert(user1.getUsername(), trade.getTradeID(), tradeString);
 
     }
 
-    private String createTradeString(Trade trade){
-        StringBuilder tradeString = new StringBuilder("Their: ");
-
-        if (trade.getItemIDsSentToUser1().size() == 0){
-            tradeString.append("nothing");
-        }else {
-            if (trade.getItemIDsSentToUser1().size() > 1){
-                for (int i = 0; i < trade.getItemIDsSentToUser1().size() - 1; i++){
-                    tradeString.append(searchItem(trade.getItemIDsSentToUser1().get(i)).getName()).append(", ");
-                }
-                tradeString.append(searchItem(trade.getItemIDsSentToUser1().get(trade.getItemIDsSentToUser1().size()-1)).getName());
-            } else {
-                tradeString.append(searchItem(trade.getItemIDsSentToUser1().get(0)).getName());
-            }
-
-        }
-        tradeString.append(" for your: ");
-
-        if (trade.getItemIDsSentToUser2().size() == 0){
-            tradeString.append("nothing");
-        }else {
-            if (trade.getItemIDsSentToUser2().size() > 1){
-                for (int i = 0; i < trade.getItemIDsSentToUser2().size() - 1; i++){
-                    tradeString.append(searchItem(trade.getItemIDsSentToUser2().get(i)).getName()).append(", ");
-                }
-                tradeString.append(searchItem(trade.getItemIDsSentToUser2().get(trade.getItemIDsSentToUser2().size()-1)).getName());
-            } else {
-                tradeString.append(searchItem(trade.getItemIDsSentToUser2().get(0)).getName());
-            }
-
-        }
-        tradeString.append(". Meet at ").append(trade.getMeetingPlace()).append(" at ").append(trade.getTimeOfTrade());
-
-        return tradeString.toString();
-    }
 
     /** Method which allows a user to accept a trade request
      * Author: Jinyu Liu
@@ -168,7 +133,7 @@ public class UserManager implements Serializable{
         pendingTradeRequests.remove(trade);
         pendingTrades.add(trade);
 
-        String tradeString = createTradeString(trade);
+        String tradeString = tradeToString(trade);
         TradeAcceptedAlert alert = new TradeAcceptedAlert(user.getUsername(), tradeString);
         alertUser(otherUserName, alert);
     }
@@ -182,11 +147,9 @@ public class UserManager implements Serializable{
     public void declineTradeRequest(Trade trade, User decliningUser){
 
         pendingTradeRequests.remove(trade);
-        //Murray will handle the below TODO after discussing it next meeting:
-        //TODO: sort out which tradestring we should use. Ask the group. Do the same for editTradeRequest and sendTrade
-        // Request.
 
-        String tradeString = createTradeString(trade);
+
+        String tradeString = tradeToString(trade);
 
         TradeDeclinedAlert alert = new TradeDeclinedAlert(tradeString, decliningUser.getUsername());
 

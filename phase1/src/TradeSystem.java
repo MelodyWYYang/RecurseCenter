@@ -1,6 +1,11 @@
 public class TradeSystem {
 
-    public static UserManager userManager = new UserManager();
+    public static AdminUser adminUser = new AdminUser("admin", "admin");
+
+    UserAlertManager userAlertManager = new UserAlertManager();
+
+    AdminAlertManager adminAlertManager = new AdminAlertManager();
 
 
 }
+
