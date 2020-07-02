@@ -1,8 +1,11 @@
 import AlertPack.FrozenAlert;
+import AlertPack.ItemValidationDeclinedAlert;
+import AlertPack.ItemValidationRequestAlert;
+import AlertPack.UserAlert;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Scanner;
 
 public class AdminUser implements Serializable {
     //author: Tingyu Liang, Riya Razdan in group 0110 for CSC207H1 summer 2020 project
@@ -18,6 +21,9 @@ public class AdminUser implements Serializable {
     public ArrayList<String> accountsToFreezeQueue;
     public ArrayList<String> unfreezeRequestList; // list of accounts that have requested to be unfrozen
     public ArrayList<String> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
+
+    public UserManager userManager = new UserManager(); // Not really sure how we want to do this. Hardcoded for simplicity in the meanwhile - Louis
+    //Todo replace above line with actual UserManager.
 
     public AdminUser(String username, String password) {
         // this.loginInfo.put(username, password);
@@ -78,26 +84,32 @@ public class AdminUser implements Serializable {
      }
      */
 
-    public void pollValidationRequest(boolean accepted) {
-        ItemValidationRequest request = UserManager.itemValidationRequestQueue.get(0);
+    public void pollValidationRequest(boolean accepted, ItemValidationRequestAlert request) {
         if (accepted) {
-            User user = UserManager.searchUser(request.usernameOfOwner);
-            Item item = new Item(request.name, request.itemID);
-            item.setOwner(request.usernameOfOwner);
-            item.setUserThatHasPossession(request.usernameOfOwner);
-            item.setDescription(request.description);
+            User user = UserManager.searchUser(request.getOwner());
+            Item item = new Item(request.getName(), request.getItemID());
+            item.setOwner(request.getOwner());
+            item.setUserThatHasPossession(request.getOwner());
+            item.setDescription(request.getDescription());
             assert user != null;
             user.availableItems.add(item);   //Changed this to fail when user is null. We don't want the program to
             // fail silently.
             // request.getOwner().availableItems.add(request.getObj());
         }
-        UserManager.itemValidationRequestQueue.remove(0);
+        else{
+            System.out.println("Please enter a reason why this request was declined.");
+            Scanner scanner = new Scanner(System.in);
+            String message = scanner.next();
+            UserAlert alert = new ItemValidationDeclinedAlert(request.getOwner(), request.getName(),
+                    request.getDescription(), request.getItemID(), message);
+            userManager.alertUser(request.getName(), alert);
+        }
     }
 
 
     /** Method which freeze the user account and sends a FrozenAlert to the user
      * author: tian
-     * @param username user object
+     * @param user user object
      */
     public void freezeUser(User user){
         user.isFrozen(true);
