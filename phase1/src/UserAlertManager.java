@@ -28,6 +28,9 @@ public class UserAlertManager {
 
             handleTradeRequestAlert((TradeRequestAlert) alert);
 
+        }
+        else if (alert instanceof TradeAcceptedAlert) {
+            handleTradeAcceptedAlert();
         } else if (alert instanceof TradeDeclinedAlert){
             handleTradeDeclinedAlert();
         } else if (alert instanceof TradeCancelledAlert) {
@@ -38,6 +41,8 @@ public class UserAlertManager {
             handleItemValidationDeclinedAlert((ItemValidationDeclinedAlert) alert);
         } else if (alert instanceof TradePastDateAlert) {
             handleTradePastDateAlert((TradePastDateAlert) alert);
+        } else if (alert instanceof MessageAlert) {
+            handleMessageAlert();
         }
 
             //Each alert needs a handle method for its type, which prints/takes input and calls corresponding functions to
@@ -142,6 +147,21 @@ public class UserAlertManager {
         }
     }
 
+    private void handleTradeAcceptedAlert(){
+
+        boolean handled = false;
+
+        int input = 0;
+
+        while (!handled){
+            Scanner scan = new Scanner(System.in);
+            System.out.println("(1) Dismiss");
+            input = scan.nextInt();
+            if (input == 1) handled = true;
+        }
+
+    }
+
     private void handleTradeDeclinedAlert(){
 
         boolean handled = false;
@@ -214,6 +234,21 @@ public class UserAlertManager {
         }
 
         }
+    }
+
+    private void handleMessageAlert(){
+
+        boolean handled = false;
+
+        int input = 0;
+
+        while (!handled){
+            Scanner scan = new Scanner(System.in);
+            System.out.println("(1) Dismiss");
+            input = scan.nextInt();
+            if (input == 1) handled = true;
+        }
+
     }
 
     //helper method to ensure the user picks a valid choice, options are between 1 and x - Louis

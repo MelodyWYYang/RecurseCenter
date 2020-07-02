@@ -148,18 +148,29 @@ public class UserManager implements Serializable{
 
     /** Method which allows a user to accept a trade request
      * Author: Jinyu Liu
+     * Reworked by Tingyu Liang 7/2/2020
      * @param trade trade object
      * @param user user which is accepting the trade request
      */
     public void acceptTradeRequest(Trade trade, User user) {
-        if (trade.getUsername1().equals(user.username)) {
-            trade.user1AcceptedRequest = true;
+        String otherUserName;
+
+        if (trade.getUsername1().equals(user.getUsername())) {
+            trade.setUser1AcceptedRequest(true);
+            otherUserName = trade.getUsername2();
         }
-        else if (trade.getUsername2().equals(user.username)) {
-            trade.user2AcceptedRequest = true;
+        else {
+            // I am not sure if we have function to check if user is in the trade, commented by Tingyu
+            assert trade.getUsername2().equals(user.getUsername());
+            trade.setUser2AcceptedRequest(true);
+            otherUserName = trade.getUsername1();
         }
         pendingTradeRequests.remove(trade);
         pendingTrades.add(trade);
+
+        String tradeString = createTradeString(trade);
+        TradeAcceptedAlert alert = new TradeAcceptedAlert(user.getUsername(), tradeString);
+        alertUser(otherUserName, alert);
     }
 
     /**
