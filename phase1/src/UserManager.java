@@ -48,10 +48,12 @@ public class UserManager implements Serializable{
      * @param username username of user
      * @param password password of user
      */
-    public User createUser(String username, String password) {
-        // TODO: Whenever and wherever this is called from the controller/presenter layer, there MUST be a check first
-        //  to see if the passed <username> is taken by annother user. A major assumption of our backend is that
-        //  usernames are distinct and unique.
+    public User createUser(String username, String password) throws UserNameTakenException {
+        for (User user : listUsers) {
+            if (user.getUsername().equals(username)) {
+                throw new UserNameTakenException("That username is taken.");
+            }
+        }
         User newUser = new User(username);
         newUser.setPassword(password);
         listUsers.add(newUser);
@@ -60,7 +62,6 @@ public class UserManager implements Serializable{
     }
 
 
-    //TODO: Make it so this method depends on item IDs (Integer) and not directly on items.
     /** Method which creates a trade request and adds it to the list of pending trade requests.
      * Author: Jinyu Liu
      * Slight rework by Louis Scheffer V 6/27/2020
@@ -256,7 +257,7 @@ public class UserManager implements Serializable{
     }
 
     //TODO fix this method and other stats methods
-    public ArrayList<Item> RecentTransactions(User user) {
+    public ArrayList<Item> RecentTransactionItems(User user) {
         ArrayList<Trade> potentialRecentCompleted = new ArrayList<Trade>();
         ArrayList<TemporaryTrade> potentialRecentIncompleted = new ArrayList<TemporaryTrade>();
         ArrayList<Item> recents = new ArrayList<Item>();
@@ -299,14 +300,18 @@ public class UserManager implements Serializable{
                 if (mostRecentComp.getTimeOfTrade().isAfter(mostRecentIncomp.getTimeOfTrade())) {
                     if (mostRecentComp.getUsername1().equals(user.username)) {
                         recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
+                        potentialRecentCompleted.remove(mostRecentComp);
                     } else if (mostRecentComp.getUsername2().equals(user.username)) {
                         recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
+                        potentialRecentCompleted.remove(mostRecentComp);
                     }
                 } else if (mostRecentIncomp.getTimeOfTrade().isAfter(mostRecentComp.getTimeOfTrade())) {
                     if (mostRecentIncomp.getUsername1().equals(user.username)) {
                         recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser2().get(0)));
+                        potentialRecentIncompleted.remove(mostRecentIncomp);
                     } else if (mostRecentIncomp.getUsername2().equals(user.username)) {
                         recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser1().get(0)));
+                        potentialRecentIncompleted.remove(mostRecentIncomp);
                     }
                 }
             }

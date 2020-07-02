@@ -30,6 +30,10 @@ public class UserAlertManager {
 
         } else if (alert instanceof TradeDeclinedAlert){
             handleTradeDeclinedAlert();
+        } else if (alert instanceof TradeCancelledAlert) {
+            handleTradeCancelledAlert();
+        } else if (alert instanceof  TradeRequestCancelledAlert) {
+            handleTradeRequestCancelledAlert();
         }
 
             //Each alert needs a handle method for its type, which prints/takes input and calls corresponding functions to
@@ -147,5 +151,34 @@ public class UserAlertManager {
             if (input == 1) handled = true;
         }
 
+    }
+
+
+    private void handleTradeCancelledAlert() {
+
+        boolean handled = false;
+
+        int input = 0;
+
+        while (!handled){
+            Scanner scan = new Scanner(System.in);
+            System.out.println("(1) Dismiss");
+            input = scan.nextInt();
+            if (input == 1) handled = true;
+        }
+    }
+
+    private void handleTradeRequestCancelledAlert() {
+
+        boolean handled = false;
+
+        int input = 0;
+
+        while (!handled) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("(1) Dismiss");
+            input = scan.nextInt();
+            if (input == 1) handled = true;
+        }
     }
 }
