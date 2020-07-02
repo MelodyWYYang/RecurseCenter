@@ -32,7 +32,7 @@ public class FreezeUserAlert extends AdminAlert implements Serializable {
      */
     @Override
     public String toString() {
-        return "Freeze User Alert Warning" +
+        return "Freeze User Alert" +
                 "\n" + username + " has lent: " + lent + " items" +
                 "\n" + username + " has borrowed: " + borrowed + " items" +
                 "\n" + "Please select an option below:" +

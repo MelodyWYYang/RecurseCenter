@@ -55,6 +55,40 @@ public class UserAlertManager {
         }
     }
 
+    private void handleFreezeUserAlert(){
+        // author: Callan Murphy
+        boolean flag = true;
+        int input = 0;
+        while (flag) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("(1) Freeze User");
+            System.out.println("(2) Dismiss");
+            input = scan.nextInt();
+            if (input == 1) {
+                FreezeUserAlert.freezeUser();
+                flag = false;
+            }
+            if (input == 2) flag = false;
+        }
+    }
+
+    private void handleUnfreezeUserAlert(){
+        // author: Callan Murphy
+        boolean flag = true;
+        int input = 0;
+        while (flag) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("(1) Unfreeze User");
+            System.out.println("(2) Dismiss");
+            input = scan.nextInt();
+            if (input == 1) {
+                FreezeUserAlert.unfreezeUser();
+                flag = false;
+            }
+            if (input == 2) flag = false;
+        }
+    }
+
     private void handleExpirationAlert(ExpirationAlert alert){
         boolean flag = true;
         int input = 0;
