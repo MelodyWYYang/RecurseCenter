@@ -531,6 +531,10 @@ public class UserManager implements Serializable{
         }
     }
 
+    public void confirmTrade(User user, Trade trade){
+        // TODO
+    }
+
     /** Method which returns items to their owners after the expiration of a temporary trade
      * Author: Louis Scheffer V
      * @param trade Temporary Trade Object

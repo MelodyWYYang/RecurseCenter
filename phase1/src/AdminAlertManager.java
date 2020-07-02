@@ -55,7 +55,23 @@ public class AdminAlertManager {
     }
 
     public void handleReportAlert(ReportAlert alert){
-
+        boolean flag = true;
+        int input = 0;
+        while (flag){
+            Scanner scan = new Scanner(System.in);
+            System.out.println(alert.toString());
+            System.out.println("(1) Accept report");
+            System.out.println("(2) Dismiss");
+            input = scan.nextInt();
+            if (input == 1){
+                // increment incompleteTrades stat in AdminUser and freeze user if needed
+                // incomplete trades are not being tracked currently. will update
+                flag = false;
+            }
+            if (input == 2){
+                flag = false;
+            }
+        }
     }
 
     private void handleFreezeUserAlert(FreezeUserAlert alert){
