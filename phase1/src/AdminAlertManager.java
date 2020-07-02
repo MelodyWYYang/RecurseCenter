@@ -1,10 +1,16 @@
-import AlertPack.AdminAlert;
+import AlertPack.*;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class AdminAlertManager {
-/*
 
+    /** Method which iterates through each AdminAlert and handles it.
+     *
+     * @param alerts Array List of AdminAlerts that need to be processed.
+     */
+    public AdminUser adminUser = new AdminUser("admin", "admin");// Not really sure how we want to do this. Hardcoded for simplicity in the meanwhile - Louis
+    //Todo replace above line with actual admin user.
     public void handleAlertQueue(ArrayList<AdminAlert> alerts){
 
         while(!(alerts.size() == 0)){
@@ -14,17 +20,61 @@ public class AdminAlertManager {
 
     }
 
+    /** Method which sends each AdminAlert to the correct function to be handled based on its type
+     *
+     * @param a AdminAlert object to be handled
+     */
     private void handleAlert(AdminAlert a){
 
-        if a.instanceof(INSERT ALERT TYPE HERE){
-                //Each if block should call the handle method for the corresponding alert type.
-        } else if //blah blah blah and so on.
+        if (a instanceof ItemValidationRequestAlert){
+                handleItemValidationRequestAlert((ItemValidationRequestAlert) a);
+        } else if (a instanceof ReportAlert){
+            handleReportAlert((ReportAlert) a);
+        } else if (a instanceof FreezeUserAlert){
+            handleFreezeUserAlert((FreezeUserAlert) a);
+        }else if (a instanceof UnfreezeRequestAlert){
+            handleUnfreezeRequestAlert((UnfreezeRequestAlert) a);
+        }
     }
 
         //Each alert needs a handle method for its type, which prints/takes input and calls corresponding functions to
         //  handle the alert on the enduser side of things. See google doccument for specifics on alerts and their
         //  handling process.
-*/
+
+    /**
+     *
+     * @param alert a
+     */
+    public void handleItemValidationRequestAlert(ItemValidationRequestAlert alert){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(alert.toString());
+        System.out.println("(1) Approve this item");
+        System.out.println("(2) Deny this item");
+        int choice = optionChoice(2);
+        adminUser.pollValidationRequest(choice == 1, alert);
+    }
+    public void handleReportAlert(ReportAlert alert){
+
+    }
+    public void handleFreezeUserAlert(FreezeUserAlert alert){
+
+    }
+    public void handleUnfreezeRequestAlert(UnfreezeRequestAlert a){
+
+    }
+    //helper method to ensure the user picks a valid choice, options are between 1 and x - Louis
+    private int optionChoice(int x){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter one of the numbers listed above");
+        int choice = scanner.nextInt();
+        while(choice > x || choice <= 0){
+            System.out.println("The number you entered was not listed above. Please enter a choice between 1 and " + x);
+            choice = scanner.nextInt();
+        }
+        return choice;
+
+
+    }
 }
 
 

@@ -1,6 +1,8 @@
+package AlertPack;
+
 import java.io.Serializable;
 
-public class ItemValidationRequest implements Serializable{
+public class ItemValidationRequestAlert extends AdminAlert implements Serializable{
     //author: Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
     protected String usernameOfOwner;
     protected String name;
@@ -8,14 +10,14 @@ public class ItemValidationRequest implements Serializable{
     protected final int itemID;
     private static int idGenerator = 0;
 
-    public ItemValidationRequest(String owner, String obj, String desc){
+    public ItemValidationRequestAlert(String owner, String obj, String desc){
         this.description = desc;
         this.name = obj;
         this.usernameOfOwner = owner;
         itemID = idGenerator;
         idGenerator++;
     }
-    public ItemValidationRequest(String owner, String obj){
+    public ItemValidationRequestAlert(String owner, String obj){
         this.name = obj;
         this.usernameOfOwner = owner;
         itemID = idGenerator;
@@ -26,7 +28,7 @@ public class ItemValidationRequest implements Serializable{
      *
      * @return the name or title of the item.
      */
-    public String getObj() {
+    public String getName() {
         return name;
     }
 
@@ -52,5 +54,18 @@ public class ItemValidationRequest implements Serializable{
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     *
+     * @return ID number of the item
+     */
+    public int getItemID() {
+        return itemID;
+    }
+    @Override
+    public String toString(){
+        return "Item validation request/nUser: " + usernameOfOwner + "Item name: " + name + "/nItem description: " +
+                description + "/nItem ID number: " + itemID;
     }
 }

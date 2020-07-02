@@ -34,6 +34,8 @@ public class UserAlertManager {
             handleTradeCancelledAlert();
         } else if (alert instanceof  TradeRequestCancelledAlert) {
             handleTradeRequestCancelledAlert();
+        }else if (alert instanceof ItemValidationDeclinedAlert){
+            handleItemValidationDeclinedAlert((ItemValidationDeclinedAlert) alert);
         }
 
             //Each alert needs a handle method for its type, which prints/takes input and calls corresponding functions to
@@ -180,5 +182,28 @@ public class UserAlertManager {
             input = scan.nextInt();
             if (input == 1) handled = true;
         }
+    }
+    public void handleItemValidationDeclinedAlert(ItemValidationDeclinedAlert alert){
+        //It doesn't make sense to finish this method until we have set up the functionality to request item validation
+        // I will finish this method when we do so. - Louis
+        System.out.println(alert.toString());
+        System.out.println("(1) Dismiss");
+        System.out.println("(2) Send a new item validation request");
+        int choice = optionChoice(2);
+        if (choice == 2){
+            //TODO finish this method by sending a new item validation request - Louis
+        }
+    }
+    //helper method to ensure the user picks a valid choice, options are between 1 and x - Louis
+    private int optionChoice(int x){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter one of the numbers listed above");
+        int choice = scanner.nextInt();
+        while(choice > x || choice <= 0){
+            System.out.println("The number you entered was not listed above. Please enter a choice between 1 and " + x);
+        }
+        return choice;
+
+
     }
 }

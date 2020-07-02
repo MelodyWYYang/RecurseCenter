@@ -41,7 +41,7 @@ public class UserManager implements Serializable{
         return pendingTradeRequests;
     }
 
-    public static ArrayList<ItemValidationRequest> itemValidationRequestQueue = new ArrayList<ItemValidationRequest>();
+    public static ArrayList<ItemValidationRequestAlert> itemValidationRequestQueue = new ArrayList<ItemValidationRequestAlert>();
 
     /** Method which creates a user and adds it to the list of users
      * Author: Jinyu Liu
@@ -232,7 +232,7 @@ public class UserManager implements Serializable{
      */
     public void sendValidationRequest(String name, String description, String owner) {
         // reworked by Tingyu since the itemValidationRequestQueue has been moved to UserManager
-        itemValidationRequestQueue.add(new ItemValidationRequest(owner, name, description));
+        itemValidationRequestQueue.add(new ItemValidationRequestAlert(owner, name, description));
     }
 
     /** 2-arg method which creates and instantiates an ItemvalidationRequest.
@@ -241,7 +241,7 @@ public class UserManager implements Serializable{
      * @param owner username of the user who will own the item
      */
     public void sendValidationRequest(String name, String owner) {
-        itemValidationRequestQueue.add(new ItemValidationRequest(name, owner));
+        itemValidationRequestQueue.add(new ItemValidationRequestAlert(name, owner));
     }
 
     /* No longer neccessary - Louis
