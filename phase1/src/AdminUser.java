@@ -16,6 +16,8 @@ public class AdminUser implements Serializable {
     public static int incompleteThreshold; // # of incomplete trades allowed
     public static int completeThreshold; // # of complete trades allowed per week
 
+    private int borrowLendThreshold = 1;
+
     // public static ArrayList<ItemValidationRequest> itemValidationQueue;
 
     public ArrayList<String> accountsToFreezeQueue;

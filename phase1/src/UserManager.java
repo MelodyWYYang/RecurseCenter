@@ -451,13 +451,12 @@ public class UserManager implements Serializable{
         pendingTrades.remove(trade);
         if (trade instanceof TemporaryTrade){
             currentTemporaryTrades.add((TemporaryTrade) trade);
-            //TODO: if the borrowing user now has more borrows than loans + threshold, send
-            // a freeze request
 
         }
         else{
             completedTrades.add(trade);
         }
+
     }
 
     /** Method which exchanges the items in the trade system after a trade has been marked as completed
