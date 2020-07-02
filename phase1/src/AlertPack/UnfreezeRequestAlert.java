@@ -20,10 +20,7 @@ public class UnfreezeRequestAlert extends FreezeUserAlert implements Serializabl
     public String toString() {
         return "Unfreeze User Request Alert" +
                 "\n" + username + " has lent: " + lent + " items" +
-                "\n" + username + " has borrowed: " + borrowed + " items" +
-                "\n" + "Please select an option below:" +
-                "\n" + "1) Unfreeze User" +
-                "\n" + "2) Ignore";
+                "\n" + username + " has borrowed: " + borrowed + " items";
     }
 
 }
