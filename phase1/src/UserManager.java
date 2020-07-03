@@ -9,7 +9,8 @@ public class UserManager implements Serializable{
     //author: Jinyu Liu, Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
     //All methods written by Jinyu Liu except where noted
 
-    protected ArrayList<Trade> transactions = new ArrayList<Trade>(); // list of all transactions this User has completed since creation - Mel
+    //protected ArrayList<Trade> transactions = new ArrayList<Trade>(); // list of all transactions this User has completed since creation - Mel
+    //I believe this is identical to completed trades
 
     protected ArrayList<Trade> completedTrades = new ArrayList<Trade>(); // list of all trades which have been completed - Louis
 
@@ -230,72 +231,143 @@ public class UserManager implements Serializable{
         // unfreezeRequestList.add(username);
     }
 
-    //TODO fix this method and other stats methods
-    public ArrayList<Item> RecentTransactionItems(User user) {
-        ArrayList<Trade> potentialRecentCompleted = new ArrayList<Trade>();
-        ArrayList<TemporaryTrade> potentialRecentIncompleted = new ArrayList<TemporaryTrade>();
-        ArrayList<Item> recents = new ArrayList<Item>();
+    /** Helper function that returns a list of all the trades that user participated in and traded an item. The list is
+     * order by the date that the item left the user's possession.
+     * @param user User being evaluated
+     * @return ArrayList</Trade> (sorted by LocalTimeDate)
+     */
+    private ArrayList<Trade> getOrderedTrades(User user) {
+        ArrayList<Trade> completed = new ArrayList<Trade>();
+        ArrayList<TemporaryTrade> incompleted = new ArrayList<TemporaryTrade>();
+        ArrayList<Trade> recent = new ArrayList<Trade>();
+
         for (Trade trade : completedTrades) {
-            if (trade.getUsername1().equals(user.username) & !trade.getItemIDsSentToUser2().isEmpty()) {
-                potentialRecentCompleted.add(trade);
-            } else if (trade.getUsername2().equals(user.username) & !trade.getItemIDsSentToUser1().isEmpty()) {
-                potentialRecentCompleted.add(trade);
+            if (trade.getUsername1().equals(user.getUsername()) & !trade.getItemIDsSentToUser2().isEmpty()) {
+                completed.add(trade);
+            } else if (trade.getUsername2().equals(user.getUsername()) & !trade.getItemIDsSentToUser1().isEmpty()) {
+                completed.add(trade);
             }
         }
-        for (TemporaryTrade tTrade: currentTemporaryTrades) {
-            if (tTrade.getUsername1().equals(user.username) & !tTrade.getItemIDsSentToUser2().isEmpty()) {
-                potentialRecentIncompleted.add(tTrade);
-            } else if (tTrade.getUsername2().equals(user.username) & !tTrade.getItemIDsSentToUser1().isEmpty()) {
-                potentialRecentIncompleted.add(tTrade);
+
+        for (TemporaryTrade tTrade : currentTemporaryTrades) {
+            if (tTrade.getUsername1().equals(user.getUsername()) & !tTrade.getItemIDsSentToUser2().isEmpty()) {
+                incompleted.add(tTrade);
+            } else if (tTrade.getUsername2().equals(user.getUsername()) & !tTrade.getItemIDsSentToUser1().isEmpty()) {
+                incompleted.add(tTrade);
             }
         }
-        while (recents.size() < 3 & (!potentialRecentCompleted.isEmpty() | !potentialRecentIncompleted.isEmpty())) {
-            if (!potentialRecentCompleted.isEmpty() & potentialRecentIncompleted.isEmpty()) {
-                Trade mostRecentComp = potentialRecentCompleted.get(potentialRecentCompleted.size() - 1);
-                if (mostRecentComp.getUsername1().equals(user.username)) {
-                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
-                    potentialRecentCompleted.remove(mostRecentComp);
-                } else if (mostRecentComp.getUsername2().equals(user.username)) {
-                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
-                    potentialRecentCompleted.remove(mostRecentComp);
-                }
-            } else if (!potentialRecentIncompleted.isEmpty() & potentialRecentCompleted.isEmpty()) {
-                Trade mostRecentIncomp = potentialRecentIncompleted.get(potentialRecentCompleted.size() - 1);
-                if (mostRecentIncomp.getUsername1().equals(user.username)) {
-                    recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser2().get(0)));
-                    potentialRecentIncompleted.remove(mostRecentIncomp);
-                } else if (mostRecentIncomp.getUsername2().equals(user.username)) {
-                    recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser1().get(0)));
-                    potentialRecentIncompleted.remove(mostRecentIncomp);
-                }
+
+        while (!completed.isEmpty() | !incompleted.isEmpty()) {
+            if (!completed.isEmpty() & incompleted.isEmpty()) {
+                recent.addAll(completed);
+                completed.clear();
+            } else if (completed.isEmpty() & !incompleted.isEmpty()) {
+                recent.addAll(incompleted);
+                incompleted.clear();
             } else {
-                Trade mostRecentComp = potentialRecentCompleted.get(potentialRecentCompleted.size() - 1);
-                Trade mostRecentIncomp = potentialRecentIncompleted.get(potentialRecentIncompleted.size() - 1);
-                if (mostRecentComp.getTimeOfTrade().isAfter(mostRecentIncomp.getTimeOfTrade())) {
-                    if (mostRecentComp.getUsername1().equals(user.username)) {
-                        recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
-                        potentialRecentCompleted.remove(mostRecentComp);
-                    } else if (mostRecentComp.getUsername2().equals(user.username)) {
-                        recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
-                        potentialRecentCompleted.remove(mostRecentComp);
-                    }
-                } else if (mostRecentIncomp.getTimeOfTrade().isAfter(mostRecentComp.getTimeOfTrade())) {
-                    if (mostRecentIncomp.getUsername1().equals(user.username)) {
-                        recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser2().get(0)));
-                        potentialRecentIncompleted.remove(mostRecentIncomp);
-                    } else if (mostRecentIncomp.getUsername2().equals(user.username)) {
-                        recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser1().get(0)));
-                        potentialRecentIncompleted.remove(mostRecentIncomp);
-                    }
+                if (completed.get(0).getTimeOfTrade().isBefore(incompleted.get(0).getTimeOfTrade())) {
+                    recent.add(completed.get(0));
+                    completed.remove(0);
+                } else {
+                    recent.add(incompleted.get(0));
+                    incompleted.remove(0);
                 }
             }
         }
-        return recents;
-    } //there can be many items traded per single trade, how do we keep track of top three?
-    // most recent 3 transactions, access transactions list and take last 3
-    // code for case where User hasn't traded w 3 ppl yet -Mel
-    // I realize this code does not cover cases where incomp/comp lists are empty or become empty. I'm fixing that right
-    // now in another test file - Jinyu
+    return recent;
+    }
+
+    /** Helper function that returns an ordered list of all item's ID that the user traded away. The list is ordered by
+     * the date that the user traded the item away.
+     * @param tradeHistory Ordered list of all trades that user participated in and traded an item away
+     * @param user User being evaluated
+     * @return ArrayList</int> (sorted by LocalTimeDate)
+     */
+    private ArrayList<Integer> getOrderedItemsID(ArrayList<Trade> tradeHistory, User user) {
+        ArrayList<Integer> orderedItemsID = new ArrayList<Integer>();
+        for (Trade trade : tradeHistory) {
+            if (trade.getUsername1().equals(user.getUsername())) {
+                orderedItemsID.addAll(trade.getItemIDsSentToUser2());
+            } else if (trade.getUsername2().equals(user.getUsername())) {
+                orderedItemsID.addAll(trade.getItemIDsSentToUser1());
+            }
+        }
+        return orderedItemsID;
+    }
+
+    public ArrayList<Item> getNOrderedItems(User user, ArrayList<Integer> orderedItemsID, int n) {
+        ArrayList<Integer> orderedItemsIDClone = (ArrayList<Integer>) orderedItemsID.clone();
+        ArrayList<Item> nOrderedItems = new ArrayList<Item>();
+        while (nOrderedItems.size() < n & !orderedItemsIDClone.isEmpty()) {
+            nOrderedItems.add(searchItem(orderedItemsIDClone.get(orderedItemsIDClone.size() - 1)));
+            orderedItemsIDClone.remove(orderedItemsIDClone.size() - 1);
+        }
+        return nOrderedItems;
+    }
+
+
+//    public ArrayList<Item> RecentTransactionItems(User user) {
+//        ArrayList<Trade> potentialRecentCompleted = new ArrayList<Trade>();
+//        ArrayList<TemporaryTrade> potentialRecentIncompleted = new ArrayList<TemporaryTrade>();
+//        ArrayList<Item> recents = new ArrayList<Item>();
+//        for (Trade trade : completedTrades) {
+//            if (trade.getUsername1().equals(user.username) & !trade.getItemIDsSentToUser2().isEmpty()) {
+//                potentialRecentCompleted.add(trade);
+//            } else if (trade.getUsername2().equals(user.username) & !trade.getItemIDsSentToUser1().isEmpty()) {
+//                potentialRecentCompleted.add(trade);
+//            }
+//        }
+//        for (TemporaryTrade tTrade: currentTemporaryTrades) {
+//            if (tTrade.getUsername1().equals(user.username) & !tTrade.getItemIDsSentToUser2().isEmpty()) {
+//                potentialRecentIncompleted.add(tTrade);
+//            } else if (tTrade.getUsername2().equals(user.username) & !tTrade.getItemIDsSentToUser1().isEmpty()) {
+//                potentialRecentIncompleted.add(tTrade);
+//            }
+//        }
+//        while (recents.size() < 3 & (!potentialRecentCompleted.isEmpty() | !potentialRecentIncompleted.isEmpty())) {
+//            if (!potentialRecentCompleted.isEmpty() & potentialRecentIncompleted.isEmpty()) {
+//                Trade mostRecentComp = potentialRecentCompleted.get(potentialRecentCompleted.size() - 1);
+//                if (mostRecentComp.getUsername1().equals(user.username)) {
+//                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
+//                    potentialRecentCompleted.remove(mostRecentComp);
+//                } else if (mostRecentComp.getUsername2().equals(user.username)) {
+//                    recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
+//                    potentialRecentCompleted.remove(mostRecentComp);
+//                }
+//            } else if (!potentialRecentIncompleted.isEmpty() & potentialRecentCompleted.isEmpty()) {
+//                Trade mostRecentIncomp = potentialRecentIncompleted.get(potentialRecentCompleted.size() - 1);
+//                if (mostRecentIncomp.getUsername1().equals(user.username)) {
+//                    recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser2().get(0)));
+//                    potentialRecentIncompleted.remove(mostRecentIncomp);
+//                } else if (mostRecentIncomp.getUsername2().equals(user.username)) {
+//                    recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser1().get(0)));
+//                    potentialRecentIncompleted.remove(mostRecentIncomp);
+//                }
+//            } else {
+//                Trade mostRecentComp = potentialRecentCompleted.get(potentialRecentCompleted.size() - 1);
+//                Trade mostRecentIncomp = potentialRecentIncompleted.get(potentialRecentIncompleted.size() - 1);
+//                if (mostRecentComp.getTimeOfTrade().isAfter(mostRecentIncomp.getTimeOfTrade())) {
+//                    if (mostRecentComp.getUsername1().equals(user.username)) {
+//                        recents.add(searchItem(mostRecentComp.getItemIDsSentToUser2().get(0)));
+//                        potentialRecentCompleted.remove(mostRecentComp);
+//                    } else if (mostRecentComp.getUsername2().equals(user.username)) {
+//                        recents.add(searchItem(mostRecentComp.getItemIDsSentToUser1().get(0)));
+//                        potentialRecentCompleted.remove(mostRecentComp);
+//                    }
+//                } else if (mostRecentIncomp.getTimeOfTrade().isAfter(mostRecentComp.getTimeOfTrade())) {
+//                    if (mostRecentIncomp.getUsername1().equals(user.username)) {
+//                        recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser2().get(0)));
+//                        potentialRecentIncompleted.remove(mostRecentIncomp);
+//                    } else if (mostRecentIncomp.getUsername2().equals(user.username)) {
+//                        recents.add(searchItem(mostRecentIncomp.getItemIDsSentToUser1().get(0)));
+//                        potentialRecentIncompleted.remove(mostRecentIncomp);
+//                    }
+//                }
+//            }
+//        }
+//        return recents;
+//    }
+//As ugly as this is, please don't delete this yet until I am sure the newer code works - Jinyu
 
     public int getNumTradesThisWeek(User user) {
         int numTransactions = 0;
@@ -318,6 +390,28 @@ public class UserManager implements Serializable{
         }
         return numTransactions;
     }
+
+
+    private ArrayList<Trade> getIncompleteTrades() {
+        ArrayList<Trade> incompleteTrades = new ArrayList<Trade>();
+        for (Trade trade : pendingTrades) {
+            if (trade.getTimeOfTrade().isAfter(LocalDateTime.now())) {
+                incompleteTrades.add(trade);
+            }
+        }
+        return incompleteTrades;
+    }
+
+    public int getNumIncompTrades(User user, ArrayList<Trade> incompleteTrades) {
+        int count = 0;
+        for (Trade trade : incompleteTrades) {
+            if (trade.getUsername1().equals(user.getUsername()) | trade.getUsername2().equals(user.getUsername())) {
+                count++;
+            }
+        }
+        return count;
+    }
+
 
     /* i don't think this is neccessary anymore - Louis
     public Trade dequeueTradeRequest(){
