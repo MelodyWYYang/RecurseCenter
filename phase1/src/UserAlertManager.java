@@ -256,7 +256,7 @@ public class UserAlertManager {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter one of the numbers listed above");
         int choice = scanner.nextInt();
-        while(choice > x || choice <= 0){
+        while(choice >= x || choice < 0){
             System.out.println("The number you entered was not listed above. Please enter a choice between 1 and " + x);
         }
         return choice;

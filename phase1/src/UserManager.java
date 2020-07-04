@@ -733,8 +733,8 @@ public class UserManager implements Serializable{
         return "User 1: " + trade.getUsername1() + "\nUser 2: " + trade.getUsername2() +
                 "\nItems being traded from user 1 to user 2: " + GetItemNamesFromUser1ToUser2(trade) +
                 "\nItems being traded from user 2 to user 1: " + GetItemNamesFromUser1ToUser2(trade) +
-                "\n Time & Date of item exchange: " + trade.getTimeOfTrade().toString() +
-                "\n Location of Trade: " + trade.getMeetingPlace();
+                "\nTime & Date of item exchange: " + trade.getTimeOfTrade().toString() +
+                "\nLocation of Trade: " + trade.getMeetingPlace() + "\nTradeID: " + trade.getTradeID();
     }
     // helper method which lists the names of the items going from user 1 to user 2 - Louis
     private String GetItemNamesFromUser1ToUser2(Trade trade){
@@ -787,6 +787,15 @@ public class UserManager implements Serializable{
     public void sendMessageToUser(User sender, User recipient, String message){
         Alert alert = new MessageAlert(sender.getUsername(), message);
         alertUser(recipient, alert);
+    }
+    public ArrayList<Trade> searchPendingTradesByUser(User user){
+        ArrayList<Trade> userTrades = new ArrayList<Trade>();
+        for(Trade trade : pendingTrades){
+            if (trade.getUsername1().equals(user.getUsername()) || trade.getUsername2().equals(user.getUsername())){
+                userTrades.add(trade);
+            }
+        }
+        return userTrades;
     }
 
 }

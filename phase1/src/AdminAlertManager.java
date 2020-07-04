@@ -47,11 +47,18 @@ public class AdminAlertManager {
      */
     public void handleItemValidationRequestAlert(ItemValidationRequestAlert alert){
         Scanner scanner = new Scanner(System.in);
+        String message;
         System.out.println(alert.toString());
         System.out.println("(1) Approve this item");
         System.out.println("(2) Deny this item");
         int choice = optionChoice(2);
-        adminUser.pollValidationRequest(choice == 1, alert);
+        if (choice == 2){
+            System.out.println("Please enter a reason why this request was declined.");
+            message = scanner.next();
+        }else{
+            message = "";
+        }
+        adminUser.pollValidationRequest(choice == 1, alert, message);
     }
 
     public void handleReportAlert(ReportAlert alert){
@@ -115,7 +122,7 @@ public class AdminAlertManager {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter one of the numbers listed above");
         int choice = scanner.nextInt();
-        while(choice > x || choice <= 0){
+        while(choice >= x || choice < 0){
             System.out.println("The number you entered was not listed above. Please enter a choice between 1 and " + x);
             choice = scanner.nextInt();
         }

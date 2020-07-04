@@ -1,3 +1,6 @@
+import AlertPack.AdminAlert;
+import AlertPack.ReportAlert;
+
 import javax.swing.text.View;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
@@ -6,6 +9,12 @@ import java.util.Scanner;
 public class UserActions {
 
     // hehe xd
+    public AdminUser adminUser;
+    public UserManager userManager = adminUser.userManager;
+    //we can use this for now
+    public void setAdminUser(AdminUser adminUser) {
+        this.adminUser = adminUser;
+    }
 
     public void run(User user){
         int input = 0;
@@ -20,7 +29,7 @@ public class UserActions {
             } else break;
         }
         if (input == 1){
-            ViewItemAndWishlist(user);
+            viewItemAndWishlist(user);
         } else if (input == 2) {
 
         } else if (input == 3) {
@@ -28,7 +37,7 @@ public class UserActions {
         } else if (input == 4) {
             // KING MURRAY
         } else if (input == 5) {
-            // KING LOUKOS
+            viewPendingTrades(user);
         } else if (input == 6) {
             // KING TINGYU
         }
@@ -36,7 +45,7 @@ public class UserActions {
 
     }
 
-    public void ViewItemAndWishlist(User user){
+    public void viewItemAndWishlist(User user){
         boolean flag = true;
         int input = 0;
         Scanner scan = new Scanner(System.in);
@@ -50,7 +59,7 @@ public class UserActions {
         }
 
         while (flag){
-            System.out.println("(1) Send Item Validation requestion \n (2) Remove an item from available items " +
+            System.out.println("(1) Send Item Validation request \n (2) Remove an item from available items " +
                     "\n (3) Remove an item from your wishlist");
             input = scan.nextInt();
             if (input < 1 || input > 3){
@@ -127,4 +136,23 @@ public class UserActions {
             run(user);
         }
     }
+    public void viewPendingTrades(User user){
+        int choice = 0;
+        while (choice != 0 ) {
+            ArrayList<Trade> userTrades = userManager.searchPendingTradesByUser(user);
+            System.out.println("Options:");
+            System.out.println("(1) Exit this menu");
+            System.out.println("====================");
+            System.out.println("Your pending trades:");
+            for (Trade trade : userTrades) {
+                System.out.println(userManager.tradeToString(trade));
+            }
+            Scanner scanner = new Scanner(System.in);
+            choice = scanner.nextInt();
+            if (choice != 1){
+                System.out.println("Your choice was not valid, please pick a valid choice.");
+            }
+        }
+    }
+
 }

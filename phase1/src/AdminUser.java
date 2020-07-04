@@ -1,7 +1,4 @@
-import AlertPack.FrozenAlert;
-import AlertPack.ItemValidationDeclinedAlert;
-import AlertPack.ItemValidationRequestAlert;
-import AlertPack.UserAlert;
+import AlertPack.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,7 +15,7 @@ public class AdminUser implements Serializable {
 
     private int borrowLendThreshold = 1;
 
-    // public static ArrayList<ItemValidationRequest> itemValidationQueue;
+    public ArrayList<AdminAlert> adminAlerts = new ArrayList<AdminAlert>();
 
     public ArrayList<String> accountsToFreezeQueue;
     public ArrayList<String> unfreezeRequestList; // list of accounts that have requested to be unfrozen
@@ -86,7 +83,7 @@ public class AdminUser implements Serializable {
      }
      */
 
-    public void pollValidationRequest(boolean accepted, ItemValidationRequestAlert request) {
+    public void pollValidationRequest(boolean accepted, ItemValidationRequestAlert request, String message) {
         if (accepted) {
             User user = UserManager.searchUser(request.getOwner());
             Item item = new Item(request.getName(), request.getItemID());
@@ -99,9 +96,6 @@ public class AdminUser implements Serializable {
             // request.getOwner().availableItems.add(request.getObj());
         }
         else{
-            System.out.println("Please enter a reason why this request was declined.");
-            Scanner scanner = new Scanner(System.in);
-            String message = scanner.next();
             UserAlert alert = new ItemValidationDeclinedAlert(request.getOwner(), request.getName(),
                     request.getDescription(), request.getItemID(), message);
             userManager.alertUser(request.getName(), alert);
@@ -118,7 +112,7 @@ public class AdminUser implements Serializable {
         int numBorrowed = user.stats.get("Borrowed");
         int numLent = user.stats.get("Lent");
         FrozenAlert alert = new FrozenAlert(numBorrowed, numLent, numBorrowed - numLent);
-        TradeSystem.userManager.alertUser(user.getUsername(), alert);
+        userManager.alertUser(user.getUsername(), alert);
     }
     /*
     public void dequeueAndFreeze() {
@@ -159,5 +153,13 @@ public class AdminUser implements Serializable {
 
     public void changeThresholdForUser(int newThreshold) {
         Trade.numLendsForBorrowThreshold = newThreshold;
+    }
+
+    public void alertAdmin(AdminAlert adminAlert){
+        adminAlerts.add(adminAlert);
+    }
+
+    public ArrayList<AdminAlert> getAdminAlerts() {
+        return adminAlerts;
     }
 }
