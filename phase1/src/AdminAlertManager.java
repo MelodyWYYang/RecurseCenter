@@ -15,7 +15,8 @@ public class AdminAlertManager {
 
         while(!(alerts.size() == 0)){
             AdminAlert alert = alerts.get(0);
-
+            handleAlert(alert);
+            alerts.remove(0);
         }
 
     }
@@ -92,6 +93,7 @@ public class AdminAlertManager {
             input = scan.nextInt();
             if (input == 1) {
                 User user = UserManager.searchUser(alert.getUsername());
+                assert user != null;
                 adminUser.freezeUser(user);
                 flag = false;
             }

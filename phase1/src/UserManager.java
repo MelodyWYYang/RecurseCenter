@@ -3,7 +3,6 @@ import AlertPack.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +20,7 @@ public class UserManager implements Serializable{
     protected ArrayList<Trade> pendingTradeRequests = new ArrayList<Trade>(); // list of all trade requests which have not been accepted
     // by both parties - Louis
 
+    protected ArrayList<Alert> adminAlerts = new ArrayList<Alert>();
 
     protected ArrayList<Trade> pendingTrades = new ArrayList<Trade>(); // list of all trades which have been accepted but not completed - Louis
 
@@ -46,6 +46,11 @@ public class UserManager implements Serializable{
 
     public static ArrayList<ItemValidationRequestAlert> itemValidationRequestQueue = new ArrayList<ItemValidationRequestAlert>();
 
+    private int incompleteThreshold; // # of incomplete trades allowed
+    private int completeThreshold; // # of complete trades allowed per week
+
+    private int borrowLendThreshold = 1;
+
     /** Method which creates a user and adds it to the list of users
      * Author: Jinyu Liu
      * @param username username of user
@@ -64,6 +69,10 @@ public class UserManager implements Serializable{
         return newUser;
     }
 
+    public void addToWishlist(User user, String itemName){
+        user.wishlistItemNames.add(itemName);
+    }
+
 
     /** Method which creates a trade request and adds it to the list of pending trade requests.
      * Author: Jinyu Liu
@@ -79,11 +88,18 @@ public class UserManager implements Serializable{
                                  ArrayList<Integer> itemIDsSentToUser1, ArrayList<Integer> itemIDsSentToUser2,
                                  LocalDateTime timeOfTrade, String meetingPlace) {
         int tradeCapacity = 1;
-
         ArrayList<Integer> list1;
-        list1 = (ArrayList<Integer>)itemIDsSentToUser1.subList(0, tradeCapacity);
+        if (itemIDsSentToUser1.size() == 0){
+            list1 = new ArrayList<Integer>();
+        } else {
+            list1 = (ArrayList<Integer>) itemIDsSentToUser1.subList(0, tradeCapacity);
+        }
         ArrayList<Integer> list2;
-        list2 = (ArrayList<Integer>)itemIDsSentToUser2.subList(0, tradeCapacity);
+        if (itemIDsSentToUser2.size() == 0){
+            list2 = new ArrayList<Integer>();
+        }else {
+            list2 = (ArrayList<Integer>) itemIDsSentToUser2.subList(0, tradeCapacity);
+        }
 
         Trade trade = new Trade(user1.username, user2.username, list1, list2);
         pendingTradeRequests.add(trade);
@@ -93,7 +109,7 @@ public class UserManager implements Serializable{
 
         //Creating and adding an alert for user2
         TradeRequestAlert alert = createTradeRequestAlert(trade, user1);
-        alertSystem.get(user2.getUsername()).add(alert);
+        alertUser(user2, alert);
 
     } //Does not remove item from user1 availableItems or user2 availableItems
 
@@ -163,7 +179,7 @@ public class UserManager implements Serializable{
         }else{
             otherUserName = trade.getUsername1();
         }
-        alertSystem.get(otherUserName).add(alert);
+        alertUser(otherUserName, alert);
     }
 
     /** Method which allows a user to counter-offer by changing the details of a trade request
@@ -198,7 +214,7 @@ public class UserManager implements Serializable{
             otherUserName = trade.getUsername1();
         }
 
-        alertSystem.get(otherUserName).add(alert);
+        alertUser(otherUserName, alert);
     }
 
     /** 3-arg method which creates and instantiates an ItemvalidationRequest.
@@ -207,18 +223,23 @@ public class UserManager implements Serializable{
      * @param description description of the item
      * @param owner username of the user who will own the item
      */
-    public void sendValidationRequest(String name, String description, String owner) {
+    public ItemValidationRequestAlert sendValidationRequest(String name, String description, String owner) {
         // reworked by Tingyu since the itemValidationRequestQueue has been moved to UserManager
-        itemValidationRequestQueue.add(new ItemValidationRequestAlert(owner, name, description));
+        ItemValidationRequestAlert alert = new ItemValidationRequestAlert(owner, name, description);
+        itemValidationRequestQueue.add(alert);
+        return alert;
     }
 
     /** 2-arg method which creates and instantiates an ItemvalidationRequest.
      * Author: Jinyu Liu
      * @param name name of the item
      * @param owner username of the user who will own the item
+     * @return The ItemValidationRequestAlert in question.
      */
-    public void sendValidationRequest(String name, String owner) {
-        itemValidationRequestQueue.add(new ItemValidationRequestAlert(name, owner));
+    public ItemValidationRequestAlert sendValidationRequest(String name, String owner) {
+        ItemValidationRequestAlert alert = new ItemValidationRequestAlert(name, owner);
+        itemValidationRequestQueue.add(alert);
+        return alert;
     }
 
     /* No longer neccessary - Louis
@@ -305,6 +326,10 @@ public class UserManager implements Serializable{
             orderedItemsIDClone.remove(orderedItemsIDClone.size() - 1);
         }
         return nOrderedItems;
+    }
+
+    public ArrayList<Alert> getAdminAlerts(){
+        return this.adminAlerts;
     }
 
 
@@ -554,6 +579,22 @@ public class UserManager implements Serializable{
             completedTrades.add(trade);
         }
 
+        User user1 = searchUser(trade.getUsername1());
+        User user2 = searchUser(trade.getUsername2());
+
+        assert user1 != null;
+        //This might be > instead of >= idk lol
+        if (user1.getNumBorrowed() + borrowLendThreshold >= user1.getNumLent()){
+            FreezeUserAlert alert = new FreezeUserAlert(user1.getUsername(), Integer.toString(user1.getNumBorrowed()),
+                    Integer.toString(user1.getNumLent()), Integer.toString(borrowLendThreshold));
+            adminAlerts.add(alert);
+        }
+        assert user2 != null;
+        if (user2.getNumBorrowed() + borrowLendThreshold >= user2.getNumLent()){
+            FreezeUserAlert alert = new FreezeUserAlert(user2.getUsername(), Integer.toString(user2.getNumBorrowed()),
+                    Integer.toString(user2.getNumLent()), Integer.toString(borrowLendThreshold));
+            adminAlerts.add(alert);
+        }
     }
 
     /** Method which exchanges the items in the trade system after a trade has been marked as completed
@@ -798,4 +839,27 @@ public class UserManager implements Serializable{
         return userTrades;
     }
 
+    public int getBorrowLendThreshold() {
+        return borrowLendThreshold;
+    }
+
+    public void setBorrowLendThreshold(int borrowLendThreshold) {
+        this.borrowLendThreshold = borrowLendThreshold;
+    }
+
+    public int getCompleteThreshold() {
+        return completeThreshold;
+    }
+
+    public void setCompleteThreshold(int completeThreshold) {
+        this.completeThreshold = completeThreshold;
+    }
+
+    public int getIncompleteThreshold() {
+        return incompleteThreshold;
+    }
+
+    public void setIncompleteThreshold(int incompleteThreshold) {
+        this.incompleteThreshold = incompleteThreshold;
+    }
 }

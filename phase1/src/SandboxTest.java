@@ -1,3 +1,4 @@
+import AlertPack.ItemValidationRequestAlert;
 import AlertPack.TradeRequestAlert;
 
 import java.util.ArrayList;
@@ -9,56 +10,53 @@ public class SandboxTest {
 
         testSearchItem1();
 
-        generalTest1();
-
-
+        testViewAllUsers();
     }
 
-    private static void generalTest1(){
-        UserManager um = new UserManager();
-        AdminUser au = new AdminUser("Epic_Admin_69", "password");
 
-        um.createUser("Jerry", "JerryIsTheBest123");
-        um.createUser("Bob", "BobIsCool22");
+    private static void testViewAllUsers(){
+        User jerry = null;
+        try {
+            jerry = TradeSystem.adminUser.userManager.createUser("Jerry", "passsword1");
+            TradeSystem.adminUser.userManager.createUser("Larry", "password2");
+            TradeSystem.adminUser.userManager.createUser("Barry", "password3");
 
+            //TODO: Why does this catch?
+        } catch (UserNameTakenException e){
+            System.out.println("Username Taken");
+        }
 
-        um.sendValidationRequest("Scooter", "Jerry");
-        um.sendValidationRequest("Bike", "Jerry");
-        um.sendValidationRequest("Pen", "Bob");
+        UserActions ua = new UserActions();
 
-        //Note, below is not how we're doing itemvalidation in the final build. This will be determined by
-        // Admin's input when moving through their alertQueue upon login.
-        au.pollValidationRequest(true);
-        au.pollValidationRequest(true);
-        au.pollValidationRequest(true);
-
-
-        ArrayList<Integer> itemIDsSentToUser1 = new ArrayList<Integer>();
-        ArrayList<Integer> itemIDsSentToUser2 = new ArrayList<Integer>();
-
-        itemIDsSentToUser1.add(3);
-        itemIDsSentToUser2.add(1);
-        itemIDsSentToUser2.add(2);
-
-        Trade trade = new Trade("Jerry", "Bob", itemIDsSentToUser1, itemIDsSentToUser2);
-        //something about this sequence is fucked. I think its the use of searchItem in createTradeRequestAlert.
-        TradeRequestAlert alert = um.createTradeRequestAlert(trade, UserManager.searchUser("Jerry"));
-        System.out.println(alert.getTradeString());
+        ua.mainMenu(jerry);
     }
+
+
 
     private static void testSearchUser1(){
         UserManager um = new UserManager();
-        User barry = um.createUser("Barry", "password");
+        User barry = null;
+        try {
+            barry = um.createUser("Barry", "password");
+        } catch (UserNameTakenException e){
+            System.out.println("The username is taken.");
+        }
 
         assert um.searchUser("Barry") == barry;
     }
 
     private static void testSearchItem1(){
         UserManager um = new UserManager();
-        User larry = um.createUser("Larry", "password");
+        User larry = null;
+        try {
+            larry = um.createUser("Larry", "password");
+        } catch (UserNameTakenException e){
+            System.out.println("The username is taken.");
+        }
 
         Item larrysBike = new Item("Bike", 1);
 
+        assert larry != null;
         larry.availableItems.add(larrysBike);
 
         assert um.searchItem(1) == larrysBike;

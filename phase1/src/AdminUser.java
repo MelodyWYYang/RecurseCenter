@@ -2,7 +2,6 @@ import AlertPack.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class AdminUser implements Serializable {
     //author: Tingyu Liang, Riya Razdan in group 0110 for CSC207H1 summer 2020 project
@@ -10,10 +9,7 @@ public class AdminUser implements Serializable {
     // private HashMap<String, String> loginInfo = new HashMap<String, String>();
     private String username;
     private String password;
-    public static int incompleteThreshold; // # of incomplete trades allowed
-    public static int completeThreshold; // # of complete trades allowed per week
 
-    private int borrowLendThreshold = 1;
 
     public ArrayList<AdminAlert> adminAlerts = new ArrayList<AdminAlert>();
 
@@ -64,12 +60,12 @@ public class AdminUser implements Serializable {
         this.password = password;
     }
 
-    public static void setIncompleteThreshold(int incompleteThreshold) {
-        AdminUser.incompleteThreshold = incompleteThreshold;
+    public void setIncompleteThreshold(int incompleteThreshold) {
+        userManager.setIncompleteThreshold(incompleteThreshold);
     }
 
-    public static void setCompleteThreshold(int completeThreshold) {
-        AdminUser.completeThreshold = completeThreshold;
+    public void setCompleteThreshold(int completeThreshold) {
+        userManager.setCompleteThreshold(completeThreshold);
     }
 
     /**Temporarily abandoned by Tingyu
@@ -108,7 +104,7 @@ public class AdminUser implements Serializable {
      * @param user user object
      */
     public void freezeUser(User user){
-        user.isFrozen(true);
+        user.setFrozen(true);
         int numBorrowed = user.stats.get("Borrowed");
         int numLent = user.stats.get("Lent");
         FrozenAlert alert = new FrozenAlert(numBorrowed, numLent, numBorrowed - numLent);
@@ -148,7 +144,7 @@ public class AdminUser implements Serializable {
     }
 
     public void unfreezeAccount(User user){
-        user.isFrozen(false);
+        user.setFrozen(false);
     }
 
     public void changeThresholdForUser(int newThreshold) {

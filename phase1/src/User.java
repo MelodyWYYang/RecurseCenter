@@ -17,7 +17,7 @@ public class User implements Serializable {
 
     public ArrayList<Item> availableItems = new ArrayList<Item>(); // if this was protected then our presenters can't access it
     public ArrayList<Item> borrowedItems = new ArrayList<Item>();// items that the user is currently borrowing via TemporaryTrade - Louis
-    public ArrayList<Item> wishlistItems = new ArrayList<Item>();// presenter needs to access this as well
+    public ArrayList<String> wishlistItemNames = new ArrayList<String>();// presenter needs to access this as well
 
     public ArrayList<Alert> alertQueue = new ArrayList<Alert>();
 
@@ -46,7 +46,7 @@ public class User implements Serializable {
 
     //for adding and removing from wishlist and available-to-lend lists, and getters for this User's lists
     public ArrayList<Item> getAvailableItems() {return this.availableItems;}
-    public ArrayList<Item> getWishlistItems() {return this.wishlistItems;}
+    public ArrayList<String> getWishlistItemNames() {return this.wishlistItemNames;}
 
     /**Method to add an item to one of the AvailableItems, WishlistItems, or borrowedItems lists,
      * and remove it from the other 2 lists.
@@ -98,7 +98,7 @@ public class User implements Serializable {
         return username;
     }
 
-    public void isFrozen(boolean frozen){
+    public void setFrozen(boolean frozen){
     this.frozen = frozen;
     } // whether the account is set to frozen or not
 
@@ -125,6 +125,34 @@ public class User implements Serializable {
         for (int i = 0; i < 3; i++) {
             top3.add(i, orderedPartners.get(i)); }
         return top3;
+    }
+
+    public String toString(){
+        StringBuilder userString = new StringBuilder("User: " + username + "\n");
+        if (availableItems.size() == 0){
+            userString.append("This User has no items available for trade. \n");
+        } else {
+            userString.append("Items available for trade: \n");
+            for (int i = 0; i < availableItems.size() - 1; i++) {
+                userString.append(availableItems.get(i).getName() + " (ID: " + availableItems.get(i).getId() + "), ");
+            }
+            userString.append(availableItems.get(availableItems.size() - 1) + " (ID: " +
+                    availableItems.get(availableItems.size() - 1).getId() + ")\n");
+        }
+        if (wishlistItemNames.size() == 0){
+            userString.append("This User has no items in their wishlist. \n");
+        } else {
+            userString.append("Wishlist: \n");
+            for (int i = 0; i < wishlistItemNames.size() - 1; i++) {
+                userString.append(wishlistItemNames.get(i) + ", ");
+            }
+            userString.append(wishlistItemNames.get(wishlistItemNames.size() - 1) + "\n");
+        }
+        if (getFrozen()){
+            userString.append("This user is frozen, and thus cannot make a trade. \n");
+        }
+
+        return userString.toString();
     }
 }
     // top 3 trading partners, access orderedPartners LinkedHashMap and return first three username Strings.
