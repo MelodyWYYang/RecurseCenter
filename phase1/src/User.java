@@ -30,6 +30,17 @@ public class User implements Serializable {
         this.username = username; // Admin needs to access to freeze; USerManager needs to access/search by User
     }
 
+
+    public int getNumBorrowed() {
+        return this.stats.get("Borrowed");
+
+
+    }
+    public int getNumLent() {
+        return this.stats.get("Lent");
+    }
+
+
     public void setPassword(String password) { this.password = password; }// may want to extend a use case to change password if forgotten
     public String getPassword(String password) { return this.password;}
 

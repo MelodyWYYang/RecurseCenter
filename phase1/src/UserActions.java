@@ -15,14 +15,14 @@ public class UserActions {
             System.out.println("(1) View items and wishlist \n (2) View user stats \n (3) Request an unfreeze \n" +
                     "(4) View other users \n (5) View your pending trades \n (6) View active temporary trades");
             input = scan.nextInt();
-            if (input > 6 || input < 1){
+            if (input >= 6 || input <= 1){
                 System.out.println("Please enter a number from 1 to 6");
             } else break;
         }
         if (input == 1){
             ViewItemAndWishlist(user);
         } else if (input == 2) {
-            // KING ALEX
+
         } else if (input == 3) {
             //KING TINGYU
         } else if (input == 4) {
@@ -86,10 +86,45 @@ public class UserActions {
 
         }
 
-
-
-
-
     }
 
+    public void runStats(User user) {
+        int input = 0;
+        while (true) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("--- View user stats ---");
+            System.out.println("(1) View number of items user has borrowed \n (2) View number of items user has lent" +
+                    "\n (3) View frozen status \n (4) View number of trades involving user that have not been" +
+                    "completed \n (5) View number of transactions this week \n (6) View items recently traded away" +
+                    "\n (7) View most frequent trading partners \n (8) Return to \"User Menu\"");
+            input = scan.nextInt();
+            if (input >= 8 || input <= 1) {
+                System.out.println("Please enter a number from 1 to 8");
+            } else break;
+        }
+        if (input == 1) {
+            System.out.println("You have borrowed " + Integer.toString(user.getNumBorrowed()) + " items.");
+            runStats(user);
+        } else if (input == 2) {
+            System.out.println("You have lent " + Integer.toString(user.getNumLent()) + " items.");
+            runStats(user);
+        } else if (input == 3) {
+            if (user.getFrozen()) {
+                System.out.println("Your account has been frozen");
+            } else {
+                System.out.println("Your account is not frozen");
+            }
+            runStats(user);
+        } else if (input == 4) { //Other methods need access to UserManager methods
+
+        } else if (input == 5) {
+
+        } else if (input == 6) {
+
+        } else if (input == 7) {
+
+        } else if (input == 8) {
+            run(user);
+        }
+    }
 }

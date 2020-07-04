@@ -3,7 +3,9 @@ import AlertPack.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 public class UserManager implements Serializable{
     //author: Jinyu Liu, Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
@@ -411,6 +413,44 @@ public class UserManager implements Serializable{
         }
         return count;
     }
+
+    private HashMap<String, Integer> getNumTradesPerUser(User user) {
+        HashMap<String, Integer> numTradesPerUser = new HashMap<String, Integer>();
+        for (Trade trade: completedTrades) {
+            if (trade.getUsername1().equals(user.getUsername())) {
+                String partnerUsername = trade.getUsername2();
+                numTradesPerUser.putIfAbsent(trade.getUsername2(), 0);
+                numTradesPerUser.replace(trade.getUsername2(), numTradesPerUser.get(trade.getUsername2()) + 1);
+                } else if (trade.getUsername2().equals(user.getUsername())) {
+                String partnerUsername = trade.getUsername1();
+                numTradesPerUser.putIfAbsent(trade.getUsername1(), 0);
+                numTradesPerUser.replace(trade.getUsername1(), numTradesPerUser.get(trade.getUsername1()) + 1);
+            }
+        }
+        return numTradesPerUser;
+    }
+
+    public ArrayList<String> getTopNTradingPartners(User user, int n, HashMap<String, Integer> numTradesPerUser) {
+        HashMap<String, Integer> numTradesPerUserClone = (HashMap<String, Integer>) numTradesPerUser.clone();
+        ArrayList<String> topPartnersUsername = new ArrayList<String>();
+        while (topPartnersUsername.size() < n & !numTradesPerUserClone.isEmpty()) {
+            int maxInt = 0;
+            StringBuilder favouritePartner = new StringBuilder();
+            for (Map.Entry<String, Integer> mapping : numTradesPerUserClone.entrySet()) {
+                if (mapping.getValue() > maxInt) {
+                    maxInt = (mapping.getValue());
+                    StringBuilder string = new StringBuilder();
+                    favouritePartner = string.append(mapping.getKey());
+                    //Code fragment based off of code in https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
+                }
+            }
+            topPartnersUsername.add(favouritePartner.toString());
+            numTradesPerUserClone.remove(favouritePartner.toString());
+        }
+        return topPartnersUsername;
+    }
+
+
 
 
     /* i don't think this is neccessary anymore - Louis
