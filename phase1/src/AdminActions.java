@@ -41,7 +41,7 @@ public class AdminActions {
                 System.out.println("Please enter a valid threshold number");
             }
             else {
-                UserManager.setBorrowLendThreshold(input);
+                TradeSystem.adminUser.userManager.setBorrowLendThreshold(input);
                 flag = false;
             }
         }
