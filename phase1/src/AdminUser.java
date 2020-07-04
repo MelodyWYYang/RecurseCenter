@@ -18,7 +18,7 @@ public class AdminUser implements Serializable {
     public ArrayList<String> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
 
     public UserManager userManager = new UserManager(); // Not really sure how we want to do this. Hardcoded for simplicity in the meanwhile - Louis
-    //Todo replace above line with actual UserManager.
+
 
     public AdminUser(String username, String password) {
         // this.loginInfo.put(username, password);
@@ -68,6 +68,15 @@ public class AdminUser implements Serializable {
         userManager.setCompleteThreshold(completeThreshold);
     }
 
+    /**
+     * Manages all the startup stuff we need to do.
+     */
+    public ArrayList<AdminAlert> onStartUp(){
+        this.adminAlerts = userManager.getAdminAlerts();
+        //TODO: Also dispatches the adminAlerts to the main method to be passed into AdminAlertManager.
+        return this.adminAlerts;
+    }
+
     /**Temporarily abandoned by Tingyu
     public HashMap<String, String> getLogInInfo(){
         return this.loginInfo;
@@ -81,7 +90,7 @@ public class AdminUser implements Serializable {
 
     public void pollValidationRequest(boolean accepted, ItemValidationRequestAlert request, String message) {
         if (accepted) {
-            User user = UserManager.searchUser(request.getOwner());
+            User user = TradeSystem.adminUser.userManager.searchUser(request.getOwner());
             Item item = new Item(request.getName(), request.getItemID());
             item.setOwner(request.getOwner());
             item.setUserThatHasPossession(request.getOwner());
@@ -152,7 +161,7 @@ public class AdminUser implements Serializable {
     }
 
     public void alertAdmin(AdminAlert adminAlert){
-        adminAlerts.add(adminAlert);
+        userManager.alertAdmin(adminAlert);
     }
 
     public ArrayList<AdminAlert> getAdminAlerts() {

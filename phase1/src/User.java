@@ -48,6 +48,7 @@ public class User implements Serializable {
     public ArrayList<Item> getAvailableItems() {return this.availableItems;}
     public ArrayList<String> getWishlistItemNames() {return this.wishlistItemNames;}
 
+    //TODO: Make an AddtoList method for each list. Also make a remove method for each.
     /**Method to add an item to one of the AvailableItems, WishlistItems, or borrowedItems lists,
      * and remove it from the other 2 lists.
      * @param a </Item>
@@ -60,7 +61,7 @@ public class User implements Serializable {
     private void searchAndRemoveItem(Item item){
 
     }
-
+    //TODO: Fix this.
     public void removeItemFromList(Item a, ArrayList<Item> list) {list.remove(a);}
 
     //for changing #items Borrowed and Lent by this User

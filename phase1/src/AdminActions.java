@@ -2,11 +2,11 @@ import java.util.Scanner;
 
 public class AdminActions {
 
-    public void run(AdminUser admin) {
-        mainMenu(admin);
+    public void run() {
+        mainMenu();
     }
 
-    public void mainMenu(AdminUser admin) {
+    public void mainMenu() {
 
         boolean running = true;
         while (running) {
@@ -20,7 +20,7 @@ public class AdminActions {
                 if (input > 1 || input < 0) {
                     System.out.println("Please enter a number from 0 to 1");
                 } else if (input == 1) {
-                    setThreshold(admin);
+                    setThreshold(TradeSystem.adminUser);
                     valid_input = true;
                 } else if (input == 0) {
                     valid_input = true;

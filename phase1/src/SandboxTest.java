@@ -5,25 +5,35 @@ import java.util.ArrayList;
 
 public class SandboxTest {
 
-    public static void main(String[] args){
-        testSearchUser1();
+    /*public static void main(String[] args){
+        //testSearchUser1();
 
-        testSearchItem1();
+        //testSearchItem1();
 
         testViewAllUsers();
-    }
+    }*/
 
 
     private static void testViewAllUsers(){
         User jerry = null;
         try {
-            jerry = TradeSystem.adminUser.userManager.createUser("Jerry", "passsword1");
-            TradeSystem.adminUser.userManager.createUser("Larry", "password2");
             TradeSystem.adminUser.userManager.createUser("Barry", "password3");
+        } catch(UserNameTakenException e) {
+            System.out.println("Caught on barry");
+        }
+        try {
+            jerry = TradeSystem.adminUser.userManager.createUser("Jerry", "passsword1");
+        } catch(UserNameTakenException e){
+            System.out.println("Caught on Jerry");
+        }
+        try{
+
+            TradeSystem.adminUser.userManager.createUser("Janice", "password2");
+
 
             //TODO: Why does this catch?
         } catch (UserNameTakenException e){
-            System.out.println("Username Taken");
+            System.out.println("Caught on Janice");
         }
 
         UserActions ua = new UserActions();

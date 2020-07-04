@@ -15,22 +15,22 @@ public class UserManager implements Serializable{
 
     protected ArrayList<Trade> completedTrades = new ArrayList<Trade>(); // list of all trades which have been completed - Louis
 
-    protected static ArrayList<User> listUsers = new ArrayList<User>(); // List of all users - Jinyu
+    protected ArrayList<User> listUsers = new ArrayList<User>(); // List of all users - Jinyu
 
     protected ArrayList<Trade> pendingTradeRequests = new ArrayList<Trade>(); // list of all trade requests which have not been accepted
     // by both parties - Louis
 
-    protected ArrayList<Alert> adminAlerts = new ArrayList<Alert>();
+    protected ArrayList<AdminAlert> adminAlerts = new ArrayList<AdminAlert>();
 
     protected ArrayList<Trade> pendingTrades = new ArrayList<Trade>(); // list of all trades which have been accepted but not completed - Louis
 
     protected ArrayList<TemporaryTrade> currentTemporaryTrades = new ArrayList<TemporaryTrade>(); //list of all temporary trades where items have
     // been exchanged but not returned -Louis
 
-    protected HashMap<String, ArrayList<Alert>> alertSystem = new HashMap<String, ArrayList<Alert>>();
+    protected HashMap<String, ArrayList<UserAlert>> alertSystem = new HashMap<String, ArrayList<UserAlert>>();
 
     public ArrayList<User> getListUsers() {
-        return UserManager.listUsers;}
+        return listUsers;}
 
     public ArrayList<Trade> getCompletedTrades() {
         return completedTrades;
@@ -51,21 +51,40 @@ public class UserManager implements Serializable{
 
     private int borrowLendThreshold = 1;
 
+
+    public ArrayList<UserAlert> getAlerts(String username){
+        return alertSystem.get(username);
+    }
+    public void onStartUp(){
+        //Calls all initialization stuff for UserManager.
+    }
+    /**
+     * Alerts the admin.
+     */
+    public void alertAdmin(AdminAlert alert){
+        this.adminAlerts.add(alert);
+    }
+
+
     /** Method which creates a user and adds it to the list of users
      * Author: Jinyu Liu
      * @param username username of user
      * @param password password of user
      */
     public User createUser(String username, String password) throws UserNameTakenException {
+        System.out.println("Entered:" + username);
         for (User user : listUsers) {
+            System.out.println("Iterated on " + user.getUsername());
             if (user.getUsername().equals(username)) {
+
                 throw new UserNameTakenException("That username is taken.");
             }
+
         }
         User newUser = new User(username);
         newUser.setPassword(password);
         listUsers.add(newUser);
-        alertSystem.put(username, new ArrayList<Alert>());
+        alertSystem.put(username, new ArrayList<UserAlert>());
         return newUser;
     }
 
@@ -87,6 +106,9 @@ public class UserManager implements Serializable{
     public void sendTradeRequest(User user1, User user2, //user1 is the one sending the request to user2.
                                  ArrayList<Integer> itemIDsSentToUser1, ArrayList<Integer> itemIDsSentToUser2,
                                  LocalDateTime timeOfTrade, String meetingPlace) {
+        if (!beforeTrade(user1, user2)){
+            return;
+        }
         int tradeCapacity = 1;
         ArrayList<Integer> list1;
         if (itemIDsSentToUser1.size() == 0){
@@ -328,7 +350,7 @@ public class UserManager implements Serializable{
         return nOrderedItems;
     }
 
-    public ArrayList<Alert> getAdminAlerts(){
+    public ArrayList<AdminAlert> getAdminAlerts(){
         return this.adminAlerts;
     }
 
@@ -489,7 +511,7 @@ public class UserManager implements Serializable{
      * @param username username of the user
      * @return user object
      */
-    public static User searchUser(String username){
+    public User searchUser(String username){
         for(User user: listUsers){
             if (user.username.equals(username)){
                 return user;
@@ -585,14 +607,14 @@ public class UserManager implements Serializable{
         assert user1 != null;
         //This might be > instead of >= idk lol
         if (user1.getNumBorrowed() + borrowLendThreshold >= user1.getNumLent()){
-            FreezeUserAlert alert = new FreezeUserAlert(user1.getUsername(), Integer.toString(user1.getNumBorrowed()),
-                    Integer.toString(user1.getNumLent()), Integer.toString(borrowLendThreshold));
+            FreezeUserAlert alert = new FreezeUserAlert(user1.getUsername(),user1.getNumBorrowed(),
+                    user1.getNumLent(), borrowLendThreshold);
             adminAlerts.add(alert);
         }
         assert user2 != null;
         if (user2.getNumBorrowed() + borrowLendThreshold >= user2.getNumLent()){
-            FreezeUserAlert alert = new FreezeUserAlert(user2.getUsername(), Integer.toString(user2.getNumBorrowed()),
-                    Integer.toString(user2.getNumLent()), Integer.toString(borrowLendThreshold));
+            FreezeUserAlert alert = new FreezeUserAlert(user2.getUsername(), user2.getNumBorrowed(),
+                    user2.getNumLent(), borrowLendThreshold);
             adminAlerts.add(alert);
         }
     }
@@ -646,11 +668,11 @@ public class UserManager implements Serializable{
                 int tradeID = tempTrade.getTradeID();
 
                 if (!tempTrade.getUser1ItemReturnRequestAccepted()){
-                    Alert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername1(), tradeID);
+                    UserAlert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername1(), tradeID);
                     alertUser(tempTrade.getUsername1(), alert);
                 }
                 if (!tempTrade.getUser2ItemReturnRequestAccepted()){
-                    Alert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername2(), tradeID);
+                    UserAlert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername2(), tradeID);
                     alertUser(tempTrade.getUsername2(), alert);
                 }
                 
@@ -717,7 +739,7 @@ public class UserManager implements Serializable{
                 if (item == null){
                     pendingTrades.remove(trade);
                     String tradeString = tradeToString(trade);
-                    Alert alert = new TradeCancelledAlert(tradeString);
+                    UserAlert alert = new TradeCancelledAlert(tradeString);
                     alertUser(user1, alert);
                     alertUser(user2, alert);
                 }
@@ -727,7 +749,7 @@ public class UserManager implements Serializable{
                 if (item == null) {
                     pendingTrades.remove(trade);
                     String tradeString = tradeToString(trade);
-                    Alert alert = new TradeCancelledAlert(tradeString);
+                    UserAlert alert = new TradeCancelledAlert(tradeString);
                     alertUser(user1, alert);
                     alertUser(user2, alert);
                 }
@@ -747,7 +769,7 @@ public class UserManager implements Serializable{
                 if (item == null){
                     pendingTradeRequests.remove(trade);
                     String tradeString = tradeToString(trade);
-                    Alert alert = new TradeRequestCancelledAlert(tradeString);
+                    UserAlert alert = new TradeRequestCancelledAlert(tradeString);
                     alertUser(user1, alert);
                     alertUser(user2, alert);
                 }
@@ -757,7 +779,7 @@ public class UserManager implements Serializable{
                 if (item == null) {
                     pendingTradeRequests.remove(trade);
                     String tradeString = tradeToString(trade);
-                    Alert alert = new TradeRequestCancelledAlert(tradeString);
+                    UserAlert alert = new TradeRequestCancelledAlert(tradeString);
                     alertUser(user1, alert);
                     alertUser(user2, alert);
                 }
@@ -803,7 +825,7 @@ public class UserManager implements Serializable{
      * @param user object of the user who will be receiving the alert
      * @param alert alert object to send to the user
      */
-    public void alertUser(User user, Alert alert){
+    public void alertUser(User user, UserAlert alert){
         String username = user.getUsername();
         alertUser(username, alert);
     }
@@ -813,8 +835,8 @@ public class UserManager implements Serializable{
      * @param username username of the user receiving the alert
      * @param alert alert object to send to the user
      */
-    public void alertUser(String username, Alert alert){
-        ArrayList<Alert> alerts = alertSystem.get(username);
+    public void alertUser(String username, UserAlert alert){
+        ArrayList<UserAlert> alerts = alertSystem.get(username);
         alerts.add(alert);
         alertSystem.put(username, alerts);
     }
@@ -826,7 +848,7 @@ public class UserManager implements Serializable{
      * @param message message text.
      */
     public void sendMessageToUser(User sender, User recipient, String message){
-        Alert alert = new MessageAlert(sender.getUsername(), message);
+        UserAlert alert = new MessageAlert(sender.getUsername(), message);
         alertUser(recipient, alert);
     }
     public ArrayList<Trade> searchPendingTradesByUser(User user){

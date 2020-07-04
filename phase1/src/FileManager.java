@@ -27,6 +27,23 @@ public class FileManager {
         }
     }
 
+    public static AdminUser loadAdminUser(String fileName){
+        AdminUser adminUsr;
+        try {
+            FileInputStream file = new FileInputStream("/data/admins/" + fileName);
+            ObjectInputStream in = new ObjectInputStream(file);
+            adminUsr = (AdminUser) in.readObject();
+            in.close();
+            file.close();
+        }
+        catch (IOException | ClassNotFoundException e) {
+            // ClassNotFoundException if User class is not recognized
+            e.printStackTrace();
+            return null;
+        }
+        return adminUsr;
+    }
+
     /**
      * Serializes an admin object to a .ser file
      * @param admin admin which is being saved to a file

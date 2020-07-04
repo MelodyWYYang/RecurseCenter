@@ -75,7 +75,7 @@ public class UserAlertManager {
         if (input == 1) {
             // report the other user
         } else {
-            User user = UserManager.searchUser(alert.getUsername());
+            User user = TradeSystem.adminUser.userManager.searchUser(alert.getUsername());
             TemporaryTrade trade = TradeSystem.adminUser.userManager.serachTemporaryTrade(alert.getTradeId());
             TradeSystem.adminUser.userManager.confirmReExchange(user, trade);
             System.out.println("Trade ReExchange confirmed");
@@ -229,7 +229,7 @@ public class UserAlertManager {
                 // report the other user. rendReport not implemented. will update
             }
             if (input == 2){
-                User user = UserManager.searchUser(alert.getUsername());
+                User user = TradeSystem.adminUser.userManager.searchUser(alert.getUsername());
                 // confirm trade
         }
 

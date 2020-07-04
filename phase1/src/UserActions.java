@@ -25,11 +25,12 @@ public class UserActions {
             int input = -1;
             Scanner scan = new Scanner(System.in);
             System.out.println("--- User Menu --- \n");
-            System.out.println("(1) View items and wishlist \n (2) View user stats \n (3) Request an unfreeze \n" +
-                    "(4) View other users \n (5) View your pending trades \n (6) View active temporary trades \n " +
+            System.out.println("(1) View items and wishlist \n(2) View user stats \n(3) Request an unfreeze \n" +
+                    "(4) View other users \n(5) View your pending trades \n(6) View active temporary trades \n" +
                     "(0) Quit");
             boolean valid_input = false;
             while(!valid_input){
+                System.out.println("Please enter a number corresponding to a setting above:\n");
                 input = scan.nextInt();
                 if (input > 6 || input < 0) {
                     System.out.println("Please enter a number from 1 to 6");
@@ -63,9 +64,13 @@ public class UserActions {
         boolean flag = true;
         int input = 0;
         Scanner scan = new Scanner(System.in);
-        System.out.println("Your available items:");
-        for (Item item : user.getAvailableItems()){
-            System.out.println(item);
+        if (user.getAvailableItems().size() == 0){
+            System.out.println("You have no items.");
+        } else {
+            System.out.println("Your available items:");
+            for (Item item : user.getAvailableItems()) {
+                System.out.println(item);
+            }
         }
         System.out.println("\n Your wishlist :");
         for (String itemName : user.getWishlistItemNames()){
@@ -310,10 +315,10 @@ public class UserActions {
         while (true) {
             Scanner scan = new Scanner(System.in);
             System.out.println("--- View user stats ---");
-            System.out.println("(1) View number of items user has borrowed \n (2) View number of items user has lent" +
-                    "\n (3) View frozen status \n (4) View number of trades involving user that have not been" +
-                    "completed \n (5) View number of transactions this week \n (6) View items recently traded away" +
-                    "\n (7) View most frequent trading partners \n (8) Return to \"User Menu\"");
+            System.out.println("(1) View number of items user has borrowed \n(2) View number of items user has lent" +
+                    "\n(3) View frozen status \n(4) View number of trades involving user that have not been" +
+                    "completed \n(5) View number of transactions this week \n(6) View items recently traded away" +
+                    "\n(7) View most frequent trading partners \n(8) Return to \"User Menu\"");
             input = scan.nextInt();
             if (input >= 8 || input <= 1) {
                 System.out.println("Please enter a number from 1 to 8");

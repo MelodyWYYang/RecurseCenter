@@ -92,7 +92,7 @@ public class AdminAlertManager {
             System.out.println("(2) Dismiss");
             input = scan.nextInt();
             if (input == 1) {
-                User user = UserManager.searchUser(alert.getUsername());
+                User user = TradeSystem.adminUser.userManager.searchUser(alert.getUsername());
                 assert user != null;
                 adminUser.freezeUser(user);
                 flag = false;
@@ -111,7 +111,7 @@ public class AdminAlertManager {
             System.out.println("(2) Dismiss");
             input = scan.nextInt();
             if (input == 1) {
-                User user = UserManager.searchUser(alert.getUsername());
+                User user = TradeSystem.adminUser.userManager.searchUser(alert.getUsername());
                 adminUser.unfreezeAccount(user);
                 flag = false;
             }
