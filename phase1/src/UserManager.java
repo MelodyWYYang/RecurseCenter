@@ -838,6 +838,15 @@ public class UserManager implements Serializable{
         }
         return userTrades;
     }
+    public ArrayList<TemporaryTrade> searchActiveTempTradesByUser(User user) {
+        ArrayList<TemporaryTrade> userTrades = new ArrayList<TemporaryTrade>();
+        for (TemporaryTrade trade: currentTemporaryTrades) {
+            if (trade.getUsername1().equals(user.getUsername()) || trade.getUsername2().equals(user.getUsername())) {
+                userTrades.add(trade);
+            }
+        }
+        return userTrades;
+    }
 
     public int getBorrowLendThreshold() {
         return borrowLendThreshold;

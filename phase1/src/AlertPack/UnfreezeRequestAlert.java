@@ -4,12 +4,13 @@ import java.io.Serializable;
 
 public class UnfreezeRequestAlert extends AdminAlert implements Serializable {
     //author: Callan Murphy in group 0110 for CSC207H1 summer 2020 project
+    // Parameter type changed from String to int by Tingyu
     private String username; // username of the user
-    private String lent; // amount user has lent
-    private String borrowed; // amount user has borrowed
-    private String thresholdRequired; // difference needed between lent and borrowed
+    private int lent; // amount user has lent
+    private int borrowed; // amount user has borrowed
+    private int thresholdRequired; // difference needed between lent and borrowed
 
-    public UnfreezeRequestAlert(String username, String lent, String borrowed, String thresholdRequired){
+    public UnfreezeRequestAlert(String username, int lent, int borrowed, int thresholdRequired){
         this.username = username;
         this.lent = lent;
         this.borrowed = borrowed;
@@ -18,15 +19,15 @@ public class UnfreezeRequestAlert extends AdminAlert implements Serializable {
 
     public String getUsername(){ return username; }
 
-    public String getLent(){ return lent; }
+    public int getLent(){ return lent; }
 
-    public String getBorrowed(){ return borrowed; }
+    public int getBorrowed(){ return borrowed; }
 
     public void setUsername(String username){ this.username = username; }
 
-    public void setLent(String lent){ this.lent = lent; }
+    public void setLent(int lent){ this.lent = lent; }
 
-    public void setBorrowed(String borrowed){ this.borrowed = borrowed; }
+    public void setBorrowed(int borrowed){ this.borrowed = borrowed; }
 
     /**
      * toString() method to return the user's stats to the admin

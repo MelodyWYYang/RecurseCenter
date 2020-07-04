@@ -1,5 +1,6 @@
 import AlertPack.AdminAlert;
 import AlertPack.ReportAlert;
+import AlertPack.UnfreezeRequestAlert;
 
 import javax.swing.text.View;
 import java.sql.SQLOutput;
@@ -39,7 +40,7 @@ public class UserActions {
                     runStats(user);
                     valid_input = true;
                 } else if (input == 3) {
-                    //KING TINGYU
+                    sendUnfreezeRequest(user);
                     valid_input = true;
                 } else if (input == 4) {
                     viewAllUsers(user);
@@ -48,7 +49,7 @@ public class UserActions {
                     viewPendingTrades(user);
                     valid_input = true;
                 } else if (input == 6) {
-                    // KING TINGYU
+                    viewActiveTempTrades(user);
                     valid_input = true;
                 } else if (input == 0){
                     valid_input = true;
@@ -343,6 +344,22 @@ public class UserActions {
             run(user);
         }
     }
+
+    public void sendUnfreezeRequest(User user) {
+        if (!user.getFrozen()) {
+            System.out.println("Your account is not frozen");
+        }
+        else {
+            String username = user.getUsername();
+            int numLent = user.getNumLent();
+            int numBorrowed = user.getNumBorrowed();
+            int borrowLendThreshold = TradeSystem.adminUser.userManager.getBorrowLendThreshold();
+            UnfreezeRequestAlert alert = new UnfreezeRequestAlert(username, numLent, numBorrowed, borrowLendThreshold);
+            TradeSystem.adminUser.alertAdmin(alert);
+            System.out.println("Your request has been sent");
+        }
+    }
+
     public void viewPendingTrades(User user){
         int choice = 0;
         while (choice != 0 ) {
@@ -360,6 +377,26 @@ public class UserActions {
                 System.out.println("Your choice was not valid, please pick a valid choice.");
             }
         }
+    }
+
+    public void viewActiveTempTrades(User user) {
+        int input = -1;
+        ArrayList<TemporaryTrade> userTrades = TradeSystem.adminUser.userManager.searchActiveTempTradesByUser(user);
+        System.out.println("Options:");
+        System.out.println("(1) Exit this menu");
+        System.out.println("====================");
+        System.out.println("Your active temporary trades:");
+        for (Trade trade : userTrades) {
+            System.out.println(TradeSystem.adminUser.userManager.tradeToString(trade));
+        }
+        while (input != 1) {
+            Scanner scanner = new Scanner(System.in);
+            input = scanner.nextInt();
+            if (input != 1) {
+                System.out.println("Your choice was not valid, please pick a valid choice.");
+            }
+        }
+
     }
 
 }
