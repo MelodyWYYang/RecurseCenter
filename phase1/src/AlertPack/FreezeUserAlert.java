@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class FreezeUserAlert extends AdminAlert implements Serializable {
     //author: Callan Murphy in group 0110 for CSC207H1 summer 2020 project
+    // Question by Tingyu: should the number parameter be in type int?
     private String username; // username of the user
     private String lent; // amount user has lent
     private String borrowed; // amount user has borrowed
