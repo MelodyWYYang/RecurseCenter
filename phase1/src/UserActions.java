@@ -31,7 +31,7 @@ public class UserActions {
         if (input == 1){
             viewItemAndWishlist(user);
         } else if (input == 2) {
-
+            runStats(user);
         } else if (input == 3) {
             //KING TINGYU
         } else if (input == 4) {
