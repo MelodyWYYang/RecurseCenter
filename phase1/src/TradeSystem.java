@@ -6,6 +6,6 @@ public class TradeSystem {
 
     AdminAlertManager adminAlertManager = new AdminAlertManager();
 
-
+    UserManager userManager = new UserManager();
 }
 
