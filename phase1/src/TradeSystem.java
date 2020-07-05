@@ -14,6 +14,8 @@ public class TradeSystem {
 
 
     public static void main(String[] args){
+        createAdminUser();
+        /*
         //TODO: Create the adminUser.ser file if it does not exist.
         adminUser = FileManager.loadAdminUser("adminUser.ser");
 
@@ -51,6 +53,12 @@ public class TradeSystem {
         }
 
         FileManager.saveAdminToFile(adminUser);
+
+         */
+    }
+    private static void createAdminUser(){
+        AdminUser adminUser = new AdminUser("admin", "admin");
+        FileManager.saveAdminToFile(adminUser);
     }
 
     private static void onStartUp(){
@@ -77,7 +85,7 @@ public class TradeSystem {
 
     }
 
-    public static User login(){
+    private static User login(){
         User user = takeUsername();
         if (takePassword(user)){
             return user;

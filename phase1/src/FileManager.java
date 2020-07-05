@@ -53,7 +53,7 @@ public class FileManager {
         try {
             // Line below commented by Tingyu
             // FileOutputStream file = new FileOutputStream("/data/admins/" + admin.getLogInInfo().get(username) + ".ser");
-            FileOutputStream file = new FileOutputStream("/data/admins/" + admin.getUsername() + ".ser");
+            FileOutputStream file = new FileOutputStream("/data/admins/" + admin.getUsername() + ".ser"); // This file path needs to be created if it doesn't already exist - louis
             ObjectOutputStream out = new ObjectOutputStream(file);
             out.writeObject(admin);
             out.close();
