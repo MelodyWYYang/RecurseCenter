@@ -1,10 +1,12 @@
 import AlertPack.*;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TradeSystem {
 
-    public static AdminUser adminUser = new AdminUser("admin", "admin");
+    public static AdminUser adminUser;
 
     static UserAlertManager userAlertManager = new UserAlertManager();
 
@@ -14,8 +16,10 @@ public class TradeSystem {
 
 
     public static void main(String[] args){
-        createAdminUser();
-        /*
+        if (!((new File("adminUser.ser"))).exists()){
+            createAdminUser();
+        }
+
         //TODO: Create the adminUser.ser file if it does not exist.
         adminUser = FileManager.loadAdminUser("adminUser.ser");
 
@@ -29,7 +33,7 @@ public class TradeSystem {
         int input = optionChoice(2);
         //TODO: Should we make this stuff its own class?
         if (input == 1){
-            createAccount();
+            loggedIn = createAccount();
         } else if (input == 2){
             User x = login();
             if (x == null){
@@ -54,7 +58,7 @@ public class TradeSystem {
 
         FileManager.saveAdminToFile(adminUser);
 
-         */
+
     }
     private static void createAdminUser(){
         AdminUser adminUser = new AdminUser("admin", "admin");
@@ -66,7 +70,7 @@ public class TradeSystem {
         adminUser.userManager.onStartUp();
     }
 
-    private static void createAccount(){
+    private static User createAccount(){
 
         while (true) {
             try {
@@ -75,13 +79,11 @@ public class TradeSystem {
                 String inputUsername = scan.nextLine();
                 System.out.println("Enter your desired password");
                 String password = scan.nextLine();
-                adminUser.userManager.createUser(inputUsername, password);
-                break;
+                return adminUser.userManager.createUser(inputUsername, password);
             } catch (UserNameTakenException e) {
                 System.out.println("Username taken, try again");
             }
         }
-
 
     }
 

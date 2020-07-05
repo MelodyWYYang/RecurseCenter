@@ -33,7 +33,7 @@ public class UserActions {
                 System.out.println("Please enter a number corresponding to a setting above:\n");
                 input = scan.nextInt();
                 if (input > 6 || input < 0) {
-                    System.out.println("Please enter a number from 1 to 6");
+                    System.out.println("Please enter a number from 0 to 6");
                 } else if (input == 1) {
                     viewItemAndWishlist(user);
                     valid_input = true;
@@ -320,7 +320,7 @@ public class UserActions {
                     "completed \n(5) View number of transactions this week \n(6) View items recently traded away" +
                     "\n(7) View most frequent trading partners \n(8) Return to \"User Menu\"");
             input = scan.nextInt();
-            if (input >= 8 || input <= 1) {
+            if (input > 8 || input < 1) {
                 System.out.println("Please enter a number from 1 to 8");
             } else break;
         }
