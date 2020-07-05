@@ -92,8 +92,6 @@ public class AdminUser implements Serializable {
         if (accepted) {
             User user = TradeSystem.adminUser.userManager.searchUser(request.getOwner());
             Item item = new Item(request.getName(), request.getItemID());
-            item.setOwner(request.getOwner());
-            item.setUserThatHasPossession(request.getOwner());
             item.setDescription(request.getDescription());
             assert user != null;
             user.availableItems.add(item);   //Changed this to fail when user is null. We don't want the program to

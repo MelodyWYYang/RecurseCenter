@@ -8,19 +8,16 @@ public class Item implements Serializable {
     private String name;
     private String description;
     private final int id;
-    private static int idGenerator = 1;
 
-    public Item(String name, String description) {
+    public Item(String name, String description, int itemID) {
         this.name = name;
         this.description = description;
-        this.id = idGenerator;
-        idGenerator ++;
+        this.id = itemID; // id number is taken from the item validation request when the item is created within AdminAlertManager
     }
 
-    public Item(String name){
+    public Item(String name, int itemID){
         this.name = name;
-        this.id = idGenerator;
-        idGenerator ++;
+        this.id = itemID;
     }
 
     @Override

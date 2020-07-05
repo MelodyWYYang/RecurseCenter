@@ -42,7 +42,8 @@ public class User implements Serializable {
 
 
     public void setPassword(String password) { this.password = password; }// may want to extend a use case to change password if forgotten
-    public String getPassword(String password) { return this.password;}
+    public String getPassword() { return this.password;}
+    public boolean checkPassword(String pass){return pass.equals(password);}
 
     //for adding and removing from wishlist and available-to-lend lists, and getters for this User's lists
     public ArrayList<Item> getAvailableItems() {return this.availableItems;}

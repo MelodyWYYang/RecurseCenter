@@ -77,8 +77,44 @@ public class TradeSystem {
 
     }
 
-    private static User login(){
+    public static User login(){
+        User user = takeUsername();
+        if (takePassword(user)){
+            return user;
+        }
         return null;
+    }
+    private static User takeUsername(){
+        Scanner scanner = new Scanner(System.in);
+        User user = null;
+        while(user == null) {
+            System.out.println("Enter your username:");
+            String username = scanner.next();
+            if (username.equals("0")){
+                return null;
+            }
+            user = adminUser.userManager.searchUser(username);
+            if (user == null){
+                System.out.println("Username was not valid. Please try again or enter 0 to return to the main menu.");//currently entering 0 just exits the system - louis
+            }
+        }
+        return user;
+    }
+    private static boolean takePassword(User user){
+        Scanner scanner = new Scanner(System.in);
+        while(true) {
+            System.out.println("Please enter the password for " + user.getUsername() + ":");
+            String pass = scanner.next();
+            if (pass.equals("0")){
+                return false;
+            }
+            else if (user.checkPassword(pass)) {
+                System.out.println("Logged in as " + user.getUsername());
+                return true;
+            }else{
+                System.out.println("Invalid Password. Please try again or enter 0 to return to the main menu."); //currently you will exit the system if you enter 0 - louis
+            }
+        }
     }
 
     private static int optionChoice(int x){

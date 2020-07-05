@@ -5,13 +5,14 @@ import java.util.ArrayList;
 
 public class SandboxTest {
 
-    /*public static void main(String[] args){
+    public static void main(String[] args){
         //testSearchUser1();
 
         //testSearchItem1();
 
         testViewAllUsers();
-    }*/
+
+    }
 
 
     private static void testViewAllUsers(){
@@ -37,8 +38,10 @@ public class SandboxTest {
         }
 
         UserActions ua = new UserActions();
-
-        ua.mainMenu(jerry);
+        User user = TradeSystem.login();//login must be set to public to run this test. Set back to private when done.
+        if (user != null){
+            ua.mainMenu(user);
+        }
     }
 
 
@@ -64,11 +67,12 @@ public class SandboxTest {
             System.out.println("The username is taken.");
         }
 
-        Item larrysBike = new Item("Bike");
+        Item larrysBike = new Item("Bike", 1);
 
         assert larry != null;
         larry.availableItems.add(larrysBike);
 
         assert um.searchItem(1) == larrysBike;
     }
+
 }
