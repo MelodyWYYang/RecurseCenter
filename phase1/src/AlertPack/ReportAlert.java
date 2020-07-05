@@ -1,6 +1,7 @@
 package AlertPack;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class ReportAlert extends AdminAlert implements Serializable {
 

@@ -65,6 +65,8 @@ public class AdminAlertManager {
     public void handleReportAlert(ReportAlert alert){
         boolean flag = true;
         int input = 0;
+        int numIncompTrades = 0;
+        int threshold = 0; // threshold of incomplete trades
         while (flag){
             Scanner scan = new Scanner(System.in);
             System.out.println(alert.toString());
@@ -73,7 +75,12 @@ public class AdminAlertManager {
             input = scan.nextInt();
             if (input == 1){
                 // increment incompleteTrades stat in AdminUser and freeze user if needed
-                // incomplete trades are not being tracked currently. will update
+                // numIncompTrades = TradeSystem.adminUser.userManager.getNumIncompTrades(alert.getReportedUserName(), alert.);
+                threshold = TradeSystem.adminUser.userManager.getIncompleteThreshold();
+                if (numIncompTrades > threshold){
+                    User reportedUser = TradeSystem.adminUser.userManager.searchUser(alert.getReportedUserName());
+                    TradeSystem.adminUser.freezeUser(reportedUser);
+                }
                 flag = false;
             }
             if (input == 2){
