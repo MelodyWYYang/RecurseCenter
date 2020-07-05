@@ -11,12 +11,6 @@ public class Trade implements Serializable {
     protected String username1;
     protected String username2;
 
-    //I read in the assignment details that the AdminUser should be able to
-    //change how many times one should have to lend in order to borrow.
-    //I made this public static so it can be changed from anywhere and independent of
-    //individual trades. - Murray
-    public static int numLendsForBorrowThreshold = 1;
-
     protected boolean user1AcceptedRequest = false;
     protected boolean user2AcceptedRequest = false;
 
@@ -87,10 +81,16 @@ public class Trade implements Serializable {
         this.user2TradeConfirmed = user2TradeConfirmed;
     }
 
+    /**
+     * Increments the number of times User1 has sent this trade as a counter-offer.
+     */
     public void incrementUser1NumRequests(){
         user1NumRequests+=1;
     }
 
+    /**
+     * Increments the number of times User2 has sent this trade as a counter-offer.
+     */
     public void incrementUser2NumRequests(){
         user2NumRequests+=1;
     }

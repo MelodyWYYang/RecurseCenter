@@ -29,7 +29,7 @@ public class TradeSystem {
         User loggedIn = null;
         boolean isAdmin = false;
         System.out.println("Welcome to Insert_name_here trading system!\n Would you like to create an account or " +
-                "login?\n(1) Create account \n(2)Login to existing account\n(0) Quit");
+                "login?\n(1) Create account \n(2) Login to existing account\n(0) Quit");
         int input = optionChoice(2);
         //TODO: Should we make this stuff its own class?
         if (input == 1){
@@ -51,7 +51,7 @@ public class TradeSystem {
             adminAlertManager.handleAlertQueue(adminAlerts);
             adminActions.run();
         } else {
-            ArrayList<UserAlert> userAlerts = adminUser.userManager.getAlerts(loggedIn.getUsername());
+            ArrayList<UserAlert> userAlerts = adminUser.userManager.getUserAlerts(loggedIn.getUsername());
             userAlertManager.handleAlertQueue(userAlerts);
             userActions.run(loggedIn);
         }
@@ -71,7 +71,6 @@ public class TradeSystem {
     }
 
     private static User createAccount(){
-
         while (true) {
             try {
                 Scanner scan = new Scanner(System.in);
@@ -84,7 +83,6 @@ public class TradeSystem {
                 System.out.println("Username taken, try again");
             }
         }
-
     }
 
     public static User login(){
@@ -150,7 +148,7 @@ public class TradeSystem {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter one of the numbers listed above");
         int choice = scanner.nextInt();
-        while(choice >= x || choice <= 0){
+        while(choice > x || choice < 0){
             System.out.println("The number you entered was not listed above. Please enter a choice between 0 and " + x);
             choice = scanner.nextInt();
         }

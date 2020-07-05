@@ -223,16 +223,18 @@ public class UserAlertManager {
         int input = 0;
         while (flag) {
             Scanner scan = new Scanner(System.in);
-            System.out.println("(1) Report the other user \n (2) Confirm Trade");
+            System.out.println("(1) Confirm Trade\n(2) I didn't show up\n(3) The other person didn't show up");
             input = scan.nextInt();
             if (input == 1) {
-                // report the other user. rendReport not implemented. will update
-            }
-            if (input == 2){
                 User user = TradeSystem.adminUser.userManager.searchUser(alert.getUsername());
-                // confirm trade
-        }
-
+                TradeSystem.adminUser.userManager.confirmTrade(user,
+                        TradeSystem.adminUser.userManager.searchPendingTrade(alert.getTradeId()));
+                System.out.println("Trade confirmed. Your items have been exchanged on the system.");
+                //TODO
+            }
+            else if (input == 2){
+                //TODO
+            }
         }
     }
 

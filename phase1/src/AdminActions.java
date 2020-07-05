@@ -13,7 +13,7 @@ public class AdminActions {
             int input = -1;
             Scanner scan = new Scanner(System.in);
             System.out.println("--- Admin Menu --- \n");
-            System.out.println("(1) Set frozen threshold \n (0) Quit");
+            System.out.println("(1) Set Borrow/Lend threshold \n(0) Quit");
             boolean valid_input = false;
             while (!valid_input) {
                 input = scan.nextInt();

@@ -52,12 +52,15 @@ public class UserManager implements Serializable{
     private int borrowLendThreshold = 1;
 
 
-    public ArrayList<UserAlert> getAlerts(String username){
+    public ArrayList<UserAlert> getUserAlerts(String username){
         return alertSystem.get(username);
     }
+
     public void onStartUp(){
         //Calls all initialization stuff for UserManager.
+        checkForExpiredTempTrades();
     }
+
     /**
      * Alerts the admin.
      */
@@ -570,6 +573,15 @@ public class UserManager implements Serializable{
         return null;
     }
 
+    public Trade searchPendingTrade(int tradeID){
+        for (Trade trade : pendingTrades){
+            if (trade.getTradeID() == tradeID) {
+                return trade;
+            }
+        }
+        return null;
+    }
+
     /** Method which ensures that neither user account is frozen.
      * Author: Louis Scheffer V
      * @param u1 user1
@@ -658,7 +670,7 @@ public class UserManager implements Serializable{
      * Check to see if any TemporaryTrades have expired and if so, add an alert to the User's alertQueue.
      * Author: Murray Smith
      * Rework by Louis Scheffer V 6/30/20 // modifications made to work with the alert system.
-     * Rework by Tian Yue Dong 7/1/2020 ; made it so it only sends alert to user who didnt confirm the reexchange
+     * Rework by Tian Yue Dong 7/1/2020 ; made it so it only sends alert to user who didn't confirm the reexchange
      */
     public void checkForExpiredTempTrades(){
         for (TemporaryTrade tempTrade : currentTemporaryTrades) {

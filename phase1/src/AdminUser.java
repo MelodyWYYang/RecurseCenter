@@ -155,7 +155,7 @@ public class AdminUser implements Serializable {
     }
 
     public void changeThresholdForUser(int newThreshold) {
-        Trade.numLendsForBorrowThreshold = newThreshold;
+        userManager.setBorrowLendThreshold(newThreshold);
     }
 
     public void alertAdmin(AdminAlert adminAlert){
