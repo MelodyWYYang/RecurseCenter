@@ -60,6 +60,21 @@ public class TradeSystem {
 
     private static void createAccount(){
 
+        while (true) {
+            try {
+                Scanner scan = new Scanner(System.in);
+                System.out.println("Enter your desired username");
+                String inputUsername = scan.nextLine();
+                System.out.println("Enter your desired password");
+                String password = scan.nextLine();
+                adminUser.userManager.createUser(inputUsername, password);
+                break;
+            } catch (UserNameTakenException e) {
+                System.out.println("Username taken, try again");
+            }
+        }
+
+
     }
 
     private static User login(){

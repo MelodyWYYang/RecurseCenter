@@ -99,16 +99,16 @@ public class UserActions {
              for (Item item: user.getAvailableItems()){
                  if (item.getId() == itemID) {
                      user.getAvailableItems().remove(item);
-                 }
+                     System.out.println("Item deleted");
+                 } else System.out.println("Invalid item id");
              }
 
          } else {
-             System.out.println("Please the ID of the item you wish to remove from your wishlist");
-             String inputItemName = scan.nextLine();
+             System.out.println("Please enter the name of the item on your wishlist you wish to remove");
+             String wishlistitem = scan.nextLine();
              for (String itemName: user.getWishlistItemNames()){
-                 if (itemName.equals(inputItemName)) {
-                     //TODO: ensure this alias works
-                     user.getWishlistItemNames().remove(itemName);
+                 if (itemName.equals(wishlistitem)) {
+                     user.getWishlistItemNames().remove(wishlistitem);
                  }
              }
          }

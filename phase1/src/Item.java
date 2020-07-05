@@ -8,71 +8,57 @@ public class Item implements Serializable {
     private String name;
     private String description;
     private final int id;
+    private static int idGenerator = 1;
 
-    private String ownerUserName;
-    private String userThatHasPossession;
-
-    protected ArrayList<String> tags = new ArrayList<String>();
-
-    public Item(String name, String description, int id){
+    public Item(String name, String description) {
         this.name = name;
         this.description = description;
-        this.id = id;
+        this.id = idGenerator;
+        idGenerator ++;
     }
 
-    public Item(String name, int id){
+    public Item(String name){
         this.name = name;
-        this.id = id;
+        this.id = idGenerator;
+        idGenerator ++;
     }
 
     @Override
     public String toString() {
-        return "Item{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                '}';
+        return name + "\n" + "item Id: " + id + "\n" + "Description: " + description;
     }
 
     //setters
 
-    public void setOwner(String owner) { ownerUserName = owner; }
-
-    public void setUserThatHasPossession(String userThatHasPossession) {
-        this.userThatHasPossession = userThatHasPossession;
-    }
-
+    /**
+     * @param description the description of the string
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void addTags(String tag){
-        if (!tags.contains(tag)) {
-            tags.add(tag);
-        }
-    }
-
-    public void deleteTag(String tag){
-        if(tags.contains(tag)){
-            tags.remove(tag);
-        }
-    }
-
     //getters
 
+    /**
+     * @return the name of the item
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return the description of the item
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * @return the ID of the item
+     */
     public int getId() {
         return id;
     }
 
-    public ArrayList<String> getTags() {
-        return tags;
-    }
+
 }

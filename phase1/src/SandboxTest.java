@@ -64,7 +64,7 @@ public class SandboxTest {
             System.out.println("The username is taken.");
         }
 
-        Item larrysBike = new Item("Bike", 1);
+        Item larrysBike = new Item("Bike");
 
         assert larry != null;
         larry.availableItems.add(larrysBike);
