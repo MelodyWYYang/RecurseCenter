@@ -46,4 +46,20 @@ public class AdminActions {
             }
         }
     }
+
+    public void addNewAdmin(AdminUser admin) {
+        boolean flag = true;
+        String inputUsername;
+        String inputPassword;
+        while (flag) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Enter the username of the administrator you want to add: ");
+            inputUsername = scan.next();
+            System.out.println("Enter the password of the administrator you want to add: ");
+            inputPassword = scan.next();
+            TradeSystem.adminUser.createAdmin(inputUsername, inputPassword);
+            flag = false;
+            }
+        }
+    }
 }
