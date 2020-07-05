@@ -63,6 +63,7 @@ public class UserManager implements Serializable{
 
     /**
      * Alerts the admin.
+     * @param alert alert
      */
     public void alertAdmin(AdminAlert alert){
         this.adminAlerts.add(alert);
@@ -73,6 +74,7 @@ public class UserManager implements Serializable{
      * Author: Jinyu Liu
      * @param username username of user
      * @param password password of user
+     * @return the created user
      */
     public User createUser(String username, String password) throws UserNameTakenException {
         System.out.println("Entered:" + username);
@@ -91,6 +93,11 @@ public class UserManager implements Serializable{
         return newUser;
     }
 
+    /**
+     * Adds an item to the user's wishlist
+     * @param user user
+     * @param itemName name of item
+     */
     public void addToWishlist(User user, String itemName){
         user.wishlistItemNames.add(itemName);
     }
@@ -247,6 +254,7 @@ public class UserManager implements Serializable{
      * @param name name of the item
      * @param description description of the item
      * @param owner username of the user who will own the item
+     * @return The ItemValidationRequestAlert in question.
      */
     public ItemValidationRequestAlert sendValidationRequest(String name, String description, String owner) {
         // reworked by Tingyu since the itemValidationRequestQueue has been moved to UserManager
@@ -325,7 +333,7 @@ public class UserManager implements Serializable{
     return recent;
     }
 
-    /** Helper function that returns an ordered list of all item's ID that the user traded away. The list is ordered by
+    /** Helper function that returns an ordered list of all items' ID that the user traded away. The list is ordered by
      * the date that the user traded the item away.
      * @param tradeHistory Ordered list of all trades that user participated in and traded an item away
      * @param user User being evaluated
@@ -343,6 +351,13 @@ public class UserManager implements Serializable{
         return orderedItemsID;
     }
 
+    /** Returns an ordered list of all items that the user traded away. The list is ordered by the date that the user
+     * traded the item away.
+     * @param orderedItemsID Ordered list of all items' ID that user participated in and traded an item away
+     * @param user User being evaluated
+     * @param n number of items
+     * @return ArrayList</Item> (sorted by LocalTimeDate)
+     */
     public ArrayList<Item> getNOrderedItems(User user, ArrayList<Integer> orderedItemsID, int n) {
         ArrayList<Integer> orderedItemsIDClone = (ArrayList<Integer>) orderedItemsID.clone();
         ArrayList<Item> nOrderedItems = new ArrayList<Item>();
@@ -421,6 +436,10 @@ public class UserManager implements Serializable{
 //    }
 //As ugly as this is, please don't delete this yet until I am sure the newer code works - Jinyu
 
+    /** Number of trades carried out by the user in a week
+     * @param user user whose number of trades is being calculated
+     * @return the number of transactions in a week
+     */
     public int getNumTradesThisWeek(User user) {
         int numTransactions = 0;
         LocalDateTime timeNow = LocalDateTime.now(); //gets the current time
@@ -454,6 +473,11 @@ public class UserManager implements Serializable{
         return incompleteTrades;
     }
 
+    /** Number of incomplete trades made by the user
+     * @param incompleteTrades list of incomplete trades
+     * @param user User being evaluated
+     * @return count of number of incomplete trades
+     */
     public int getNumIncompTrades(User user, ArrayList<Trade> incompleteTrades) {
         int count = 0;
         for (Trade trade : incompleteTrades) {
@@ -480,6 +504,12 @@ public class UserManager implements Serializable{
         return numTradesPerUser;
     }
 
+    /** Top trading partners for a user.
+     * @param n number of top trading partners to be considered
+     * @param numTradesPerUser number of trades per user
+     * @param user User being evaluated
+     * @return the usernames of the top trading partners for a given user
+     */
     public ArrayList<String> getTopNTradingPartners(User user, int n, HashMap<String, Integer> numTradesPerUser) {
         HashMap<String, Integer> numTradesPerUserClone = (HashMap<String, Integer>) numTradesPerUser.clone();
         ArrayList<String> topPartnersUsername = new ArrayList<String>();
@@ -555,6 +585,11 @@ public class UserManager implements Serializable{
         return null;
     }
 
+    /** Method which returns a temporary trade when given its ID number.
+     * Returns null if an invalid ID is given
+     * @param tradeID ID number corresponding to the trade
+     * @return the temporary trade
+     */
     public TemporaryTrade serachTemporaryTrade(int tradeID) {
         for (TemporaryTrade tempTrade : currentTemporaryTrades){
             if (tempTrade.getTradeID() == tradeID){
@@ -564,6 +599,11 @@ public class UserManager implements Serializable{
         return null;
     }
 
+    /** Method which searches pending trade requests when given the trade's ID number and returns the trade.
+     * Returns null if an invalid ID is given
+     * @param tradeID ID number corresponding to the trade
+     * @return the trade
+     */
     public Trade searchPendingTradeRequest(int tradeID){
         for (Trade trade : pendingTradeRequests){
             if (trade.getTradeID() == tradeID){
@@ -573,6 +613,11 @@ public class UserManager implements Serializable{
         return null;
     }
 
+    /** Method which searches pending trades when given the trade's ID number and returns the trade.
+     * Returns null if an invalid ID is given
+     * @param tradeID ID number corresponding to the trade
+     * @return the trade
+     */
     public Trade searchPendingTrade(int tradeID){
         for (Trade trade : pendingTrades){
             if (trade.getTradeID() == tradeID) {
@@ -694,7 +739,7 @@ public class UserManager implements Serializable{
 
 
 
-    /** Method which allows a user to confirm the re-exchange of items has occured in the real world. If the other
+    /** Method which allows a user to confirm the re-exchange of items has occurred in the real world. If the other
      * user has already confirmed, then the reExchangeItems method will be called to reExahange the items within the
      * trade system.
      * Author: Louis Scheffer V
@@ -713,6 +758,10 @@ public class UserManager implements Serializable{
         }
     }
 
+    /** Method which allows a user to confirm a permanent trade has occurred.
+     * @param user who is confirming the trade
+     * @param trade the trade object
+     */
     public void confirmTrade(User user, Trade trade){
         // TODO
     }
@@ -863,6 +912,11 @@ public class UserManager implements Serializable{
         UserAlert alert = new MessageAlert(sender.getUsername(), message);
         alertUser(recipient, alert);
     }
+
+    /** Searches pending trades by user and returns the trades of the user
+     * @param user the user whose pending trades are being searched
+     * @return the trades of the yser
+     */
     public ArrayList<Trade> searchPendingTradesByUser(User user){
         ArrayList<Trade> userTrades = new ArrayList<Trade>();
         for(Trade trade : pendingTrades){
@@ -872,6 +926,11 @@ public class UserManager implements Serializable{
         }
         return userTrades;
     }
+
+    /** Searches current temporary trades by user and returns the trades of the user
+     * @param user the user whose trades are being searched
+     * @return the trades of the yser
+     */
     public ArrayList<TemporaryTrade> searchActiveTempTradesByUser(User user) {
         ArrayList<TemporaryTrade> userTrades = new ArrayList<TemporaryTrade>();
         for (TemporaryTrade trade: currentTemporaryTrades) {
