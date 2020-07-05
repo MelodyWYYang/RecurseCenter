@@ -165,4 +165,7 @@ public class AdminUser implements Serializable {
     public ArrayList<AdminAlert> getAdminAlerts() {
         return adminAlerts;
     }
+    public boolean checkPassword(String pass){
+        return pass.equals(password);
+    }
 }

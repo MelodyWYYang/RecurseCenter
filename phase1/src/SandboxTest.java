@@ -10,7 +10,7 @@ public class SandboxTest {
 
         //testSearchItem1();
 
-        //testViewAllUsers();
+        testViewAllUsers();
 
 
     }
@@ -38,11 +38,11 @@ public class SandboxTest {
             System.out.println("Caught on Janice");
         }
 
- //       UserActions ua = new UserActions();
- //       User user = TradeSystem.login();//login must be set to public to run this test. Set back to private when done.
- //       if (user != null){
- //           ua.mainMenu(user);
- //       }
+        UserActions ua = new UserActions();
+        User user = TradeSystem.login();//login must be set to public to run this test. Set back to private when done.
+        if (user != null){
+            ua.mainMenu(user);
+        }
     }
 
 

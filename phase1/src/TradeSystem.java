@@ -85,7 +85,7 @@ public class TradeSystem {
 
     }
 
-    private static User login(){
+    public static User login(){
         User user = takeUsername();
         if (takePassword(user)){
             return user;
@@ -99,10 +99,13 @@ public class TradeSystem {
             System.out.println("Enter your username:");
             String username = scanner.next();
             if (username.equals("0")){
-                return null;
+                return null;// This needs to be changed so that it will return to the main menu. - Louis
             }
             user = adminUser.userManager.searchUser(username);
-            if (user == null){
+            if (username.equals(adminUser.getUsername()) && takeAdminPassword(adminUser)){
+                return null;
+            }
+            else if (user == null){
                 System.out.println("Username was not valid. Please try again or enter 0 to return to the main menu.");//currently entering 0 just exits the system - louis
             }
         }
@@ -118,6 +121,22 @@ public class TradeSystem {
             }
             else if (user.checkPassword(pass)) {
                 System.out.println("Logged in as " + user.getUsername());
+                return true;
+            }else{
+                System.out.println("Invalid Password. Please try again or enter 0 to return to the main menu."); //currently you will exit the system if you enter 0 - louis
+            }
+        }
+    }
+    private static Boolean takeAdminPassword(AdminUser adminUser){
+        Scanner scanner = new Scanner(System.in);
+        while(true) {
+            System.out.println("Please enter the password for " + adminUser.getUsername() + ":");
+            String pass = scanner.next();
+            if (pass.equals("0")){
+                return false;
+            }
+            else if (adminUser.checkPassword(pass)) {
+                System.out.println("Logged in as " + adminUser.getUsername());
                 return true;
             }else{
                 System.out.println("Invalid Password. Please try again or enter 0 to return to the main menu."); //currently you will exit the system if you enter 0 - louis
