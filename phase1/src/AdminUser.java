@@ -10,16 +10,18 @@ public class AdminUser implements Serializable {
     private String username;
     private String password;
 
-
-    public ArrayList<AdminAlert> adminAlerts = new ArrayList<AdminAlert>();
-
+    private ArrayList<AdminAlert> adminAlerts = new ArrayList<AdminAlert>();
     public ArrayList<String> accountsToFreezeQueue;
     public ArrayList<String> unfreezeRequestList; // list of accounts that have requested to be unfrozen
     public ArrayList<String> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
 
     public UserManager userManager = new UserManager(); // Not really sure how we want to do this. Hardcoded for simplicity in the meanwhile - Louis
 
-
+    /**
+     * Constructor for AdminUser
+     * @param username string for the admin's username
+     * @param password string for the admin's password
+     */
     public AdminUser(String username, String password) {
         // this.loginInfo.put(username, password);
         // itemValidationQueue = new ArrayList<ItemValidationRequest>();
@@ -37,6 +39,11 @@ public class AdminUser implements Serializable {
         this.loginInfo.put(username, password);
     }*/
 
+    /**
+     * Creates a new admin user
+     * @param username - string for the admin's username
+     * @param password - string for the admin's password
+     */
     public void createAdmin(String username, String password) {
         AdminUser newAdmin = new AdminUser(username, password);
         newAdmin.accountsToFreezeQueue = this.accountsToFreezeQueue;
@@ -50,6 +57,10 @@ public class AdminUser implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public ArrayList<AdminAlert> getAdminAlerts() {
+        return adminAlerts;
     }
 
     public void setUsername(String username) {
@@ -69,7 +80,7 @@ public class AdminUser implements Serializable {
     }
 
     /**
-     * Manages all the startup stuff we need to do.
+     * Manages all startup information for the admin
      */
     public ArrayList<AdminAlert> onStartUp(){
         this.adminAlerts = userManager.getAdminAlerts();
@@ -88,14 +99,21 @@ public class AdminUser implements Serializable {
      }
      */
 
+    /**
+     * Determines acceptance of item validation request and either creates/adds the new item,
+     * or provides an alert that it has been declined
+     * @param accepted boolean for whether or not the request has been accepted
+     * @param request corresponding ItemValidationRequestAlert object
+     * @param message validation request message
+     */
     public void pollValidationRequest(boolean accepted, ItemValidationRequestAlert request, String message) {
         if (accepted) {
             User user = TradeSystem.adminUser.userManager.searchUser(request.getOwner());
             Item item = new Item(request.getName(), request.getItemID());
             item.setDescription(request.getDescription());
             assert user != null;
-            user.availableItems.add(item);   //Changed this to fail when user is null. We don't want the program to
-            // fail silently.
+            user.availableItems.add(item);   //Changed this to fail when user is null. We don't want the program
+            // to fail silently.
             // request.getOwner().availableItems.add(request.getObj());
         }
         else{
@@ -106,9 +124,9 @@ public class AdminUser implements Serializable {
     }
 
 
-    /** Method which freeze the user account and sends a FrozenAlert to the user
+    /** Method which freezes the user account and sends a FrozenAlert to the user
      * author: tian
-     * @param user user object
+     * @param user user object to freeze
      */
     public void freezeUser(User user){
         user.setFrozen(true);
@@ -117,54 +135,36 @@ public class AdminUser implements Serializable {
         FrozenAlert alert = new FrozenAlert(numBorrowed, numLent, numBorrowed - numLent);
         userManager.alertUser(user.getUsername(), alert);
     }
-    /*
-    public void dequeueAndFreeze() {
-        User user = UserManager.searchUser(accountsToFreezeQueue.get(0));
-        if (user != null) { user.isFrozen(false);    // freeze User only when it is found
-        }
-        accountsToFreezeQueue.remove(0);
-    }
 
+    /**
+     * Unfreezes user account
+     * @param user account to unfreeze
      */
-    /*
-    // The function below made by Tingyu, contact me if this is unnecessary or wrong
-    public void rejectUnfreezeRequest(boolean accepted) {
-        // from what i understand, this is rejecting the unfreeze request - riya
-        String username = unfreezeRequestList.get(0);
-        if (accepted) {
-            User user = UserManager.searchUser(username);
-            if (user != null) {
-                user.isFrozen(true);
-            }
-        }
-        unfreezeRequestList.remove(0);
-    }
-
-     */
-
-    public void moveToUnfreeze(ArrayList<String> unfreezeRequestList) {
-        String username = unfreezeRequestList.get(0);
-        if (username != null) {
-            accountsToUnfreezeQueue.add(username);
-            unfreezeRequestList.remove(0);
-        }
-    }
-
     public void unfreezeAccount(User user){
         user.setFrozen(false);
     }
 
+    /**
+     * Change the borrow/lend threshold value
+     * @param newThreshold int variable for new threshold
+     */
     public void changeThresholdForUser(int newThreshold) {
         userManager.setBorrowLendThreshold(newThreshold);
     }
 
+    /**
+     * Calls userManager.alertAdmin with the given alert
+     * @param adminAlert alert to be sent to userManager.alertAdmin
+     */
     public void alertAdmin(AdminAlert adminAlert){
         userManager.alertAdmin(adminAlert);
     }
 
-    public ArrayList<AdminAlert> getAdminAlerts() {
-        return adminAlerts;
-    }
+    /**
+     * Checks if password is correct
+     * @param pass string of password attempt to check
+     * @return whether or not password is correct
+     */
     public boolean checkPassword(String pass){
         return pass.equals(password);
     }
