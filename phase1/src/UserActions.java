@@ -318,7 +318,7 @@ public class UserActions {
             System.out.println("(1) View number of items user has borrowed \n(2) View number of items user has lent" +
                     "\n(3) View frozen status \n(4) View number of trades involving user that have not been" +
                     "completed \n(5) View number of transactions this week \n(6) View items recently traded away" +
-                    "\n(7) View most frequent trading partners \n(8) Return to \"User Menu\"");
+                    "\n(7) View most frequent trading partner's \n(8) Return to \"User Menu\"");
             input = scan.nextInt();
             if (input > 8 || input < 1) {
                 System.out.println("Please enter a number from 1 to 8");
@@ -338,13 +338,23 @@ public class UserActions {
             }
             runStats(user);
         } else if (input == 4) { //Other methods need access to UserManager methods
-
+            int incompleteTrades = TradeSystem.adminUser.userManager.getNumIncompTrades(user);
+            System.out.println("Your account has made " + Integer.toString(incompleteTrades) +
+                    " incomplete transactions");
+            runStats(user);
         } else if (input == 5) {
-
+            int weeklyTransactions = TradeSystem.adminUser.userManager.getNumTradesThisWeek(user);
+            System.out.println("Your account has made " + Integer.toString(weeklyTransactions) +
+                    " transactions this week");
+            runStats(user);
         } else if (input == 6) {
-
+            ArrayList<Item> recentItems = TradeSystem.adminUser.userManager.getNRecentItems(user, 3);
+            System.out.println(recentItems);
+            runStats(user);
         } else if (input == 7) {
-
+            ArrayList<String> favouriteParnters = TradeSystem.adminUser.userManager.getTopNTradingPartners(user, 3);
+            System.out.println(favouriteParnters);
+            runStats(user);
         } else if (input == 8) {
             run(user);
         }

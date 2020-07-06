@@ -335,11 +335,11 @@ public class UserManager implements Serializable{
 
     /** Helper function that returns an ordered list of all items' ID that the user traded away. The list is ordered by
      * the date that the user traded the item away.
-     * @param tradeHistory Ordered list of all trades that user participated in and traded an item away
      * @param user User being evaluated
      * @return ArrayList</int> (sorted by LocalTimeDate)
      */
-    private ArrayList<Integer> getOrderedItemsID(ArrayList<Trade> tradeHistory, User user) {
+    private ArrayList<Integer> getOrderedItemsID(User user) {
+        ArrayList<Trade> tradeHistory = this.getOrderedTrades(user);
         ArrayList<Integer> orderedItemsID = new ArrayList<Integer>();
         for (Trade trade : tradeHistory) {
             if (trade.getUsername1().equals(user.getUsername())) {
@@ -353,12 +353,12 @@ public class UserManager implements Serializable{
 
     /** Returns an ordered list of all items that the user traded away. The list is ordered by the date that the user
      * traded the item away.
-     * @param orderedItemsID Ordered list of all items' ID that user participated in and traded an item away
      * @param user User being evaluated
      * @param n number of items
      * @return ArrayList</Item> (sorted by LocalTimeDate)
      */
-    public ArrayList<Item> getNOrderedItems(User user, ArrayList<Integer> orderedItemsID, int n) {
+    public ArrayList<Item> getNRecentItems(User user, int n) {
+        ArrayList<Integer> orderedItemsID = this.getOrderedItemsID(user);
         ArrayList<Integer> orderedItemsIDClone = (ArrayList<Integer>) orderedItemsID.clone();
         ArrayList<Item> nOrderedItems = new ArrayList<Item>();
         while (nOrderedItems.size() < n & !orderedItemsIDClone.isEmpty()) {
@@ -436,15 +436,19 @@ public class UserManager implements Serializable{
 //    }
 //As ugly as this is, please don't delete this yet until I am sure the newer code works - Jinyu
 
+    public LocalDateTime getStartofWeek() {
+        LocalDateTime timeNow = LocalDateTime.now(); //gets the current time
+        LocalDateTime timeNowBeginning = timeNow.withHour(0).withMinute(0).withSecond(0).withNano(0); //set time 00:00
+        return timeNowBeginning.minusDays(timeNowBeginning.getDayOfWeek().getValue());
+    }
+
     /** Number of trades carried out by the user in a week
      * @param user user whose number of trades is being calculated
      * @return the number of transactions in a week
      */
     public int getNumTradesThisWeek(User user) {
         int numTransactions = 0;
-        LocalDateTime timeNow = LocalDateTime.now(); //gets the current time
-        LocalDateTime timeNowBeginning = timeNow.withHour(0).withMinute(0).withSecond(0).withNano(0); //set time 00:00
-        LocalDateTime startOfWeek = timeNowBeginning.minusDays(timeNowBeginning.getDayOfWeek().getValue()); //get Sunday
+        LocalDateTime startOfWeek = this.getStartofWeek();
         for (Trade trade : completedTrades) {
             if (trade.getUsername1().equals(user.username) & trade.getTimeOfTrade().isAfter(startOfWeek)) {
                 numTransactions++;
@@ -474,12 +478,12 @@ public class UserManager implements Serializable{
     }
 
     /** Number of incomplete trades made by the user
-     * @param incompleteTrades list of incomplete trades
      * @param user User being evaluated
      * @return count of number of incomplete trades
      */
-    public int getNumIncompTrades(User user, ArrayList<Trade> incompleteTrades) {
+    public int getNumIncompTrades(User user) {
         int count = 0;
+        ArrayList<Trade> incompleteTrades = this.getIncompleteTrades();
         for (Trade trade : incompleteTrades) {
             if (trade.getUsername1().equals(user.getUsername()) | trade.getUsername2().equals(user.getUsername())) {
                 count++;
@@ -506,11 +510,11 @@ public class UserManager implements Serializable{
 
     /** Top trading partners for a user.
      * @param n number of top trading partners to be considered
-     * @param numTradesPerUser number of trades per user
      * @param user User being evaluated
      * @return the usernames of the top trading partners for a given user
      */
-    public ArrayList<String> getTopNTradingPartners(User user, int n, HashMap<String, Integer> numTradesPerUser) {
+    public ArrayList<String> getTopNTradingPartners(User user, int n) {
+        HashMap<String, Integer> numTradesPerUser = this.getNumTradesPerUser(user);
         HashMap<String, Integer> numTradesPerUserClone = (HashMap<String, Integer>) numTradesPerUser.clone();
         ArrayList<String> topPartnersUsername = new ArrayList<String>();
         while (topPartnersUsername.size() < n & !numTradesPerUserClone.isEmpty()) {

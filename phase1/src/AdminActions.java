@@ -6,6 +6,9 @@ public class AdminActions {
         mainMenu();
     }
 
+    /**
+     *
+     */
     public void mainMenu() {
 
         boolean running = true;
