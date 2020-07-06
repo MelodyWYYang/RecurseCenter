@@ -42,9 +42,9 @@ public class AdminAlertManager {
         //  handle the alert on the enduser side of things. See google doccument for specifics on alerts and their
         //  handling process.
 
-    /**
+    /** Method that handles an ItemValidationRequestAlert by approving or denying the request
      *
-     * @param alert a
+     * @param alert AdminAlert that there is an ItemValidationRequestAlert to be handled
      */
     public void handleItemValidationRequestAlert(ItemValidationRequestAlert alert){
         Scanner scanner = new Scanner(System.in);
@@ -62,6 +62,10 @@ public class AdminAlertManager {
         adminUser.pollValidationRequest(choice == 1, alert, message);
     }
 
+    /** Method that handles a ReportAlert by accepting the report or dismissing it
+     *
+     * @param alert AdminAlert that there is a ReportAlert to be handled
+     */
     public void handleReportAlert(ReportAlert alert){
         boolean flag = true;
         int input = 0;
@@ -89,6 +93,10 @@ public class AdminAlertManager {
         }
     }
 
+    /** Method that handles a FreezeUserAlert by freezing the user or dismissing the alert
+     *
+     * @param alert AdminAlert that there is a user that should be frozen
+     */
     private void handleFreezeUserAlert(FreezeUserAlert alert){
         // author: Callan Murphy
         boolean flag = true;
@@ -108,6 +116,11 @@ public class AdminAlertManager {
         }
     }
 
+    /** Method that handles a UnfreezeUserRequestAlert by unfreezing the user that requested the unfreeze of dismissing
+     * the alert
+     *
+     * @param alert AdminAlert that there is a user who has requested that their account be unfrozen
+     */
     private void handleUnfreezeRequestAlert(UnfreezeRequestAlert alert){
         // author: Callan Murphy
         boolean flag = true;
@@ -126,6 +139,11 @@ public class AdminAlertManager {
         }
     }
 
+    /** Helper method that checks user input to ensure that they made a valid choice (options are between 1 and x)
+     *
+     * @param x user can input any value from 1 to x (inclusive)
+     * @return int
+     */
     //helper method to ensure the user picks a valid choice, options are between 1 and x - Louis
     private int optionChoice(int x){
         Scanner scanner = new Scanner(System.in);

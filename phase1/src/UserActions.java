@@ -356,7 +356,7 @@ public class UserActions {
             System.out.println(favouriteParnters);
             runStats(user);
         } else if (input == 8) {
-            run(user);
+            mainMenu(user);
         }
     }
 
