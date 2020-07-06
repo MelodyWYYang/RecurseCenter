@@ -11,9 +11,9 @@ public class AdminUser implements Serializable {
     private String password;
 
     private ArrayList<AdminAlert> adminAlerts = new ArrayList<AdminAlert>();
-    public ArrayList<String> accountsToFreezeQueue;
-    public ArrayList<String> unfreezeRequestList; // list of accounts that have requested to be unfrozen
-    public ArrayList<String> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
+    // public ArrayList<String> accountsToFreezeQueue;
+    // public ArrayList<String> unfreezeRequestList; // list of accounts that have requested to be unfrozen
+    // public ArrayList<String> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
 
     public UserManager userManager = new UserManager(); // Not really sure how we want to do this. Hardcoded for simplicity in the meanwhile - Louis
 
@@ -27,9 +27,9 @@ public class AdminUser implements Serializable {
         // itemValidationQueue = new ArrayList<ItemValidationRequest>();
         this.username = username;
         this.password = password;
-        accountsToFreezeQueue = new ArrayList<String>();
-        unfreezeRequestList = new ArrayList<String>();
-        accountsToUnfreezeQueue = new ArrayList<String>();
+        // accountsToFreezeQueue = new ArrayList<String>();
+        // unfreezeRequestList = new ArrayList<String>();
+        // accountsToUnfreezeQueue = new ArrayList<String>();
 
     }
 
@@ -46,9 +46,9 @@ public class AdminUser implements Serializable {
      */
     public void createAdmin(String username, String password) {
         AdminUser newAdmin = new AdminUser(username, password);
-        newAdmin.accountsToFreezeQueue = this.accountsToFreezeQueue;
-        newAdmin.accountsToUnfreezeQueue = this.accountsToUnfreezeQueue;
-        newAdmin.unfreezeRequestList = this.unfreezeRequestList;
+        // newAdmin.accountsToFreezeQueue = this.accountsToFreezeQueue;
+        // newAdmin.accountsToUnfreezeQueue = this.accountsToUnfreezeQueue;
+        // newAdmin.unfreezeRequestList = this.unfreezeRequestList;
     }
 
     public String getUsername() {
