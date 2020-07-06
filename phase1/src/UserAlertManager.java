@@ -9,6 +9,10 @@ import java.util.ArrayList;
 
 public class UserAlertManager {
 
+    /**
+     * Iterate through each alert in alerts, handle it and remove it from the list
+     * @param alerts list of alert that are sent in
+     */
     public void handleAlertQueue(ArrayList<UserAlert> alerts){
         while(!(alerts.size() == 0)){
             UserAlert alert = alerts.get(0);
@@ -17,6 +21,10 @@ public class UserAlertManager {
         }
     }
 
+    /**
+     * Handle alert based on its coresponding type
+     * @param alert alert sent in
+     */
     private void handleAlert(UserAlert alert) {
         System.out.println(alert); //All alerts have a toString description
 
@@ -51,6 +59,9 @@ public class UserAlertManager {
 
     }
 
+    /**
+     * Dismiss the frozen alert
+     */
     private void handleFrozenAlert(){
         boolean flag = true;
         int input = 0;

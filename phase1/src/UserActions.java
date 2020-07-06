@@ -18,6 +18,10 @@ public class UserActions {
         mainMenu(user);
     }
 
+    /**
+     * Display the main menu to user, take user's input to implement the corresponding action
+     * @param user user logged in making changes or viewing statuses
+     */
     public void mainMenu(User user){
 
         boolean running = true;
@@ -60,6 +64,10 @@ public class UserActions {
         }
     }
 
+    /**
+     * Allow user to view their available items (inventory) and wishlist
+     * @param user user logged in viewing their items
+     */
     public void viewItemAndWishlist(User user){
         boolean flag = true;
         int input = 0;
@@ -117,6 +125,10 @@ public class UserActions {
 
     }
 
+    /**
+     * Allow user to view all the users in the trading system
+     * @param userViewing user logged in viewing other users
+     */
     public void viewAllUsers(User userViewing){
         boolean handled = false;
         Scanner scan = new Scanner(System.in);
@@ -164,6 +176,14 @@ public class UserActions {
         }
     }
 
+    /**
+     * Allow userViewing to do the followings:
+     * (1) send a message to userToView
+     * (2) add one of userToView's items to the wishlist
+     * (3) send a trade request to userToView
+     * @param userToView user that is being viewed
+     * @param userViewing user logged in that is viewing other user
+     */
     private void viewUser(User userToView, User userViewing) {
         Scanner scan = new Scanner(System.in);
         StringBuilder userString = new StringBuilder(userToView.toString());
@@ -200,6 +220,11 @@ public class UserActions {
         }
     }
 
+    /**
+     * Allow userSending to send a trade request to userReceiving
+     * @param userSending user logged in that sends the trade request
+     * @param userReceiving user that will receive the trade request
+     */
     private void formTradeRequest(User userSending, User userReceiving) {
         //TODO: Possibly have a limit to the number of items that can be traded at once?
         Scanner scan = new Scanner(System.in);
@@ -309,7 +334,17 @@ public class UserActions {
         System.out.println("Successfully created and sent trade request. You will be notified when they respond.");
     }
 
-
+    /**
+     * Allow user to view the following statuses:
+     * (1) Number of items they have borrowed
+     * (2) Number of items lent
+     * (3) Frozen status
+     * (4) Number of pending trades that has not been completed
+     * (5) Number of transactions in the week
+     * (6) Items that they recently traded away
+     * (7) Three most frequent trading partners
+     * @param user user logged in viewing the statuses
+     */
     public void runStats(User user) {
         int input = 0;
         while (true) {
@@ -360,6 +395,10 @@ public class UserActions {
         }
     }
 
+    /**
+     * Send a unfreeze request to admin
+     * @param user user that sends the request
+     */
     public void sendUnfreezeRequest(User user) {
         if (!user.getFrozen()) {
             System.out.println("Your account is not frozen");
@@ -375,6 +414,10 @@ public class UserActions {
         }
     }
 
+    /**
+     * Allow user to view their pending trade history
+     * @param user user logged in
+     */
     public void viewPendingTrades(User user){
         int choice = 0;
         while (choice != 0 ) {
@@ -394,6 +437,10 @@ public class UserActions {
         }
     }
 
+    /**
+     * Allow user to view their active temporary trade history
+     * @param user user logged in
+     */
     public void viewActiveTempTrades(User user) {
         int input = -1;
         ArrayList<TemporaryTrade> userTrades = TradeSystem.adminUser.userManager.searchActiveTempTradesByUser(user);
