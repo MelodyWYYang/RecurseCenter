@@ -34,6 +34,10 @@ public class AdminActions {
         }
     }
 
+    /** Method that takes user input and changes the threshold value (The necessary difference between the number of
+     * items users have lent and borrowed before they can make another transaction)
+     * @param admin AdminUser logged in making changes
+     */
     public void setThreshold(AdminUser admin) {
         boolean flag = true;
         int input = 0;
@@ -50,6 +54,10 @@ public class AdminActions {
         }
     }
 
+    /** Method that creates additional logins for AdminUser account
+     *
+     * @param admin AdminUser logged in making changes
+     */
     public void addNewAdmin(AdminUser admin) {
         boolean flag = true;
         String inputUsername;
