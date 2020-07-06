@@ -59,6 +59,7 @@ public class AdminActions {
      * @param admin AdminUser logged in making changes
      */
     public void addNewAdmin(AdminUser admin) {
+        //TODO: ensure the username is unique.
         boolean flag = true;
         String inputUsername;
         String inputPassword;
@@ -68,7 +69,7 @@ public class AdminActions {
             inputUsername = scan.next();
             System.out.println("Enter the password of the administrator you want to add: ");
             inputPassword = scan.next();
-            TradeSystem.adminUser.createAdmin(inputUsername, inputPassword);
+            TradeSystem.adminUser.addLogin(inputUsername, inputPassword);
             flag = false;
         }
     }

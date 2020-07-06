@@ -2,13 +2,13 @@ import AlertPack.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AdminUser implements Serializable {
     //author: Tingyu Liang, Riya Razdan in group 0110 for CSC207H1 summer 2020 project
 
-    // private HashMap<String, String> loginInfo = new HashMap<String, String>();
-    private String username;
-    private String password;
+    private HashMap<String, String> loginInfo = new HashMap<String, String>();
+
 
     private ArrayList<AdminAlert> adminAlerts = new ArrayList<AdminAlert>();
     // public ArrayList<String> accountsToFreezeQueue;
@@ -25,51 +25,27 @@ public class AdminUser implements Serializable {
     public AdminUser(String username, String password) {
         // this.loginInfo.put(username, password);
         // itemValidationQueue = new ArrayList<ItemValidationRequest>();
-        this.username = username;
-        this.password = password;
+        addLogin(username, password);
         // accountsToFreezeQueue = new ArrayList<String>();
         // unfreezeRequestList = new ArrayList<String>();
         // accountsToUnfreezeQueue = new ArrayList<String>();
 
     }
 
-    /**Temporarily abandon the function below by Tingyu
-     * We are instantiating new AdminUser instead
+    public boolean isValidUsername(String username){
+        return loginInfo.containsKey(username);
+    }
+
+
     public void addLogin(String username, String password){
         this.loginInfo.put(username, password);
-    }*/
-
-    /**
-     * Creates a new admin user
-     * @param username - string for the admin's username
-     * @param password - string for the admin's password
-     */
-    public void createAdmin(String username, String password) {
-        AdminUser newAdmin = new AdminUser(username, password);
-        // newAdmin.accountsToFreezeQueue = this.accountsToFreezeQueue;
-        // newAdmin.accountsToUnfreezeQueue = this.accountsToUnfreezeQueue;
-        // newAdmin.unfreezeRequestList = this.unfreezeRequestList;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 
     public ArrayList<AdminAlert> getAdminAlerts() {
         return adminAlerts;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public void setIncompleteThreshold(int incompleteThreshold) {
         userManager.setIncompleteThreshold(incompleteThreshold);
@@ -165,7 +141,7 @@ public class AdminUser implements Serializable {
      * @param pass string of password attempt to check
      * @return whether or not password is correct
      */
-    public boolean checkPassword(String pass){
-        return pass.equals(password);
+    public boolean checkPassword(String username, String pass) {
+        return loginInfo.get(username).equals(pass);
     }
 }

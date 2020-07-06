@@ -20,7 +20,6 @@ public class TradeSystem {
             createAdminUser();
         }
 
-        //TODO: Create the adminUser.ser file if it does not exist.
         adminUser = FileManager.loadAdminUser("adminUser.ser");
 
         onStartUp();
@@ -29,7 +28,7 @@ public class TradeSystem {
         User loggedIn = null;
         boolean isAdmin = false;
         System.out.println("Welcome to Insert_name_here trading system!\n Would you like to create an account or " +
-                "login?\n(1) Create account \n(2) Login to existing account\n(0) Quit");
+                "login?\n(1) Create account \n(2) Login to User account\n(0) Quit");
         int input = optionChoice(2);
         //TODO: Should we make this stuff its own class?
         if (input == 1){
@@ -97,12 +96,12 @@ public class TradeSystem {
         User user = null;
         while(user == null) {
             System.out.println("Enter your username:");
-            String username = scanner.next();
+            String username = scanner.nextLine();
             if (username.equals("0")){
                 return null;// This needs to be changed so that it will return to the main menu. - Louis
             }
             user = adminUser.userManager.searchUser(username);
-            if (username.equals(adminUser.getUsername()) && takeAdminPassword(adminUser)){
+            if (adminUser.isValidUsername(username) && takeAdminPassword(username)){
                 return null;
             }
             else if (user == null){
@@ -115,7 +114,7 @@ public class TradeSystem {
         Scanner scanner = new Scanner(System.in);
         while(true) {
             System.out.println("Please enter the password for " + user.getUsername() + ":");
-            String pass = scanner.next();
+            String pass = scanner.nextLine();
             if (pass.equals("0")){
                 return false;
             }
@@ -127,16 +126,16 @@ public class TradeSystem {
             }
         }
     }
-    private static Boolean takeAdminPassword(AdminUser adminUser){
+    private static Boolean takeAdminPassword(String username){
         Scanner scanner = new Scanner(System.in);
         while(true) {
-            System.out.println("Please enter the password for " + adminUser.getUsername() + ":");
-            String pass = scanner.next();
+            System.out.println("Please enter the password for " + username + ":");
+            String pass = scanner.nextLine();
             if (pass.equals("0")){
                 return false;
             }
-            else if (adminUser.checkPassword(pass)) {
-                System.out.println("Logged in as " + adminUser.getUsername());
+            else if (adminUser.checkPassword(username, pass)) {
+                System.out.println("Logged in as Admin: " + username);
                 return true;
             }else{
                 System.out.println("Invalid Password. Please try again or enter 0 to return to the main menu."); //currently you will exit the system if you enter 0 - louis

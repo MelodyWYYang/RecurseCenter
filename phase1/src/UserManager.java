@@ -29,6 +29,12 @@ public class UserManager implements Serializable{
 
     protected HashMap<String, ArrayList<UserAlert>> alertSystem = new HashMap<String, ArrayList<UserAlert>>();
 
+    private int incompleteThreshold; // # of incomplete trades allowed
+    private int completeThreshold; // # of complete trades allowed per week
+
+    private int borrowLendThreshold = 1;
+
+
     public ArrayList<User> getListUsers() {
         return listUsers;}
 
@@ -45,11 +51,6 @@ public class UserManager implements Serializable{
     }
 
     public static ArrayList<ItemValidationRequestAlert> itemValidationRequestQueue = new ArrayList<ItemValidationRequestAlert>();
-
-    private int incompleteThreshold; // # of incomplete trades allowed
-    private int completeThreshold; // # of complete trades allowed per week
-
-    private int borrowLendThreshold = 1;
 
 
     public ArrayList<UserAlert> getUserAlerts(String username){
