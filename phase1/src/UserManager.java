@@ -285,6 +285,9 @@ public class UserManager implements Serializable{
         // user can request to unfreeze account whether it should be unfrozen or not
         // moved by Riya from User
         // unfreezeRequestList.add(username);
+        // UnfreezeRequestAlert alert = new UnfreezeRequestAlert(user1.getUsername(),user1.getNumBorrowed(),
+        //                    user1.getNumLent(), borrowLendThreshold);
+        //            adminAlerts.add(alert);
     }
 
     /** Helper function that returns a list of all the trades that user participated in and traded an item. The list is
