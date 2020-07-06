@@ -71,5 +71,5 @@ public class AdminActions {
             TradeSystem.adminUser.createAdmin(inputUsername, inputPassword);
             flag = false;
         }
-
+    }
 }
