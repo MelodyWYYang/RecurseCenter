@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="961.1106090482102" y="496.0">User</node>
+    <node x="2075.211289584073" y="0.0">CannotBorrowException</node>
+    <node x="1330.7112895840723" y="2841.0">AdminActions</node>
+    <node x="22.680520353303336" y="1590.0">UserAlertManager</node>
+    <node x="67.25" y="682.0">TemporaryTrade</node>
+    <node x="1065.944622917406" y="143.0">Item</node>
+    <node x="550.5843665071495" y="0.0">Trade</node>
+    <node x="1306.969682367364" y="2452.0">AdminUser</node>
+    <node x="1595.7112895840723" y="2818.0">AdminAlertManager</node>
+    <node x="1271.719682367364" y="3114.0">TradeSystem</node>
+    <node x="1068.7112895840723" y="2829.0">FileManager</node>
+    <node x="458.68052035330334" y="1096.0">UserManager</node>
+    <node x="409.1500000000001" y="705.0">UserNameTakenException</node>
+    <node x="1276.219682367364" y="3404.0">UserActions</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="UserAlertManager" target="TradeSystem">
+      <point x="-138.33333333333337" y="159.0" />
+      <point x="91.84718701996997" y="2432.0" />
+      <point x="172.48333333333335" y="2432.0" />
+      <point x="172.48333333333335" y="3094.0" />
+      <point x="1279.282182367364" y="3094.0" />
+      <point x="-113.4375" y="-115.0" />
+    </edge>
+    <edge source="TradeSystem" target="UserActions">
+      <point x="0.0" y="115.0" />
+      <point x="0.0" y="-126.0" />
+    </edge>
+    <edge source="UserActions" target="TradeSystem">
+      <point x="-33.28571428571422" y="-126.0" />
+      <point x="1359.4339680816497" y="3364.0" />
+      <point x="1312.053015700697" y="3364.0" />
+      <point x="-80.66666666666674" y="115.0" />
+    </edge>
+    <edge source="FileManager" target="AdminUser">
+      <point x="60.25" y="-82.0" />
+      <point x="1249.4612895840723" y="2788.0" />
+      <point x="1333.719682367364" y="2788.0" />
+      <point x="-187.25" y="158.0" />
+    </edge>
+    <edge source="UserAlertManager" target="TemporaryTrade">
+      <point x="0.0" y="-159.0" />
+      <point x="230.18052035330334" y="1076.0" />
+      <point x="144.64999999999998" y="1076.0" />
+      <point x="-51.60000000000002" y="49.0" />
+    </edge>
+    <edge source="UserActions" target="Item">
+      <point x="99.85714285714289" y="-126.0" />
+      <point x="1492.5768252245066" y="3384.0" />
+      <point x="2024.2112895840726" y="3384.0" />
+      <point x="2024.2112895840726" y="446.0" />
+      <point x="1189.444622917406" y="446.0" />
+      <point x="57.0" y="70.0" />
+    </edge>
+    <edge source="UserActions" target="TemporaryTrade">
+      <point x="-66.57142857142867" y="-126.0" />
+      <point x="1326.148253795935" y="3374.0" />
+      <point x="12.180520353303336" y="3374.0" />
+      <point x="12.180520353303336" y="1076.0" />
+      <point x="93.04999999999995" y="1076.0" />
+      <point x="-103.20000000000005" y="49.0" />
+    </edge>
+    <edge source="UserActions" target="Trade">
+      <point x="-99.85714285714289" y="-126.0" />
+      <point x="1292.8625395102208" y="3384.0" />
+      <point x="0.0" y="3384.0" />
+      <point x="0.0" y="446.0" />
+      <point x="565.6468665071495" y="446.0" />
+      <point x="-105.4375" y="213.0" />
+    </edge>
+    <edge source="AdminUser" target="UserManager">
+      <point x="-85.59999999999991" y="-158.0" />
+      <point x="1435.369682367364" y="2422.0" />
+      <point x="896.6805203533033" y="2422.0" />
+      <point x="146.0" y="653.0" />
+    </edge>
+    <edge source="UserManager" target="UserNameTakenException">
+      <point x="-134.76923076923077" y="-653.0" />
+      <point x="615.9112895840726" y="1016.0" />
+      <point x="577.1500000000001" y="1016.0" />
+      <point x="56.0" y="26.0" />
+    </edge>
+    <edge source="TradeSystem" target="AdminUser">
+      <point x="-22.6875" y="-115.0" />
+      <point x="1370.032182367364" y="3034.0" />
+      <point x="1320.2112895840723" y="3034.0" />
+      <point x="1320.2112895840723" y="2798.0" />
+      <point x="1387.219682367364" y="2798.0" />
+      <point x="-133.75" y="158.0" />
+    </edge>
+    <edge source="TradeSystem" target="UserAlertManager">
+      <point x="-83.1875" y="-115.0" />
+      <point x="1309.532182367364" y="3074.0" />
+      <point x="261.61686938733374" y="3074.0" />
+      <point x="261.61686938733374" y="2432.0" />
+      <point x="368.5138536866367" y="2432.0" />
+      <point x="138.33333333333337" y="159.0" />
+    </edge>
+    <edge source="TradeSystem" target="AdminAlertManager">
+      <point x="83.1875" y="-115.0" />
+      <point x="1475.907182367364" y="3074.0" />
+      <point x="1663.5446229174058" y="3074.0" />
+      <point x="-135.66666666666674" y="93.0" />
+    </edge>
+    <edge source="AdminUser" target="User">
+      <point x="0.0" y="-158.0" />
+      <point x="1520.969682367364" y="2432.0" />
+      <point x="1577.0309719514362" y="2432.0" />
+      <point x="1577.0309719514362" y="1076.0" />
+      <point x="1157.6106090482103" y="1076.0" />
+      <point x="65.5" y="235.0" />
+    </edge>
+    <edge source="TradeSystem" target="User">
+      <point x="-52.9375" y="-115.0" />
+      <point x="1339.782182367364" y="3054.0" />
+      <point x="1058.2112895840726" y="3054.0" />
+      <point x="1058.2112895840726" y="1076.0" />
+      <point x="1105.2106090482102" y="1076.0" />
+      <point x="13.099999999999909" y="235.0" />
+    </edge>
+    <edge source="AdminAlertManager" target="User">
+      <point x="135.66666666666674" y="-93.0" />
+      <point x="1934.8779562507393" y="2798.0" />
+      <point x="1909.5536962365595" y="2798.0" />
+      <point x="1909.5536962365595" y="1066.0" />
+      <point x="1183.8106090482102" y="1066.0" />
+      <point x="91.70000000000005" y="235.0" />
+    </edge>
+    <edge source="AdminActions" target="TradeSystem">
+      <point x="74.0" y="70.0" />
+      <point x="1515.7112895840723" y="3034.0" />
+      <point x="1415.407182367364" y="3034.0" />
+      <point x="22.6875" y="-115.0" />
+    </edge>
+    <edge source="TradeSystem" target="AdminActions">
+      <point x="7.5625" y="-115.0" />
+      <point x="1400.282182367364" y="3024.0" />
+      <point x="1441.7112895840723" y="3024.0" />
+      <point x="0.0" y="70.0" />
+    </edge>
+    <edge source="UserAlertManager" target="User">
+      <point x="138.33333333333337" y="-159.0" />
+      <point x="368.5138536866367" y="1026.0" />
+      <point x="974.2106090482102" y="1026.0" />
+      <point x="-117.89999999999998" y="235.0" />
+    </edge>
+    <edge source="FileManager" target="User">
+      <point x="-60.25" y="-82.0" />
+      <point x="1128.9612895840723" y="1076.0" />
+      <point x="1131.41060904821" y="1076.0" />
+      <point x="39.299999999999955" y="235.0" />
+    </edge>
+    <edge source="User" target="Item">
+      <point x="87.33333333333326" y="-235.0" />
+      <point x="1179.4439423815434" y="476.0" />
+      <point x="1132.444622917406" y="476.0" />
+      <point x="0.0" y="70.0" />
+    </edge>
+    <edge source="UserActions" target="User">
+      <point x="66.57142857142867" y="-126.0" />
+      <point x="1459.2911109387924" y="3374.0" />
+      <point x="2013.2112895840723" y="3374.0" />
+      <point x="2013.2112895840723" y="1056.0" />
+      <point x="1210.01060904821" y="1056.0" />
+      <point x="117.89999999999986" y="235.0" />
+    </edge>
+    <edge source="UserManager" target="User">
+      <point x="224.61538461538464" y="-653.0" />
+      <point x="975.295904968688" y="1056.0" />
+      <point x="1052.8106090482102" y="1056.0" />
+      <point x="-39.299999999999955" y="235.0" />
+    </edge>
+    <edge source="TradeSystem" target="FileManager">
+      <point x="-37.8125" y="-115.0" />
+      <point x="1354.907182367364" y="3044.0" />
+      <point x="1189.2112895840723" y="3044.0" />
+      <point x="0.0" y="82.0" />
+    </edge>
+    <edge source="UserManager" target="TemporaryTrade">
+      <point x="-269.53846153846155" y="-653.0" />
+      <point x="481.1420588148418" y="1006.0" />
+      <point x="196.25" y="1006.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="UserManager" target="Item">
+      <point x="89.84615384615381" y="-653.0" />
+      <point x="840.5266741994571" y="1016.0" />
+      <point x="887.6606090482102" y="1016.0" />
+      <point x="887.6606090482102" y="456.0" />
+      <point x="1075.444622917406" y="456.0" />
+      <point x="-57.0" y="70.0" />
+    </edge>
+    <edge source="TradeSystem" target="UserNameTakenException">
+      <point x="-68.0625" y="-115.0" />
+      <point x="1324.657182367364" y="3064.0" />
+      <point x="448.18052035330334" y="3064.0" />
+      <point x="448.18052035330334" y="1016.0" />
+      <point x="465.1500000000001" y="1016.0" />
+      <point x="-56.0" y="26.0" />
+    </edge>
+    <edge source="UserManager" target="Trade">
+      <point x="-44.92307692307696" y="-653.0" />
+      <point x="705.7574434302264" y="1016.0" />
+      <point x="739.573076923077" y="1016.0" />
+      <point x="739.573076923077" y="466.0" />
+      <point x="716.2718665071495" y="466.0" />
+      <point x="45.1875" y="213.0" />
+    </edge>
+    <edge source="AdminUser" target="Item">
+      <point x="85.59999999999991" y="-158.0" />
+      <point x="1606.5696823673638" y="2432.0" />
+      <point x="1654.3112895840725" y="2432.0" />
+      <point x="1654.3112895840725" y="466.0" />
+      <point x="1151.444622917406" y="466.0" />
+      <point x="19.0" y="70.0" />
+    </edge>
+    <edge source="AdminAlertManager" target="TradeSystem">
+      <point x="135.66666666666674" y="93.0" />
+      <point x="1934.8779562507393" y="3094.0" />
+      <point x="1506.157182367364" y="3094.0" />
+      <point x="113.4375" y="-115.0" />
+    </edge>
+    <edge source="TemporaryTrade" target="Trade">
+      <point x="-64.5" y="-49.0" />
+      <point x="131.75" y="466.0" />
+      <point x="625.8968665071495" y="466.0" />
+      <point x="-45.1875" y="213.0" />
+    </edge>
+    <edge source="AdminUser" target="TradeSystem">
+      <point x="-26.75" y="158.0" />
+      <point x="1494.219682367364" y="2798.0" />
+      <point x="1563.2112895840723" y="2798.0" />
+      <point x="1563.2112895840723" y="3044.0" />
+      <point x="1430.532182367364" y="3044.0" />
+      <point x="37.8125" y="-115.0" />
+    </edge>
+    <edge source="UserAlertManager" target="Trade">
+      <point x="-138.33333333333337" y="-159.0" />
+      <point x="91.84718701996997" y="1066.0" />
+      <point x="50.833333333333485" y="1066.0" />
+      <point x="50.833333333333485" y="456.0" />
+      <point x="595.7718665071495" y="456.0" />
+      <point x="-75.3125" y="213.0" />
+    </edge>
+    <edge source="AdminAlertManager" target="AdminUser">
+      <point x="-135.66666666666674" y="-93.0" />
+      <point x="1663.5446229174058" y="2798.0" />
+      <point x="1654.719682367364" y="2798.0" />
+      <point x="133.75" y="158.0" />
+    </edge>
+    <edge source="AdminActions" target="AdminUser">
+      <point x="0.0" y="-70.0" />
+      <point x="-80.25" y="158.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.6732905982905982" x="1117.6959695334815" y="985.9625515709299" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Properties</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
