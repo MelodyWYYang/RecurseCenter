@@ -8,11 +8,10 @@ public class User implements Serializable {
 
     public final String username;
     private String password; // private so no one can access except User; have setters and getters for change password function
-    protected LinkedHashMap<String, Integer> stats = new LinkedHashMap<String, Integer>(); //LinkedHashMap maintains order, so always index-able
     private int numLent;
     private int numBorrowed;
     private int numIncompleteTrades;
-    public boolean frozen = false; // false being frozen or Lent>Borrowed; true being no violations
+    private boolean frozen = false; // false being frozen or Lent>Borrowed; true being no violations
     private ArrayList<Item> availableItems = new ArrayList<Item>(); // if this was protected then our presenters can't access it
     private ArrayList<Item> borrowedItems = new ArrayList<Item>();// items that the user is currently borrowing via TemporaryTrade - Louis
     private ArrayList<String> wishlistItemNames = new ArrayList<String>();// presenter needs to access this as well
