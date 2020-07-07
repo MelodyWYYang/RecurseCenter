@@ -223,7 +223,15 @@ public class UserAlertManager {
         System.out.println("(2) Send a new item validation request");
         int choice = optionChoice(2);
         if (choice == 2){
-            //TODO finish this method by sending a new item validation request - Louis
+            Scanner scan = new Scanner(System.in);
+            String name = null;
+            System.out.println("Please enter the name of your item");
+            scan.nextLine(); //This awfulness is needed to prevent it from skipping a line. - Louis
+            name = scan.nextLine();
+            System.out.println("Please enter the item description");
+            String description = scan.nextLine();
+            String username = alert.getOwner();
+            TradeSystem.adminUser.userManager.sendValidationRequest(name,description,username);
         }
     }
 
