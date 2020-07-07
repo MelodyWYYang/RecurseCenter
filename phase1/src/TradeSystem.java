@@ -15,7 +15,8 @@ public class TradeSystem {
     static UserActions userActions = new UserActions();
 
 
-    public static void main(String[] args){
+    public void run(){
+        //TODO: Do this for every file
         if (!((new File("adminUser.ser"))).exists()){
             createAdminUser();
         }
@@ -52,6 +53,7 @@ public class TradeSystem {
             }
             ArrayList<AdminAlert> adminAlerts = adminUser.getAdminAlerts();
             adminAlertManager.handleAlertQueue(adminAlerts);
+            //TODO: Ensure the alert queue is depleted after all are handled.
             adminActions.run();
         } else {
             ArrayList<UserAlert> userAlerts = adminUser.userManager.getUserAlerts(loggedIn.getUsername());

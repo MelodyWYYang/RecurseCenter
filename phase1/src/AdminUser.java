@@ -53,6 +53,7 @@ public class AdminUser implements Serializable {
      * Manages all startup information for the admin
      */
     public ArrayList<AdminAlert> onStartUp(){
+        //TODO: Get adminalerts from BOTH Manager classes and append them together to make this adminAlerts list.
         this.adminAlerts = userManager.getAdminAlerts();
         userManager.clearAdminAlerts();
         return this.adminAlerts;

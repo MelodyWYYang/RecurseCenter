@@ -386,7 +386,7 @@ public class UserActions {
                     " incomplete transactions");
             runStats(user);
         } else if (input == 5) {
-            int weeklyTransactions = TradeSystem.adminUser.userManager.getNumTradesThisWeek(user);
+            int weeklyTransactions = TradeSystem.adminUser.userManager.getNumTradesThisWeek(user.getUsername());
             System.out.println("Your account has made " + Integer.toString(weeklyTransactions) +
                     " transactions this week");
             runStats(user);
