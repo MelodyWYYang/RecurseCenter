@@ -50,7 +50,9 @@ public class UserManager implements Serializable{
         return pendingTradeRequests;
     }
 
-    public static ArrayList<ItemValidationRequestAlert> itemValidationRequestQueue = new ArrayList<ItemValidationRequestAlert>();
+    public void clearAdminAlerts(){
+        adminAlerts = new ArrayList<AdminAlert>();
+    }
 
 
     public ArrayList<UserAlert> getUserAlerts(String username){
@@ -114,24 +116,27 @@ public class UserManager implements Serializable{
      * @param timeOfTrade time & date of the trade
      * @param meetingPlace location of the trade
      */
-    public void sendTradeRequest(User user1, User user2, //user1 is the one sending the request to user2.
+    public Boolean sendTradeRequest(User user1, User user2, //user1 is the one sending the request to user2.
                                  ArrayList<Integer> itemIDsSentToUser1, ArrayList<Integer> itemIDsSentToUser2,
                                  LocalDateTime timeOfTrade, String meetingPlace) {
-        if (!beforeTrade(user1, user2)){
-            return;
+        //TODO make sure a user cannot create a trade if they have hit the weekly threshold
+        if (getNumTradesThisWeek(user1) > completeThreshold || getNumTradesThisWeek(user2) > completeThreshold){
+            return false;
         }
-        int tradeCapacity = 1;
+        if (!beforeTrade(user1, user2)) {
+            return false;
+        }
         ArrayList<Integer> list1;
         if (itemIDsSentToUser1.size() == 0){
             list1 = new ArrayList<Integer>();
         } else {
-            list1 = (ArrayList<Integer>) itemIDsSentToUser1.subList(0, tradeCapacity);
+            list1 =  itemIDsSentToUser1;
         }
         ArrayList<Integer> list2;
         if (itemIDsSentToUser2.size() == 0){
             list2 = new ArrayList<Integer>();
         }else {
-            list2 = (ArrayList<Integer>) itemIDsSentToUser2.subList(0, tradeCapacity);
+            list2 =  itemIDsSentToUser2;
         }
 
         Trade trade = new Trade(user1.username, user2.username, list1, list2);
@@ -143,6 +148,7 @@ public class UserManager implements Serializable{
         //Creating and adding an alert for user2
         TradeRequestAlert alert = createTradeRequestAlert(trade, user1);
         alertUser(user2, alert);
+        return true;
 
     } //Does not remove item from user1 availableItems or user2 availableItems
 
@@ -260,7 +266,11 @@ public class UserManager implements Serializable{
     public ItemValidationRequestAlert sendValidationRequest(String name, String description, String owner) {
         // reworked by Tingyu since the itemValidationRequestQueue has been moved to UserManager
         ItemValidationRequestAlert alert = new ItemValidationRequestAlert(owner, name, description);
-        itemValidationRequestQueue.add(alert);
+        alertAdmin(alert);
+        System.out.println("Item has been created"); //Debugging
+        if(adminAlerts.size() > 0){
+            System.out.println(adminAlerts.size());
+        }
         return alert;
     }
 
@@ -272,7 +282,7 @@ public class UserManager implements Serializable{
      */
     public ItemValidationRequestAlert sendValidationRequest(String name, String owner) {
         ItemValidationRequestAlert alert = new ItemValidationRequestAlert(name, owner);
-        itemValidationRequestQueue.add(alert);
+        alertAdmin(alert);
         return alert;
     }
 
@@ -539,14 +549,6 @@ public class UserManager implements Serializable{
     }
 
 
-
-
-    /* i don't think this is neccessary anymore - Louis
-    public Trade dequeueTradeRequest(){
-        return this.tradeRequestQueue.remove(0);
-    }
-     */
-
     /** Method which returns a user when given their username
      * Author: Louis Scheffer V
      * @param username username of the user
@@ -654,6 +656,7 @@ public class UserManager implements Serializable{
      * @param trade trade object
       */
     public void afterTrade(Trade trade){
+        //TODO call this method from confirmTrade method in this class
         exchangeItems(trade);
         checkPendingTradeRequests();
         checkPendingTrades();
@@ -671,13 +674,13 @@ public class UserManager implements Serializable{
 
         assert user1 != null;
         //This might be > instead of >= idk lol
-        if (user1.getNumBorrowed() + borrowLendThreshold >= user1.getNumLent()){
+        if (user1.getNumBorrowed() + borrowLendThreshold > user1.getNumLent()){
             FreezeUserAlert alert = new FreezeUserAlert(user1.getUsername(),user1.getNumBorrowed(),
                     user1.getNumLent(), borrowLendThreshold);
             adminAlerts.add(alert);
         }
         assert user2 != null;
-        if (user2.getNumBorrowed() + borrowLendThreshold >= user2.getNumLent()){
+        if (user2.getNumBorrowed() + borrowLendThreshold > user2.getNumLent()){
             FreezeUserAlert alert = new FreezeUserAlert(user2.getUsername(), user2.getNumBorrowed(),
                     user2.getNumLent(), borrowLendThreshold);
             adminAlerts.add(alert);
@@ -771,7 +774,7 @@ public class UserManager implements Serializable{
      * @param trade the trade object
      */
     public void confirmTrade(User user, Trade trade){
-        // TODO
+        // TODO implement method
     }
 
     /** Method which returns items to their owners after the expiration of a temporary trade
@@ -864,7 +867,7 @@ public class UserManager implements Serializable{
     public String tradeToString(Trade trade){
         return "User 1: " + trade.getUsername1() + "\nUser 2: " + trade.getUsername2() +
                 "\nItems being traded from user 1 to user 2: " + GetItemNamesFromUser1ToUser2(trade) +
-                "\nItems being traded from user 2 to user 1: " + GetItemNamesFromUser1ToUser2(trade) +
+                "\nItems being traded from user 2 to user 1: " + GetItemNamesFromUser2ToUser1(trade) +
                 "\nTime & Date of item exchange: " + trade.getTimeOfTrade().toString() +
                 "\nLocation of Trade: " + trade.getMeetingPlace() + "\nTradeID: " + trade.getTradeID();
     }

@@ -26,7 +26,7 @@ public class UserAlertManager {
      * @param alert alert sent in
      */
     private void handleAlert(UserAlert alert) {
-        System.out.println(alert); //All alerts have a toString description
+        System.out.println(alert.toString()); //All alerts have a toString description
 
         if (alert instanceof FrozenAlert) {
             handleFrozenAlert();
@@ -54,7 +54,7 @@ public class UserAlertManager {
         }
 
             //Each alert needs a handle method for its type, which prints/takes input and calls corresponding functions to
-            //  handle the alert on the enduser side of things. See google doccument for specifics on alerts and their
+            //  handle the alert on the end user side of things. See google document for specifics on alerts and their
             //  handling process.
 
     }
@@ -219,7 +219,6 @@ public class UserAlertManager {
     public void handleItemValidationDeclinedAlert(ItemValidationDeclinedAlert alert){
         //It doesn't make sense to finish this method until we have set up the functionality to request item validation
         // I will finish this method when we do so. - Louis
-        System.out.println(alert.toString());
         System.out.println("(1) Dismiss");
         System.out.println("(2) Send a new item validation request");
         int choice = optionChoice(2);

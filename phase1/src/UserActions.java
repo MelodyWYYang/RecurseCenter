@@ -94,12 +94,13 @@ public class UserActions {
             } else flag = false;
 
          if (input == 1){
+             String name = null;
              System.out.println("Please enter the name of your item");
-             String name = scan.nextLine();
+             scan.nextLine(); //This awfulness is needed to prevent it from skipping a line. - Louis
+             name = scan.nextLine();
              System.out.println("Please enter the item description");
-             String description = scan.next();
-             System.out.println("Please enter your username");
-             String username = scan.nextLine();
+             String description = scan.nextLine();
+             String username = user.getUsername();
              TradeSystem.adminUser.userManager.sendValidationRequest(name,description,username);
          } else if (input == 2){
              System.out.println("Please enter the ID of the item you wish to remove");
@@ -204,6 +205,7 @@ public class UserActions {
                 System.out.println("Please enter a valid input");
             } else if (input == 1) {
                 System.out.println("Enter the contents of your message:\n");
+                scan.nextLine();//this uglyness is needed to prevent the scanner from skipping a line - Louis
                 String message = scan.nextLine();
                 TradeSystem.adminUser.userManager.sendMessageToUser(userViewing, userToView, message);
                 System.out.println("Sent message to " + userToView.getUsername() + ": \"" + message + "\"");
@@ -226,6 +228,7 @@ public class UserActions {
      * @param userReceiving user that will receive the trade request
      */
     private void formTradeRequest(User userSending, User userReceiving) {
+        //TODO break this method into helpers
         //TODO: Possibly have a limit to the number of items that can be traded at once?
         Scanner scan = new Scanner(System.in);
         boolean finished = false;
@@ -248,17 +251,18 @@ public class UserActions {
                 System.out.println("Invalid ID. Please try again.\n");
             } else {
                 boolean validYNInput = false;
-                while (!validYNInput)
-                    System.out.println("Would you like to add annother item? (Y/N)");
-                String annotherItem = scan.nextLine();
-                if (annotherItem.equals("Y")) {
-                    validYNInput = true;
-                } else if (annotherItem.equals("N")) {
-                    System.out.println("Moving on...");
-                    validYNInput = true;
-                    finished = true;
-                } else {
-                    System.out.println("Please enter Y or N.");
+                while (!validYNInput) {
+                    System.out.println("Would you like to add another item? (Y/N)");
+                    String anotherItem = scan.nextLine();
+                    if (anotherItem.equals("Y")) {
+                        validYNInput = true;
+                    } else if (anotherItem.equals("N")) {
+                        System.out.println("Moving on...");
+                        validYNInput = true;
+                        finished = true;
+                    } else {
+                        System.out.println("Please enter Y or N.");
+                    }
                 }
             }
         }
@@ -270,8 +274,8 @@ public class UserActions {
             finished2 = true;
         }
         while (!finished2) {
-            System.out.println("Enter the ID of an item you want to offer:\n");
-            System.out.println("Your available items to trade:\n");
+            System.out.println("Enter the ID of an item you want to offer:");
+            System.out.println("Your available items to trade:");
             StringBuilder availableItems = new StringBuilder();
             for (int i = 0; i < userSending.getAvailableItems().size() - 1; i++) {
                 availableItems.append(userSending.getAvailableItems().get(i).getName() +
@@ -291,7 +295,7 @@ public class UserActions {
                 }
             }
             if (!validID2) {
-                System.out.println("Invalid ID. Please try again.\n");
+                System.out.println("Invalid ID. Please try again.");
             } else {
                 boolean validYNInput2 = false;
                 while (!validYNInput2)
@@ -309,7 +313,7 @@ public class UserActions {
             }
         }
 
-        System.out.println("Enter a meeting time (format: yyyy-MM-dd HH:mm: \n");
+        System.out.println("Enter a meeting time (format: yyyy-MM-dd HH:mm: ");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         boolean stringNotFound = true;
         LocalDateTime meetingTime = null;
@@ -319,19 +323,23 @@ public class UserActions {
             try {
                 meetingTime = LocalDateTime.parse(inputDateTime, formatter);
             } catch (DateTimeParseException e) {
-                System.out.println("Invalid format for Date and Time, Try again (format: yyyy-MM-dd HH:mm):\n");
+                System.out.println("Invalid format for Date and Time, Try again (format: yyyy-MM-dd HH:mm):");
                 continue;
             }
             stringNotFound = false;
         }
 
-        System.out.println("Enter a meeting place:\n");
+        System.out.println("Enter a meeting place: ");
         String meetingPlace = scan.nextLine();
 
-        TradeSystem.adminUser.userManager.sendTradeRequest(userSending, userReceiving, itemIDsRecieved, itemIDsSent,
+        Boolean canBeProcessed = TradeSystem.adminUser.userManager.sendTradeRequest(userSending, userReceiving, itemIDsRecieved, itemIDsSent,
                 meetingTime, meetingPlace);
-
+        if (!canBeProcessed){
+            System.out.println("Your trade could not be processed. This could have happened if you have completed " +
+                    "too many trades this week or if one of the users was frozen");
+        }else{
         System.out.println("Successfully created and sent trade request. You will be notified when they respond.");
+        }
     }
 
     /**

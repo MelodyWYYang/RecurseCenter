@@ -28,9 +28,10 @@ public class TradeSystem {
         User loggedIn = null;
         boolean isAdmin = false;
         System.out.println("Welcome to Insert_name_here trading system!\n Would you like to create an account or " +
-                "login?\n(1) Create account \n(2) Login to User account\n(0) Quit");
+                "login?\n(1) Create account \n(2) Login to an account\n(0) Quit");
         int input = optionChoice(2);
         //TODO: Should we make this stuff its own class?
+        //TODO: This will log a user in a admin if an incorrect username and password is entered.
         if (input == 1){
             loggedIn = createAccount();
         } else if (input == 2){
@@ -46,6 +47,9 @@ public class TradeSystem {
         }
 
         if (isAdmin){
+            if (adminUser.getAdminAlerts().size() > 0){
+                System.out.println("Admin has alerts");
+            }
             ArrayList<AdminAlert> adminAlerts = adminUser.getAdminAlerts();
             adminAlertManager.handleAlertQueue(adminAlerts);
             adminActions.run();
@@ -86,7 +90,7 @@ public class TradeSystem {
 
     public static User login(){
         User user = takeUsername();
-        if (takePassword(user)){
+        if (user != null && takePassword(user)){
             return user;
         }
         return null;

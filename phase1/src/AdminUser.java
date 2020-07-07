@@ -7,13 +7,10 @@ import java.util.HashMap;
 public class AdminUser implements Serializable {
     //author: Tingyu Liang, Riya Razdan in group 0110 for CSC207H1 summer 2020 project
 
-    private HashMap<String, String> loginInfo = new HashMap<String, String>();
+    private HashMap<String, String> loginInfo;
 
 
-    private ArrayList<AdminAlert> adminAlerts = new ArrayList<AdminAlert>();
-    // public ArrayList<String> accountsToFreezeQueue;
-    // public ArrayList<String> unfreezeRequestList; // list of accounts that have requested to be unfrozen
-    // public ArrayList<String> accountsToUnfreezeQueue; // list of accounts that satisfy permission to be unfrozen
+    private ArrayList<AdminAlert> adminAlerts;
 
     public UserManager userManager = new UserManager(); // Not really sure how we want to do this. Hardcoded for simplicity in the meanwhile - Louis
 
@@ -23,12 +20,9 @@ public class AdminUser implements Serializable {
      * @param password string for the admin's password
      */
     public AdminUser(String username, String password) {
-        // this.loginInfo.put(username, password);
-        // itemValidationQueue = new ArrayList<ItemValidationRequest>();
+        adminAlerts = new ArrayList<AdminAlert>();
+        loginInfo = new HashMap<String, String>();
         addLogin(username, password);
-        // accountsToFreezeQueue = new ArrayList<String>();
-        // unfreezeRequestList = new ArrayList<String>();
-        // accountsToUnfreezeQueue = new ArrayList<String>();
 
     }
 
@@ -60,7 +54,7 @@ public class AdminUser implements Serializable {
      */
     public ArrayList<AdminAlert> onStartUp(){
         this.adminAlerts = userManager.getAdminAlerts();
-        //TODO: Also dispatches the adminAlerts to the main method to be passed into AdminAlertManager.
+        userManager.clearAdminAlerts();
         return this.adminAlerts;
     }
 

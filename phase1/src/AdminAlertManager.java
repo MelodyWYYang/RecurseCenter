@@ -26,7 +26,7 @@ public class AdminAlertManager {
      * @param a AdminAlert object to be handled
      */
     private void handleAlert(AdminAlert a){
-
+        System.out.println(a.toString());
         if (a instanceof ItemValidationRequestAlert){
                 handleItemValidationRequestAlert((ItemValidationRequestAlert) a);
         } else if (a instanceof ReportAlert){
@@ -49,7 +49,6 @@ public class AdminAlertManager {
     public void handleItemValidationRequestAlert(ItemValidationRequestAlert alert){
         Scanner scanner = new Scanner(System.in);
         String message;
-        System.out.println(alert.toString());
         System.out.println("(1) Approve this item");
         System.out.println("(2) Deny this item");
         int choice = optionChoice(2);
@@ -73,12 +72,11 @@ public class AdminAlertManager {
         int threshold = 0; // threshold of incomplete trades
         while (flag){
             Scanner scan = new Scanner(System.in);
-            System.out.println(alert.toString());
             System.out.println("(1) Accept report");
             System.out.println("(2) Dismiss");
             input = scan.nextInt();
             if (input == 1){
-                // increment incompleteTrades stat in AdminUser and freeze user if needed
+                // TODO increment incompleteTrades stat in AdminUser and freeze user if needed
                 // numIncompTrades = TradeSystem.adminUser.userManager.getNumIncompTrades(alert.getReportedUserName(), alert.);
                 threshold = TradeSystem.adminUser.userManager.getIncompleteThreshold();
                 if (numIncompTrades > threshold){
