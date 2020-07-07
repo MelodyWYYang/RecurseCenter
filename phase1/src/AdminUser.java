@@ -82,7 +82,7 @@ public class AdminUser implements Serializable {
             Item item = new Item(request.getName(), request.getItemID());
             item.setDescription(request.getDescription());
             assert user != null;
-            user.availableItems.add(item);   //Changed this to fail when user is null. We don't want the program
+            user.addAvailableItem(item);   //Changed this to fail when user is null. We don't want the program
             // to fail silently.
             // request.getOwner().availableItems.add(request.getObj());
         }

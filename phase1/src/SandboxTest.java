@@ -70,7 +70,7 @@ public class SandboxTest {
         Item larrysBike = new Item("Bike", 1);
 
         assert larry != null;
-        larry.availableItems.add(larrysBike);
+        larry.addAvailableItem(larrysBike);
 
         assert um.searchItem(1) == larrysBike;
     }

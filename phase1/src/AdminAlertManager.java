@@ -76,10 +76,10 @@ public class AdminAlertManager {
             System.out.println("(2) Dismiss");
             input = scan.nextInt();
             if (input == 1){
-                // TODO increment incompleteTrades stat in AdminUser and freeze user if needed
-                // numIncompTrades = TradeSystem.adminUser.userManager.getNumIncompTrades(alert.getReportedUserName(), alert.);
+                adminUser.userManager.increaseUserIncompleteTrades(adminUser.userManager.searchUser(alert.getReportedUserName()));
+                int numIncompleteTrades = adminUser.userManager.getNumIncompTrades(adminUser.userManager.searchUser(alert.getReportedUserName()));
                 threshold = TradeSystem.adminUser.userManager.getIncompleteThreshold();
-                if (numIncompTrades > threshold){
+                if (numIncompleteTrades > threshold){
                     User reportedUser = TradeSystem.adminUser.userManager.searchUser(alert.getReportedUserName());
                     TradeSystem.adminUser.freezeUser(reportedUser);
                 }

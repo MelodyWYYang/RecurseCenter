@@ -102,7 +102,16 @@ public class UserManager implements Serializable{
      * @param itemName name of item
      */
     public void addToWishlist(User user, String itemName){
-        user.wishlistItemNames.add(itemName);
+        user.addItemToWishList(itemName);
+    }
+
+    /**
+     * removes an item from the user's wishlist
+     * @param user user
+     * @param itemName name of item
+     */
+    public void removeFromWishList(User user, String itemName){
+        user.removeItemFromWishList(itemName);
     }
 
 
@@ -697,27 +706,27 @@ public class UserManager implements Serializable{
         for(int itemID : trade.getItemIDsSentToUser1()){
             Item item = searchItem(user2, itemID);
             //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
-            user1.increaseStat("borrowed", 1);
-            user2.increaseStat("lent", 1);
-            user2.removeItemFromList(item, user2.availableItems);
+            user1.increaseNumBorrowed(1);
+            user2.increaseNumLent(1);
+            user2.removeAvailableItem(item);
             if (trade instanceof TemporaryTrade){
-                user1.addItemToList(item, user1.borrowedItems);
+                user1.addBorrowedItem(item);
             }
             else {
-                user1.addItemToList(item, user1.availableItems);
+                user1.addAvailableItem(item);
             }
         }
         for(int itemID : trade.getItemIDsSentToUser2()){
             Item item = searchItem(user1, itemID);
             //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
-            user2.increaseStat("borrowed", 1);
-            user1.increaseStat("lent", 1);
-            user1.removeItemFromList(item, user1.availableItems);
+            user2.increaseNumBorrowed(1);
+            user1.increaseNumLent(1);
+            user1.removeAvailableItem(item);
             if (trade instanceof TemporaryTrade){
-                user2.addItemToList(item, user2.borrowedItems);
+                user2.addBorrowedItem(item);
             }
             else{
-                user2.addItemToList(item, user2.availableItems);
+                user2.addAvailableItem(item);
             }
 
         }
@@ -774,7 +783,15 @@ public class UserManager implements Serializable{
      * @param trade the trade object
      */
     public void confirmTrade(User user, Trade trade){
-        // TODO implement method
+        if(user.getUsername().equals(trade.getUsername1())){
+            trade.setUser1TradeConfirmed(true);
+        }
+        else if (user.getUsername().equals(trade.getUsername2())){
+            trade.setUser2AcceptedRequest(true);
+        }
+        if (trade.isTradeCompleted()){
+            afterTrade(trade);
+        }
     }
 
     /** Method which returns items to their owners after the expiration of a temporary trade
@@ -786,13 +803,13 @@ public class UserManager implements Serializable{
             User user2 = searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()) {
                 Item item = searchItem(user2, itemID);
-                user1.removeItemFromList(item, user1.borrowedItems);
-                user2.addItemToList(item, user2.availableItems);
+                user1.removeBorrowedItem(item);
+                user2.addAvailableItem(item);
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
                 Item item = searchItem(user1, itemID);
-                user2.removeItemFromList(item, user2.borrowedItems);
-                user2.addItemToList(item, user2.availableItems);
+                user2.removeBorrowedItem(item);
+                user2.addAvailableItem(item);
             }
     }
 
@@ -974,5 +991,11 @@ public class UserManager implements Serializable{
 
     public void setIncompleteThreshold(int incompleteThreshold) {
         this.incompleteThreshold = incompleteThreshold;
+    }
+    public void increaseUserIncompleteTrades(User user){
+        user.increaseNumIncompleteTrades(1);
+    }
+    public int getUserIncompleteTrades(User user){
+        return user.getNumIncompleteTrades();
     }
 }
