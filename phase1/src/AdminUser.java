@@ -100,8 +100,8 @@ public class AdminUser implements Serializable {
      */
     public void freezeUser(User user){
         user.setFrozen(true);
-        int numBorrowed = user.stats.get("Borrowed");
-        int numLent = user.stats.get("Lent");
+        int numBorrowed = user.getNumBorrowed();
+        int numLent = user.getNumLent();
         FrozenAlert alert = new FrozenAlert(numBorrowed, numLent, numBorrowed - numLent);
         userManager.alertUser(user.getUsername(), alert);
     }
