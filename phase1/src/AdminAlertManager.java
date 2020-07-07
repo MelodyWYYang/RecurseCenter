@@ -46,7 +46,7 @@ public class AdminAlertManager {
      *
      * @param alert AdminAlert that there is an ItemValidationRequestAlert to be handled
      */
-    public void handleItemValidationRequestAlert(ItemValidationRequestAlert alert){
+    private void handleItemValidationRequestAlert(ItemValidationRequestAlert alert){
         Scanner scanner = new Scanner(System.in);
         String message;
         System.out.println("(1) Approve this item");
@@ -65,7 +65,7 @@ public class AdminAlertManager {
      *
      * @param alert AdminAlert that there is a ReportAlert to be handled
      */
-    public void handleReportAlert(ReportAlert alert){
+    private void handleReportAlert(ReportAlert alert){
         boolean flag = true;
         int input = 0;
         int numIncompTrades = 0;
