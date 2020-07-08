@@ -4,16 +4,19 @@ import java.io.Serializable;
 
 public class TradeDeclinedAlert extends UserAlert implements Serializable {
     protected String decliningUserName;
-    protected String tradeString;
+    protected int tradeID;
 
-    public TradeDeclinedAlert(String decliningUserName, String tradeString){
+    public TradeDeclinedAlert(String decliningUserName, int tradeID){
         super();
         this.decliningUserName = decliningUserName;
-        this.tradeString = tradeString;
+        this.tradeID = tradeID;
     }
 
-    @Override
-    public String toString() {
-        return decliningUserName + " has declined the following trade request: \n" + tradeString ;
+    public String getDecliningUserName(){
+        return this.decliningUserName;
+    }
+
+    public int getTradeID(){
+        return this.tradeID;
     }
 }

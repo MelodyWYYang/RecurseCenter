@@ -6,13 +6,11 @@ import java.time.LocalDateTime;
 public class TradePastDateAlert extends UserAlert implements Serializable {
 
     protected LocalDateTime dueDate;
-    protected String tradeString;
     protected String username;
     protected int tradeId;
 
-    public TradePastDateAlert(LocalDateTime dueDate, String tradeString, String username, int tradeId){
+    public TradePastDateAlert(LocalDateTime dueDate, String username, int tradeId){
         this.dueDate = dueDate;
-        this.tradeString = tradeString;
         this.username = username;
         this.tradeId = tradeId;
     }
@@ -25,13 +23,6 @@ public class TradePastDateAlert extends UserAlert implements Serializable {
         return dueDate;
     }
 
-    /**
-     *
-     * @return string of the trade.
-     */
-    public String getTradeString() {
-        return tradeString;
-    }
 
     /**
      *
@@ -49,12 +40,4 @@ public class TradePastDateAlert extends UserAlert implements Serializable {
         return tradeId;
     }
 
-    /**
-     *
-     * @return the alert text.
-     */
-    @Override
-    public String toString() {
-        return "The following trade expired at" + dueDate + "\n" + tradeString;
-    }
 }

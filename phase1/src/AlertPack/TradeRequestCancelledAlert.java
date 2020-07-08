@@ -4,28 +4,19 @@ import java.io.Serializable;
 
 public class TradeRequestCancelledAlert extends UserAlert implements Serializable {
     //author: Louis Scheffer V in group 0110 for CSC207H1 summer 2020 project
-    protected String tradeString;
+    protected int tradeID;
 
-    public TradeRequestCancelledAlert(String tradeString){
+    public TradeRequestCancelledAlert(int tradeID){
         super();
-        this.tradeString = tradeString;
+        this.tradeID = tradeID;
     }
 
     /**
      *
      * @return String which details information about the trade.
      */
-    public String getTradeString() {
-        return tradeString;
+    public int getTradeID() {
+        return tradeID;
     }
 
-    /**
-     *
-     * @return the final text of the alert.
-     */
-    @Override
-    public String toString() {
-        return " The following trade request has been cancelled as one of the users is no longer in possession of " +
-                "a item in the proposed trade. \n" + tradeString ;
-    }
 }

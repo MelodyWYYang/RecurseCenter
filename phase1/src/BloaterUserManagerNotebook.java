@@ -739,16 +739,16 @@ public class BloaterUserManagerNotebook implements Serializable {
         public void checkForExpiredTempTrades(){
             for (TemporaryTrade tempTrade : currentTemporaryTrades) {
                 if (LocalDateTime.now().isAfter(tempTrade.getDueDate())) {
-                    String tradeString = tradeToString(tempTrade);
+
                     LocalDateTime dueDate = tempTrade.getDueDate();
                     int tradeID = tempTrade.getTradeID();
 
                     if (!tempTrade.getUser1ItemReturnRequestAccepted()){
-                        UserAlert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername1(), tradeID);
+                        UserAlert alert = new ExpirationAlert(dueDate, tempTrade.getUsername1(), tradeID);
                         alertUser(tempTrade.getUsername1(), alert);
                     }
                     if (!tempTrade.getUser2ItemReturnRequestAccepted()){
-                        UserAlert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername2(), tradeID);
+                        UserAlert alert = new ExpirationAlert(dueDate, tempTrade.getUsername2(), tradeID);
                         alertUser(tempTrade.getUsername2(), alert);
                     }
 
@@ -827,7 +827,7 @@ public class BloaterUserManagerNotebook implements Serializable {
                     if (item == null){
                         pendingTrades.remove(trade);
                         String tradeString = tradeToString(trade);
-                        UserAlert alert = new TradeCancelledAlert(tradeString);
+                        UserAlert alert = new TradeCancelledAlert(trade.get);
                         alertUser(user1, alert);
                         alertUser(user2, alert);
                     }
@@ -836,8 +836,7 @@ public class BloaterUserManagerNotebook implements Serializable {
                     Item item = searchItem(user1, itemID);
                     if (item == null) {
                         pendingTrades.remove(trade);
-                        String tradeString = tradeToString(trade);
-                        UserAlert alert = new TradeCancelledAlert(tradeString);
+                        UserAlert alert = new TradeCancelledAlert(trade.getTradeID());
                         alertUser(user1, alert);
                         alertUser(user2, alert);
                     }

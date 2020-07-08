@@ -29,16 +29,8 @@ public class UnfreezeRequestAlert extends AdminAlert implements Serializable {
 
     public void setBorrowed(int borrowed){ this.borrowed = borrowed; }
 
-    /**
-     * toString() method to return the user's stats to the admin
-     * @return a string containing the user's stats and menu options for the admin
-     */
-    @Override
-    public String toString() {
-        return "Unfreeze User Request Alert" +
-                "\n" + username + " has lent: " + lent + " items" +
-                "\n" + username + " has borrowed: " + borrowed + " items" +
-                "\n" + "Required to lend " + thresholdRequired + " more items than borrowed";
+    public int getThresholdRequired(){
+        return this.thresholdRequired;
     }
 
 }

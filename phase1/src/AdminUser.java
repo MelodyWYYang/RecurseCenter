@@ -41,20 +41,21 @@ public class AdminUser implements Serializable {
     }
 
 
-    public void setIncompleteThreshold(int incompleteThreshold) {
+    public void changeIncompleteThreshold(int incompleteThreshold) {
         TradeSystem.userManager.setIncompleteThreshold(incompleteThreshold);
     }
 
-    public void setCompleteThreshold(int completeThreshold) {
-        TradeSystem.tradeManager.setCompleteThreshold(completeThreshold);
+    public void changeCompleteThreshold(int completeThreshold) {
+        TradeSystem.tradeCreator.tradeHistories.setCompleteThreshold(completeThreshold);
     }
 
     /**
      * Manages all startup information for the admin
      */
-    public ArrayList<AdminAlert> onStartUp(){
-        //TODO: Get adminalerts from BOTH Manager classes and append them together to make this adminAlerts list.
-        this.adminAlerts = TradeSystem.userManager.getAdminAlerts();
+    public ArrayList<AdminAlert> onStartUp(UserManager userManager, TradeCreator tradeCreator){
+        //TODO: Get adminalerts from ALL Use-Case classes and append them together to make this adminAlerts list.
+        this.adminAlerts = userManager.fetchAdminAlerts();
+        this.adminAlerts.addAll(tradeCreator.fetchAdminAlerts());
         TradeSystem.userManager.clearAdminAlerts();
         return this.adminAlerts;
     }

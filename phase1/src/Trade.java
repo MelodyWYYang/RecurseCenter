@@ -135,4 +135,7 @@ public class Trade implements Serializable {
     }
 
     public int getTradeID(){return tradeID;}
+
+
+
 }

@@ -4,15 +4,20 @@ import java.io.Serializable;
 
 public class TradeAcceptedAlert extends UserAlert implements Serializable {
     protected String acceptingUsername;
-    protected String tradeString;
+    protected int tradeID;
 
-    public TradeAcceptedAlert(String acceptingUsername, String tradeString) {
+    public TradeAcceptedAlert(String acceptingUsername, int tradeID) {
         super();
         this.acceptingUsername = acceptingUsername;
-        this.tradeString = tradeString;
+        this.tradeID = tradeID;
     }
 
-    public String toString() {
-        return acceptingUsername + " has accepted the following trade request: \n" + tradeString;
+    public String getAcceptingUsername(){
+        return this.acceptingUsername;
     }
+
+    public int getTradeID(){
+        return tradeID;
+    }
+
 }

@@ -51,15 +51,6 @@ public class ReportAlert extends AdminAlert implements Serializable {
         return reportDescription;
     }
 
-    /**
-     *
-     * @return the alert text.
-     */
-    @Override
-    public String toString() {
-        return senderUserName + " has reported user " + reportedUserName + " whose trade status is " + isTradeComplete
-                + "\n" + "Details: " + reportDescription;
-    }
 
 }
 

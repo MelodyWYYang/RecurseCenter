@@ -48,24 +48,8 @@ public class ItemValidationRequestAlert extends AdminAlert implements Serializab
         return description;
     }
 
-    /**
-     *
-     * @param description description of the item.
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
-    /**
-     *
-     * @return ID number of the item
-     */
-    public int getItemID() {
-        return itemID;
-    }
-    @Override
-    public String toString(){
-        return "Item validation request\nUser: " + usernameOfOwner + "\nItem name: " + name + "\nItem description: " +
-                description + "\nItem ID number: " + itemID;
+    public int getItemID(){
+        return this.itemID;
     }
 }

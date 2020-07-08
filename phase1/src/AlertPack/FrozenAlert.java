@@ -28,17 +28,5 @@ public class FrozenAlert extends UserAlert implements Serializable {
         return threshholdNumofUser;
     }
 
-    /**
-     *
-     * @return the final text of the alert.
-     */
-    @Override
-    public String toString() {
-        return "Your account has been frozen by administrator at " +
-                "\n" + "You have borrowed: " + numBorrowedofUser + "items" +
-                "\n" + "You have lent " + numLentofUser + " items" +
-                "\n" + "You need to lend " + threshholdNumofUser + " items before you can borrow";
-    }
-
 
 }

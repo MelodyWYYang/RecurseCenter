@@ -13,28 +13,11 @@ public class MessageAlert extends UserAlert implements Serializable {
         this.senderUsername = senderUsername;
     }
 
-    /**
-     *
-     * @return the username of the sender of the message.
-     */
-    public String getSenderUsername() {
-        return senderUsername;
+    public String getSenderUsername(){
+        return this.senderUsername;
     }
 
-    /**
-     *
-     * @return the message being sent to the recipient
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     *
-     * @return the final text of the alert.
-     */
-    @Override
-    public String toString(){
-        return "From: " + senderUsername + "\n" + message;
+    public String getMessage(){
+        return this.message;
     }
 }

@@ -110,11 +110,7 @@ public class TradeManager implements Serializable {
      * @return A TradeRequestAlert corresponding to <trade>
      */ //TradeManager
     public TradeRequestAlert createTradeRequestAlert(Trade trade, User user1){
-
-        String tradeString = tradeToString(trade);
-
-        return new TradeRequestAlert(user1.getUsername(), trade.getTradeID(), tradeString);
-
+        return new TradeRequestAlert(user1.getUsername(), trade.getTradeID());
     }
 
 
@@ -140,8 +136,7 @@ public class TradeManager implements Serializable {
         pendingTradeRequests.remove(trade);
         pendingTrades.add(trade);
 
-        String tradeString = tradeToString(trade);
-        TradeAcceptedAlert alert = new TradeAcceptedAlert(username, tradeString);
+        TradeAcceptedAlert alert = new TradeAcceptedAlert(username, trade.getTradeID());
         alertUser(otherUserName, alert);
     }
 
@@ -279,6 +274,7 @@ public class TradeManager implements Serializable {
         ArrayList<Integer> orderedItemsIDClone = (ArrayList<Integer>) orderedItemsID.clone();
         ArrayList<Item> nOrderedItems = new ArrayList<Item>();
         while (nOrderedItems.size() < n & !orderedItemsIDClone.isEmpty()) {
+            //TODO: Control + F "TradeSystem" and get rid of all dependencies on it from here.
             nOrderedItems.add(TradeSystem.userManager.searchItem(orderedItemsIDClone.get(orderedItemsIDClone.size() - 1)));
             orderedItemsIDClone.remove(orderedItemsIDClone.size() - 1);
         }
@@ -533,13 +529,13 @@ public class TradeManager implements Serializable {
         if (user1.getNumBorrowed() + borrowLendThreshold > user1.getNumLent()){
             FreezeUserAlert alert = new FreezeUserAlert(user1.getUsername(),user1.getNumBorrowed(),
                     user1.getNumLent(), borrowLendThreshold);
-            TradeSystem.adminUser.alertAdmin(alert);
+            alertAdmin(alert);
         }
         assert user2 != null;
         if (user2.getNumBorrowed() + borrowLendThreshold > user2.getNumLent()){
             FreezeUserAlert alert = new FreezeUserAlert(user2.getUsername(), user2.getNumBorrowed(),
                     user2.getNumLent(), borrowLendThreshold);
-            TradeSystem.adminUser.alertAdmin(alert);
+            alertAdmin(alert);
         }
     }
 
@@ -777,16 +773,7 @@ public class TradeManager implements Serializable {
         TradeSystem.userManager.alertSystem.put(username, alerts);
     }
 
-    /** Method which allows a user to send a message to another user, using the alert system.
-     * Author: Louis Scheffer V
-     * @param sender user object who is sending the message.
-     * @param recipient user object who is receiving the message.
-     * @param message message text.
-     */ //UserManager
-    public void sendMessageToUser(User sender, User recipient, String message){
-        UserAlert alert = new MessageAlert(sender.getUsername(), message);
-        alertUser(recipient, alert);
-    }
+
 
     /** Searches pending trades by user and returns the trades of the user
      * @param user the user whose pending trades are being searched

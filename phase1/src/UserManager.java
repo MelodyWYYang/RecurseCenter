@@ -44,6 +44,61 @@ public class UserManager implements Serializable{
         this.adminAlerts.add(alert);
     }
 
+    /** Method which exchanges the items in the trade system after a trade has been marked as completed
+     * Author: Louis Scheffer V
+     * @param trade trade object
+     */ //TradeManager
+    public void exchangeItems(Trade trade){
+        User user1 = TradeSystem.userManager.searchUser(trade.getUsername1());
+        User user2 = TradeSystem.userManager.searchUser(trade.getUsername2());
+        for(int itemID : trade.getItemIDsSentToUser1()){
+            Item item = TradeSystem.userManager.searchItem(user2, itemID);
+            //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
+            user1.increaseNumBorrowed(1);
+            user2.increaseNumLent(1);
+            user2.removeAvailableItem(item);
+            if (trade instanceof TemporaryTrade){
+                user1.addBorrowedItem(item);
+            }
+            else {
+                user1.addAvailableItem(item);
+            }
+        }
+        for(int itemID : trade.getItemIDsSentToUser2()){
+            Item item = TradeSystem.userManager.searchItem(user1, itemID);
+            //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
+            user2.increaseNumBorrowed(1);
+            user1.increaseNumLent(1);
+            user1.removeAvailableItem(item);
+            if (trade instanceof TemporaryTrade){
+                user2.addBorrowedItem(item);
+            }
+            else{
+                user2.addAvailableItem(item);
+            }
+
+        }
+    }
+
+    /** Method which returns items to their owners after the expiration of a temporary trade
+     * Author: Louis Scheffer V
+     * @param trade Temporary Trade Object
+     */ //TradeManager???
+    public void reExchangeItems(TemporaryTrade trade){
+        User user1 = TradeSystem.userManager.searchUser(trade.getUsername1());
+        User user2 = TradeSystem.userManager.searchUser(trade.getUsername2());
+        for(int itemID : trade.getItemIDsSentToUser1()) {
+            Item item = TradeSystem.userManager.searchItem(user2, itemID);
+            user1.removeBorrowedItem(item);
+            user2.addAvailableItem(item);
+        }
+        for(int itemID : trade.getItemIDsSentToUser2()) {
+            Item item = TradeSystem.userManager.searchItem(user1, itemID);
+            user2.removeBorrowedItem(item);
+            user2.addAvailableItem(item);
+        }
+    }
+
 
     /** 3-arg method which creates and instantiates an ItemvalidationRequest.
      * Author: Jinyu Liu
@@ -116,9 +171,14 @@ public class UserManager implements Serializable{
         //            adminAlerts.add(alert);
     //}
 
-    //TradeManager and UserManager
-    public ArrayList<AdminAlert> getAdminAlerts(){
-        return this.adminAlerts;
+    /**
+     * Return a list of all adminAlerts from this class. Also empties the adminAlerts member.
+     * @return the list of adminAlerts
+     */
+    public ArrayList<AdminAlert> fetchAdminAlerts(){
+        ArrayList<AdminAlert> alerts = this.adminAlerts;
+        this.adminAlerts = new ArrayList<AdminAlert>();
+        return alerts;
     }
 
 

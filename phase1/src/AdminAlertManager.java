@@ -29,7 +29,6 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      * @param a AdminAlert object to be handled
      */
     private void handleAlert(AdminAlert a){
-        System.out.println(a.toString());
         if (a instanceof ItemValidationRequestAlert){
                 handleItemValidationRequestAlert((ItemValidationRequestAlert) a);
         } else if (a instanceof ReportAlert){
@@ -50,6 +49,8 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      * @param alert AdminAlert that there is an ItemValidationRequestAlert to be handled
      */
     private void handleItemValidationRequestAlert(ItemValidationRequestAlert alert){
+        System.out.println("Item validation request\nUser: " + alert.getOwner() + "\nItem name: " + alert.getName() +
+                "\nItem description: " + alert.getDescription() + "\nItem ID number: " + alert.getItemID());
         Scanner scanner = new Scanner(System.in);
         String message;
         System.out.println("(1) Approve this item");
@@ -69,6 +70,9 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      * @param alert AdminAlert that there is a ReportAlert to be handled
      */
     private void handleReportAlert(ReportAlert alert){
+        System.out.println(alert.getSenderUserName() + " has reported user " + alert.getReportedUserName() +
+                " whose trade status is " + alert.getIsTradeComplete()
+                + "\n" + "Details: " + alert.getReportDescription());
         boolean flag = true;
         int input = 0;
         int numIncompTrades = 0;
@@ -99,6 +103,11 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      * @param alert AdminAlert that there is a user that should be frozen
      */
     private void handleFreezeUserAlert(FreezeUserAlert alert){
+
+        System.out.println("Freeze User Alert" +
+                "\n" + alert.getUsername() + " has lent: " + alert.getLent() + " items" +
+                "\n" + alert.getUsername() + " has borrowed: " + alert.getBorrowed() + " items" +
+                "\n" + "Required to lend " + alert.getThresholdRequired() + " more items than borrowed");
         // author: Callan Murphy
         boolean flag = true;
         int input = 0;
@@ -123,6 +132,11 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      * @param alert AdminAlert that there is a user who has requested that their account be unfrozen
      */
     private void handleUnfreezeRequestAlert(UnfreezeRequestAlert alert){
+
+        System.out.println("Unfreeze User Request Alert" +
+                "\n" + alert.getUsername() + " has lent: " + alert.getLent() + " items" +
+                "\n" + alert.getUsername() + " has borrowed: " + alert.getBorrowed() + " items" +
+                "\n" + "Required to lend " + alert.getThresholdRequired() + " more items than borrowed");
         // author: Callan Murphy
         boolean flag = true;
         int input = 0;
