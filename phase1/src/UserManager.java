@@ -45,6 +45,20 @@ public class UserManager implements Serializable{
     }
 
 
+    /** 3-arg method which creates and instantiates an ItemvalidationRequest.
+     * Author: Jinyu Liu
+     * @param name name of the item
+     * @param description description of the item
+     * @param owner username of the user who will own the item
+     * @return The ItemValidationRequestAlert in question.
+     */ //TradeManager for cohesion reasons with alerting admin.
+    public ItemValidationRequestAlert sendValidationRequest(String name, String description, String owner) {
+        // reworked by Tingyu since the itemValidationRequestQueue has been moved to UserManager
+        ItemValidationRequestAlert alert = new ItemValidationRequestAlert(owner, name, description);
+        alertAdmin(alert);
+        return alert;
+    }
+
     /** Method which creates a user and adds it to the list of users
      * Author: Jinyu Liu
      * @param username username of user

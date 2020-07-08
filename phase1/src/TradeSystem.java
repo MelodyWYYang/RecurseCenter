@@ -7,6 +7,8 @@ import java.util.Scanner;
 public class TradeSystem {
 
     public static AdminUser adminUser;
+    public static UserManager userManager;
+    public static TradeManager tradeManager;
 
     static UserAlertManager userAlertManager = new UserAlertManager();
 
@@ -22,7 +24,7 @@ public class TradeSystem {
 
     protected static void onStartUp(){
         adminUser.onStartUp();
-        adminUser.userManager.onStartUp();
+        tradeManager.onStartUp();
     }
 
     protected static User createAccount(){
@@ -33,7 +35,7 @@ public class TradeSystem {
                 String inputUsername = scan.nextLine();
                 System.out.println("Enter your desired password");
                 String password = scan.nextLine();
-                return adminUser.userManager.createUser(inputUsername, password);
+                return userManager.createUser(inputUsername, password);
             } catch (UserNameTakenException e) {
                 System.out.println("Username taken, try again");
             }
@@ -56,7 +58,7 @@ public class TradeSystem {
             if (username.equals("0")){
                 return null;// This needs to be changed so that it will return to the main menu. - Louis
             }
-            user = adminUser.userManager.searchUser(username);
+            user = userManager.searchUser(username);
             if (adminUser.isValidUsername(username) && takeAdminPassword(username)){
                 return null;
             }
