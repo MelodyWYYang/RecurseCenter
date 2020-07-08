@@ -120,7 +120,7 @@ public class AdminUser implements Serializable {
      * @param newThreshold int variable for new threshold
      */
     public void changeThresholdForUser(int newThreshold) {
-        TradeSystem.userManager.setBorrowLendThreshold(newThreshold);
+        TradeSystem.tradeManager.setBorrowLendThreshold(newThreshold);
     }
 
     /**

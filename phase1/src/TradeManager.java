@@ -190,7 +190,7 @@ public class TradeManager implements Serializable {
             trade.incrementUser2NumRequests();
         }
 
-        TradeRequestAlert alert = createTradeRequestAlert(trade, TradeSystem.adminUser.userManager.searchUser(UserEditingname));
+        TradeRequestAlert alert = createTradeRequestAlert(trade, TradeSystem.userManager.searchUser(UserEditingname));
 
         String otherUserName;
 
@@ -668,8 +668,8 @@ public class TradeManager implements Serializable {
     //TradeManager
     public void checkPendingTrades(){
         for(Trade trade: pendingTrades){
-            User user1 = TradeSystem.adminUser.userManager.searchUser(trade.getUsername1());
-            User user2 = TradeSystem.adminUser.userManager.searchUser(trade.getUsername2());
+            User user1 = TradeSystem.userManager.searchUser(trade.getUsername1());
+            User user2 = TradeSystem.userManager.searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()){
                 Item item = TradeSystem.userManager.searchItem(user2, itemID);
                 if (item == null){

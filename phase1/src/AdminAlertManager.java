@@ -3,13 +3,16 @@ import AlertPack.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class AdminAlertManager {
+public class AdminAlertManager { //This class has a two way dependency with TradeSystem
 
     /** Method which iterates through each AdminAlert and handles it.
      *
      * @param alerts Array List of AdminAlerts that need to be processed.
      */
     public AdminUser adminUser = new AdminUser("admin", "admin");// Not really sure how we want to do this. Hardcoded for simplicity in the meanwhile - Louis
+    public UserManager userManager = new UserManager();
+    public TradeManager tradeManager = new TradeManager();
+
     //Todo replace above line with actual admin user.
     public void handleAlertQueue(ArrayList<AdminAlert> alerts){
 
@@ -76,11 +79,11 @@ public class AdminAlertManager {
             System.out.println("(2) Dismiss");
             input = scan.nextInt();
             if (input == 1){
-                adminUser.userManager.increaseUserIncompleteTrades(adminUser.userManager.searchUser(alert.getReportedUserName()));
-                int numIncompleteTrades = adminUser.userManager.getNumIncompTrades(adminUser.userManager.searchUser(alert.getReportedUserName()));
-                threshold = TradeSystem.adminUser.userManager.getIncompleteThreshold();
+                userManager.increaseUserIncompleteTrades(userManager.searchUser(alert.getReportedUserName()));
+                int numIncompleteTrades = tradeManager.getNumIncompTrades(alert.getReportedUserName());
+                threshold = TradeSystem.userManager.getIncompleteThreshold();
                 if (numIncompleteTrades > threshold){
-                    User reportedUser = TradeSystem.adminUser.userManager.searchUser(alert.getReportedUserName());
+                    User reportedUser = TradeSystem.userManager.searchUser(alert.getReportedUserName());
                     TradeSystem.adminUser.freezeUser(reportedUser);
                 }
                 flag = false;
@@ -105,7 +108,7 @@ public class AdminAlertManager {
             System.out.println("(2) Dismiss");
             input = scan.nextInt();
             if (input == 1) {
-                User user = TradeSystem.adminUser.userManager.searchUser(alert.getUsername());
+                User user = TradeSystem.userManager.searchUser(alert.getUsername());
                 assert user != null;
                 adminUser.freezeUser(user);
                 flag = false;
@@ -129,7 +132,7 @@ public class AdminAlertManager {
             System.out.println("(2) Dismiss");
             input = scan.nextInt();
             if (input == 1) {
-                User user = TradeSystem.adminUser.userManager.searchUser(alert.getUsername());
+                User user = TradeSystem.userManager.searchUser(alert.getUsername());
                 adminUser.unfreezeAccount(user);
                 flag = false;
             }
