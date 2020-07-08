@@ -15,67 +15,17 @@ public class TradeSystem {
     static UserActions userActions = new UserActions();
 
 
-    public void run(){
-        //TODO: Do this for every file
-        if (!((new File("adminUser.ser"))).exists()){
-            createAdminUser();
-        }
-
-        adminUser = FileManager.loadAdminUser("adminUser.ser");
-
-        onStartUp();
-
-        Scanner scan = new Scanner(System.in);
-        User loggedIn = null;
-        boolean isAdmin = false;
-        System.out.println("Welcome to Insert_name_here trading system!\n Would you like to create an account or " +
-                "login?\n(1) Create account \n(2) Login to an account\n(0) Quit");
-        int input = optionChoice(2);
-        //TODO: Should we make this stuff its own class?
-        //TODO: This will log a user in a admin if an incorrect username and password is entered.
-        if (input == 1){
-            loggedIn = createAccount();
-        } else if (input == 2){
-            User x = login();
-            if (x == null){
-                isAdmin = true;
-            } else {
-                loggedIn = x;
-            }
-
-        } else if(input == 0){
-            return;
-        }
-
-        if (isAdmin){
-            if (adminUser.getAdminAlerts().size() > 0){
-                System.out.println("Admin has alerts");
-            }
-            ArrayList<AdminAlert> adminAlerts = adminUser.getAdminAlerts();
-            adminAlertManager.handleAlertQueue(adminAlerts);
-            //TODO: Ensure the alert queue is depleted after all are handled.
-            adminActions.run();
-        } else {
-            ArrayList<UserAlert> userAlerts = adminUser.userManager.getUserAlerts(loggedIn.getUsername());
-            userAlertManager.handleAlertQueue(userAlerts);
-            userActions.run(loggedIn);
-        }
-
-        FileManager.saveAdminToFile(adminUser);
-
-
-    }
-    private static void createAdminUser(){
+    protected static void createAdminUser(){
         AdminUser adminUser = new AdminUser("admin", "admin");
         FileManager.saveAdminToFile(adminUser);
     }
 
-    private static void onStartUp(){
+    protected static void onStartUp(){
         adminUser.onStartUp();
         adminUser.userManager.onStartUp();
     }
 
-    private static User createAccount(){
+    protected static User createAccount(){
         while (true) {
             try {
                 Scanner scan = new Scanner(System.in);
@@ -149,7 +99,7 @@ public class TradeSystem {
         }
     }
 
-    private static int optionChoice(int x){
+    protected static int optionChoice(int x){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter one of the numbers listed above");
         int choice = scanner.nextInt();
