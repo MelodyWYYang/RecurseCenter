@@ -15,8 +15,6 @@ public class TradeManager implements Serializable {
 
     //TradeManager
     protected ArrayList<Trade> completedTrades = new ArrayList<Trade>(); // list of all trades which have been completed - Louis
-    //UserManager
-    protected ArrayList<User> listUsers = new ArrayList<User>(); // List of all users - Jinyu
     //TradeManager
     protected ArrayList<Trade> pendingTradeRequests = new ArrayList<Trade>(); // list of all trade requests which have not been accepted
     // by both parties - Louis
@@ -27,18 +25,12 @@ public class TradeManager implements Serializable {
     //TradeManager
     protected ArrayList<TemporaryTrade> currentTemporaryTrades = new ArrayList<TemporaryTrade>(); //list of all temporary trades where items have
     // been exchanged but not returned -Louis
-    //UserManager
-    protected HashMap<String, ArrayList<UserAlert>> alertSystem = new HashMap<String, ArrayList<UserAlert>>();
-    //UserManager -- all thresholds are admin things really, rethink this?
-    private int incompleteThreshold; // # of incomplete trades allowed
+
     //TradeManager
     private int completeThreshold; // # of complete trades allowed per week
     //TradeManager
     private int borrowLendThreshold = 1;
 
-    //UserManager
-    public ArrayList<User> getListUsers() {
-        return listUsers;}
     //TradeManager
     public ArrayList<Trade> getCompletedTrades() {
         return completedTrades;
@@ -56,66 +48,11 @@ public class TradeManager implements Serializable {
         adminAlerts = new ArrayList<AdminAlert>();
     }
 
-    //UserManager
-    public ArrayList<UserAlert> getUserAlerts(String username){
-        return alertSystem.get(username);
-    }
     //TradeManager -- possibly add an OnStartUp method for UserManager also.
     public void onStartUp(){
         //Calls all initialization stuff for UserManager.
         checkForExpiredTempTrades();
     }
-
-    /**
-     * Alerts the admin.
-     * @param alert alert
-     */ //TradeManager and UserManager
-    public void alertAdmin(AdminAlert alert){
-        this.adminAlerts.add(alert);
-    }
-
-
-    /** Method which creates a user and adds it to the list of users
-     * Author: Jinyu Liu
-     * @param username username of user
-     * @param password password of user
-     * @return the created user
-     */ //UserManager
-    public User createUser(String username, String password) throws UserNameTakenException {
-        System.out.println("Entered:" + username);
-        for (User user : listUsers) {
-            System.out.println("Iterated on " + user.getUsername());
-            if (user.getUsername().equals(username)) {
-
-                throw new UserNameTakenException("That username is taken.");
-            }
-
-        }
-        User newUser = new User(username);
-        newUser.setPassword(password);
-        listUsers.add(newUser);
-        alertSystem.put(username, new ArrayList<UserAlert>());
-        return newUser;
-    }
-
-    /**
-     * Adds an item to the user's wishlist
-     * @param user user
-     * @param itemName name of item
-     */ //UserManager
-    public void addToWishlist(User user, String itemName){
-        user.addItemToWishList(itemName);
-    }
-
-    /**
-     * removes an item from the user's wishlist
-     * @param user user
-     * @param itemName name of item
-     */ //UserManager
-    public void removeFromWishList(User user, String itemName){
-        user.removeItemFromWishList(itemName);
-    }
-
 
     /** Method which creates a trade request and adds it to the list of pending trade requests.
      * Author: Jinyu Liu
@@ -185,18 +122,18 @@ public class TradeManager implements Serializable {
      * Author: Jinyu Liu
      * Reworked by Tingyu Liang 7/2/2020
      * @param trade trade object
-     * @param user user which is accepting the trade request
+     * @param username username of User which is accepting the trade request
      */ //TradeManager
-    public void acceptTradeRequest(Trade trade, User user) {
+    public void acceptTradeRequest(Trade trade, String username) {
         String otherUserName;
 
-        if (trade.getUsername1().equals(user.getUsername())) {
+        if (trade.getUsername1().equals(username)) {
             trade.setUser1AcceptedRequest(true);
             otherUserName = trade.getUsername2();
         }
         else {
             // I am not sure if we have function to check if user is in the trade, commented by Tingyu
-            assert trade.getUsername2().equals(user.getUsername());
+            assert trade.getUsername2().equals(username);
             trade.setUser2AcceptedRequest(true);
             otherUserName = trade.getUsername1();
         }
@@ -204,7 +141,7 @@ public class TradeManager implements Serializable {
         pendingTrades.add(trade);
 
         String tradeString = tradeToString(trade);
-        TradeAcceptedAlert alert = new TradeAcceptedAlert(user.getUsername(), tradeString);
+        TradeAcceptedAlert alert = new TradeAcceptedAlert(username, tradeString);
         alertUser(otherUserName, alert);
     }
 
@@ -212,20 +149,18 @@ public class TradeManager implements Serializable {
      * Decline trade request <trade> sent to User <user>. Also sends a TradeDeclinedAlert to send to the requesting
      * User.
      * @param trade The trade request to be declined.
-     * @param decliningUser The User declining the request.
+     * @param decliningUser username of The User declining the request.
      *///TradeManager
-    public void declineTradeRequest(Trade trade, User decliningUser){
+    public void declineTradeRequest(Trade trade, String decliningUser){
 
         pendingTradeRequests.remove(trade);
-
-
         String tradeString = tradeToString(trade);
 
-        TradeDeclinedAlert alert = new TradeDeclinedAlert(tradeString, decliningUser.getUsername());
+        TradeDeclinedAlert alert = new TradeDeclinedAlert(tradeString, decliningUser);
 
         String otherUserName;
 
-        if (trade.getUsername1().equals(decliningUser.getUsername())){
+        if (trade.getUsername1().equals(decliningUser)){
             otherUserName = trade.getUsername2();
         }else{
             otherUserName = trade.getUsername1();
@@ -239,27 +174,27 @@ public class TradeManager implements Serializable {
      * @param trade trade object
      * @param timeOfTrade time & date of trade
      * @param meetingPlace location of trade
-     * @param userEditing user who is editing the trade
+     * @param UserEditingname  username of user who is editing the trade
      */ //TradeManager
-    public void editTradeRequest(Trade trade, LocalDateTime timeOfTrade, String meetingPlace, User userEditing) {
+    public void editTradeRequest(Trade trade, LocalDateTime timeOfTrade, String meetingPlace, String UserEditingname) {
         trade.timeOfTrade = timeOfTrade;
         trade.meetingPlace = meetingPlace;
-        if (userEditing.username.equals(trade.getUsername1())) {
+        if (UserEditingname.equals(trade.getUsername1())) {
             trade.user1AcceptedRequest = true;
             trade.user2AcceptedRequest = false;
             trade.incrementUser1NumRequests();
         }
-        else if (userEditing.username.equals(trade.getUsername2())) {
+        else if (UserEditingname.equals(trade.getUsername2())) {
             trade.user2AcceptedRequest = true;
             trade.user1AcceptedRequest = false;
             trade.incrementUser2NumRequests();
         }
 
-        TradeRequestAlert alert = createTradeRequestAlert(trade, userEditing);
+        TradeRequestAlert alert = createTradeRequestAlert(trade, TradeSystem.adminUser.userManager.searchUser(UserEditingname));
 
         String otherUserName;
 
-        if (trade.getUsername1().equals(userEditing.getUsername())){
+        if (trade.getUsername1().equals(UserEditingname)){
             otherUserName = trade.getUsername2();
         } else{
             otherUserName = trade.getUsername1();
@@ -268,46 +203,6 @@ public class TradeManager implements Serializable {
         alertUser(otherUserName, alert);
     }
 
-    /** 3-arg method which creates and instantiates an ItemvalidationRequest.
-     * Author: Jinyu Liu
-     * @param name name of the item
-     * @param description description of the item
-     * @param owner username of the user who will own the item
-     * @return The ItemValidationRequestAlert in question.
-     */ //TradeManager for cohesion reasons with alerting admin.
-    public ItemValidationRequestAlert sendValidationRequest(String name, String description, String owner) {
-        // reworked by Tingyu since the itemValidationRequestQueue has been moved to UserManager
-        ItemValidationRequestAlert alert = new ItemValidationRequestAlert(owner, name, description);
-        alertAdmin(alert);
-        return alert;
-    }
-
-    /** 2-arg method which creates and instantiates an ItemvalidationRequest.
-     * Author: Jinyu Liu
-     * @param name name of the item
-     * @param owner username of the user who will own the item
-     * @return The ItemValidationRequestAlert in question.
-     */ //TradeManager
-    public ItemValidationRequestAlert sendValidationRequest(String name, String owner) {
-        ItemValidationRequestAlert alert = new ItemValidationRequestAlert(name, owner);
-        alertAdmin(alert);
-        return alert;
-    }
-
-    /* No longer neccessary - Louis
-    public void AddTransaction(Trade trade){
-        transactions.add(trade);
-    } // This is for adding completed transactions to the stored list - Mel
-     */
-    //UserManager //TODO: Move the unfreeze stuff from the controller/presenter layer to instead call this method.
-    public void requestUnfreeze(String username){
-        // user can request to unfreeze account whether it should be unfrozen or not
-        // moved by Riya from User
-        // unfreezeRequestList.add(username);
-        // UnfreezeRequestAlert alert = new UnfreezeRequestAlert(user1.getUsername(),user1.getNumBorrowed(),
-        //                    user1.getNumLent(), borrowLendThreshold);
-        //            adminAlerts.add(alert);
-    }
 
     /** Helper function that returns a list of all the trades that user participated in and traded an item. The list is
      * order by the date that the item left the user's possession.
@@ -357,16 +252,16 @@ public class TradeManager implements Serializable {
 
     /** Helper function that returns an ordered list of all items' ID that the user traded away. The list is ordered by
      * the date that the user traded the item away.
-     * @param user User being evaluated
+     * @param user username of User being evaluated
      * @return ArrayList</int> (sorted by LocalTimeDate)
      */ //TradeManager
-    private ArrayList<Integer> getOrderedItemsID(User user) {
-        ArrayList<Trade> tradeHistory = this.getOrderedTrades(user.getUsername());
+    private ArrayList<Integer> getOrderedItemsID(String username) {
+        ArrayList<Trade> tradeHistory = this.getOrderedTrades(username);
         ArrayList<Integer> orderedItemsID = new ArrayList<Integer>();
         for (Trade trade : tradeHistory) {
-            if (trade.getUsername1().equals(user.getUsername())) {
+            if (trade.getUsername1().equals(username)) {
                 orderedItemsID.addAll(trade.getItemIDsSentToUser2());
-            } else if (trade.getUsername2().equals(user.getUsername())) {
+            } else if (trade.getUsername2().equals(username)) {
                 orderedItemsID.addAll(trade.getItemIDsSentToUser1());
             }
         }
@@ -379,12 +274,12 @@ public class TradeManager implements Serializable {
      * @param n number of items
      * @return ArrayList</Item> (sorted by LocalTimeDate)
      */ //TradeManager
-    public ArrayList<Item> getNRecentItems(User user, int n) {
+    public ArrayList<Item> getNRecentItems(String user, int n) {
         ArrayList<Integer> orderedItemsID = this.getOrderedItemsID(user);
         ArrayList<Integer> orderedItemsIDClone = (ArrayList<Integer>) orderedItemsID.clone();
         ArrayList<Item> nOrderedItems = new ArrayList<Item>();
         while (nOrderedItems.size() < n & !orderedItemsIDClone.isEmpty()) {
-            nOrderedItems.add(searchItem(orderedItemsIDClone.get(orderedItemsIDClone.size() - 1)));
+            nOrderedItems.add(TradeSystem.UserManager.searchItem(orderedItemsIDClone.get(orderedItemsIDClone.size() - 1)));
             orderedItemsIDClone.remove(orderedItemsIDClone.size() - 1);
         }
         return nOrderedItems;
@@ -500,28 +395,28 @@ public class TradeManager implements Serializable {
     }
 
     /** Number of incomplete trades made by the user
-     * @param user User being evaluated
+     * @param username username of User being evaluated
      * @return count of number of incomplete trades
      */ //TradeManager
-    public int getNumIncompTrades(User user) {
+    public int getNumIncompTrades(String username) {
         int count = 0;
         ArrayList<Trade> incompleteTrades = this.getIncompleteTrades();
         for (Trade trade : incompleteTrades) {
-            if (trade.getUsername1().equals(user.getUsername()) | trade.getUsername2().equals(user.getUsername())) {
+            if (trade.getUsername1().equals(username) | trade.getUsername2().equals(username)) {
                 count++;
             }
         }
         return count;
     }
     //TradeManager -- username substitution thiing we talked about
-    private HashMap<String, Integer> getNumTradesPerUser(User user) {
+    private HashMap<String, Integer> getNumTradesPerUser(String username) {
         HashMap<String, Integer> numTradesPerUser = new HashMap<String, Integer>();
         for (Trade trade: completedTrades) {
-            if (trade.getUsername1().equals(user.getUsername())) {
+            if (trade.getUsername1().equals(username)) {
                 String partnerUsername = trade.getUsername2();
                 numTradesPerUser.putIfAbsent(trade.getUsername2(), 0);
                 numTradesPerUser.replace(trade.getUsername2(), numTradesPerUser.get(trade.getUsername2()) + 1);
-            } else if (trade.getUsername2().equals(user.getUsername())) {
+            } else if (trade.getUsername2().equals(username)) {
                 String partnerUsername = trade.getUsername1();
                 numTradesPerUser.putIfAbsent(trade.getUsername1(), 0);
                 numTradesPerUser.replace(trade.getUsername1(), numTradesPerUser.get(trade.getUsername1()) + 1);
@@ -532,11 +427,11 @@ public class TradeManager implements Serializable {
 
     /** Top trading partners for a user.
      * @param n number of top trading partners to be considered
-     * @param user User being evaluated
+     * @param username name of User being evaluated
      * @return the usernames of the top trading partners for a given user
      */ //TradeManager
-    public ArrayList<String> getTopNTradingPartners(User user, int n) {
-        HashMap<String, Integer> numTradesPerUser = this.getNumTradesPerUser(user);
+    public ArrayList<String> getTopNTradingPartners(String username, int n) {
+        HashMap<String, Integer> numTradesPerUser = this.getNumTradesPerUser(username);
         HashMap<String, Integer> numTradesPerUserClone = (HashMap<String, Integer>) numTradesPerUser.clone();
         ArrayList<String> topPartnersUsername = new ArrayList<String>();
         while (topPartnersUsername.size() < n & !numTradesPerUserClone.isEmpty()) {
@@ -554,53 +449,6 @@ public class TradeManager implements Serializable {
             numTradesPerUserClone.remove(favouritePartner.toString());
         }
         return topPartnersUsername;
-    }
-
-
-    /** Method which returns a user when given their username
-     * Author: Louis Scheffer V
-     * @param username username of the user
-     * @return user object
-     */ //UserManager
-    public User searchUser(String username){
-        for(User user: listUsers){
-            if (user.username.equals(username)){
-                return user;
-            }
-        }
-        return null;
-    }
-
-    /** Method which returns a item (that is in a user's available items) when given its ID number and the user who it
-     * belongs to. Returns null if the ID is invalid.
-     * Author: Louis Scheffer V
-     * @param user who owns the item
-     * @param itemID ID number of the item
-     * @return item
-     */ //Wherever is most convenient
-    public Item searchItem(User user, int itemID){
-        for(Item item: user.getAvailableItems()){
-            if(itemID == item.getId()){
-                return item;
-            }
-        }
-        return null;
-    }
-    /** Method which returns a item (that is in a user's available items) when given its ID number.
-     * Returns null if an invalid ID is given
-     * Author: Louis Scheffer V
-     * @param itemID ID number of the item
-     * @return item
-     *///Ditto from above
-    public Item searchItem(int itemID) {
-        for (User user : listUsers) {
-            for (Item item : user.getAvailableItems()) {
-                if (itemID == item.getId()) {
-                    return item;
-                }
-            }
-        }
-        return null;
     }
 
     /** Method which returns a temporary trade when given its ID number.
@@ -677,21 +525,21 @@ public class TradeManager implements Serializable {
             completedTrades.add(trade);
         }
 
-        User user1 = searchUser(trade.getUsername1());
-        User user2 = searchUser(trade.getUsername2());
+        User user1 = TradeSystem.UserManager.searchUser(trade.getUsername1());
+        User user2 = TradeSystem.Usermanager.searchUser(trade.getUsername2());
 
         assert user1 != null;
         //This might be > instead of >= idk lol
         if (user1.getNumBorrowed() + borrowLendThreshold > user1.getNumLent()){
             FreezeUserAlert alert = new FreezeUserAlert(user1.getUsername(),user1.getNumBorrowed(),
                     user1.getNumLent(), borrowLendThreshold);
-            alertAdmin(alert);
+            TradeSystem.adminUser.alertAdmin(alert);
         }
         assert user2 != null;
         if (user2.getNumBorrowed() + borrowLendThreshold > user2.getNumLent()){
             FreezeUserAlert alert = new FreezeUserAlert(user2.getUsername(), user2.getNumBorrowed(),
                     user2.getNumLent(), borrowLendThreshold);
-            alertAdmin(alert);
+            TradeSystem.adminUser.alertAdmin(alert);
         }
     }
 
@@ -700,10 +548,10 @@ public class TradeManager implements Serializable {
      * @param trade trade object
      */ //TradeManager
     public void exchangeItems(Trade trade){
-        User user1 = searchUser(trade.getUsername1());
-        User user2 = searchUser(trade.getUsername2());
+        User user1 = TradeSystem.UserManager.searchUser(trade.getUsername1());
+        User user2 = TradeSystem.UserManager.searchUser(trade.getUsername2());
         for(int itemID : trade.getItemIDsSentToUser1()){
-            Item item = searchItem(user2, itemID);
+            Item item = TradeSystem.UserManager.searchItem(user2, itemID);
             //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
             user1.increaseNumBorrowed(1);
             user2.increaseNumLent(1);
@@ -716,7 +564,7 @@ public class TradeManager implements Serializable {
             }
         }
         for(int itemID : trade.getItemIDsSentToUser2()){
-            Item item = searchItem(user1, itemID);
+            Item item = TradeSystem.UserManager.searchItem(user1, itemID);
             //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
             user2.increaseNumBorrowed(1);
             user1.increaseNumLent(1);
@@ -798,15 +646,15 @@ public class TradeManager implements Serializable {
      * @param trade Temporary Trade Object
      */ //TradeManager???
     public void reExchangeItems(TemporaryTrade trade){
-        User user1 = searchUser(trade.getUsername1());
-        User user2 = searchUser(trade.getUsername2());
+        User user1 = TradeSystem.UserManager.searchUser(trade.getUsername1());
+        User user2 = TradeSystem.UserManager.searchUser(trade.getUsername2());
         for(int itemID : trade.getItemIDsSentToUser1()) {
-            Item item = searchItem(user2, itemID);
+            Item item = TradeSystem.UserManager.searchItem(user2, itemID);
             user1.removeBorrowedItem(item);
             user2.addAvailableItem(item);
         }
         for(int itemID : trade.getItemIDsSentToUser2()) {
-            Item item = searchItem(user1, itemID);
+            Item item = TradeSystem.UserManager.searchItem(user1, itemID);
             user2.removeBorrowedItem(item);
             user2.addAvailableItem(item);
         }
@@ -820,10 +668,10 @@ public class TradeManager implements Serializable {
     //TradeManager
     public void checkPendingTrades(){
         for(Trade trade: pendingTrades){
-            User user1 = searchUser(trade.getUsername1());
-            User user2 = searchUser(trade.getUsername2());
+            User user1 = TradeSystem.adminUser.userManager.searchUser(trade.getUsername1());
+            User user2 = TradeSystem.adminUser.userManager.searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()){
-                Item item = searchItem(user2, itemID);
+                Item item = TradeSystem.UserManager.searchItem(user2, itemID);
                 if (item == null){
                     pendingTrades.remove(trade);
                     String tradeString = tradeToString(trade);
@@ -833,7 +681,7 @@ public class TradeManager implements Serializable {
                 }
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
-                Item item = searchItem(user1, itemID);
+                Item item = TradeSystem.UserManager.searchItem(user1, itemID);
                 if (item == null) {
                     pendingTrades.remove(trade);
                     String tradeString = tradeToString(trade);
@@ -850,10 +698,10 @@ public class TradeManager implements Serializable {
      */ //TradeManager
     public void checkPendingTradeRequests(){
         for(Trade trade: pendingTradeRequests){
-            User user1 = searchUser(trade.getUsername1());
-            User user2 = searchUser(trade.getUsername2());
+            User user1 = TradeSystem.UserManager.searchUser(trade.getUsername1());
+            User user2 = TradeSystem.UserManager.searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()){
-                Item item = searchItem(user2, itemID);
+                Item item = TradeSystem.UserManager.searchItem(user2, itemID);
                 if (item == null){
                     pendingTradeRequests.remove(trade);
                     String tradeString = tradeToString(trade);
@@ -863,7 +711,7 @@ public class TradeManager implements Serializable {
                 }
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
-                Item item = searchItem(user1, itemID);
+                Item item = TradeSystem.UserManager.searchItem(user1, itemID);
                 if (item == null) {
                     pendingTradeRequests.remove(trade);
                     String tradeString = tradeToString(trade);
@@ -891,7 +739,7 @@ public class TradeManager implements Serializable {
     private String GetItemNamesFromUser1ToUser2(Trade trade){
         StringBuilder stringBuilder = new StringBuilder();
         for(int itemID: trade.getItemIDsSentToUser2()){
-            Item item = searchItem(searchUser(trade.getUsername1()), itemID);
+            Item item = TradeSystem.UserManager.searchItem(TradeSystem.UserManager.searchUser(trade.getUsername1()), itemID);
             stringBuilder.append(item.getName()).append(" ");
             return stringBuilder.toString();
         }
@@ -901,7 +749,7 @@ public class TradeManager implements Serializable {
     private String GetItemNamesFromUser2ToUser1(Trade trade){
         StringBuilder stringBuilder = new StringBuilder();
         for(int itemID: trade.getItemIDsSentToUser1()){
-            Item item = searchItem(searchUser(trade.getUsername2()), itemID);
+            Item item =  TradeSystem.UserManager.searchItem( TradeSystem.UserManager.searchUser(trade.getUsername2()), itemID);
             stringBuilder.append(item.getName()).append(" ");
             return stringBuilder.toString();
         }
@@ -924,9 +772,9 @@ public class TradeManager implements Serializable {
      * @param alert alert object to send to the user
      */ //UserManager AND TradeManager
     public void alertUser(String username, UserAlert alert){
-        ArrayList<UserAlert> alerts = alertSystem.get(username);
+        ArrayList<UserAlert> alerts = TradeSystem.UserManager.alertSystem.get(username);
         alerts.add(alert);
-        alertSystem.put(username, alerts);
+        TradeSystem.UserManager.alertSystem.put(username, alerts);
     }
 
     /** Method which allows a user to send a message to another user, using the alert system.
@@ -984,13 +832,6 @@ public class TradeManager implements Serializable {
         this.completeThreshold = completeThreshold;
     }
 
-    public int getIncompleteThreshold() {
-        return incompleteThreshold;
-    }
-
-    public void setIncompleteThreshold(int incompleteThreshold) {
-        this.incompleteThreshold = incompleteThreshold;
-    }
     public void increaseUserIncompleteTrades(User user){
         user.increaseNumIncompleteTrades(1);
     }
