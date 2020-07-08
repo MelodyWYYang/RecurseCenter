@@ -381,7 +381,7 @@ public class UserActions {
             }
             runStats(user);
         } else if (input == 4) { //Other methods need access to UserManager methods
-            int incompleteTrades = TradeSystem.tradeManager.getNumIncompTrades(user);
+            int incompleteTrades = TradeSystem.tradeManager.getNumIncompTrades(user.getUsername());
             System.out.println("Your account has made " + Integer.toString(incompleteTrades) +
                     " incomplete transactions");
             runStats(user);
@@ -391,11 +391,11 @@ public class UserActions {
                     " transactions this week");
             runStats(user);
         } else if (input == 6) {
-            ArrayList<Item> recentItems = TradeSystem.tradeManager.getNRecentItems(user, 3);
+            ArrayList<Item> recentItems = TradeSystem.tradeManager.getNRecentItems(user.getUsername(), 3);
             System.out.println(recentItems);
             runStats(user);
         } else if (input == 7) {
-            ArrayList<String> favouriteParnters = TradeSystem.tradeManager.getTopNTradingPartners(user, 3);
+            ArrayList<String> favouriteParnters = TradeSystem.tradeManager.getTopNTradingPartners(user.getUsername(), 3);
             System.out.println(favouriteParnters);
             runStats(user);
         } else if (input == 8) {

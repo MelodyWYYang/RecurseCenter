@@ -12,7 +12,7 @@ public class AdminUser implements Serializable {
 
     private ArrayList<AdminAlert> adminAlerts;
 
-    public UserManager userManager = new UserManager(); // Not really sure how we want to do this. Hardcoded for simplicity in the meanwhile - Louis
+     // Not really sure how we want to do this. Hardcoded for simplicity in the meanwhile - Louis
 
     /**
      * Constructor for AdminUser
@@ -42,11 +42,11 @@ public class AdminUser implements Serializable {
 
 
     public void setIncompleteThreshold(int incompleteThreshold) {
-        userManager.setIncompleteThreshold(incompleteThreshold);
+        TradeSystem.userManager.setIncompleteThreshold(incompleteThreshold);
     }
 
     public void setCompleteThreshold(int completeThreshold) {
-        userManager.setCompleteThreshold(completeThreshold);
+        TradeSystem.tradeManager.setCompleteThreshold(completeThreshold);
     }
 
     /**
@@ -54,8 +54,8 @@ public class AdminUser implements Serializable {
      */
     public ArrayList<AdminAlert> onStartUp(){
         //TODO: Get adminalerts from BOTH Manager classes and append them together to make this adminAlerts list.
-        this.adminAlerts = userManager.getAdminAlerts();
-        userManager.clearAdminAlerts();
+        this.adminAlerts = TradeSystem.userManager.getAdminAlerts();
+        TradeSystem.userManager.clearAdminAlerts();
         return this.adminAlerts;
     }
 
@@ -79,7 +79,7 @@ public class AdminUser implements Serializable {
      */
     public void pollValidationRequest(boolean accepted, ItemValidationRequestAlert request, String message) {
         if (accepted) {
-            User user = TradeSystem.adminUser.userManager.searchUser(request.getOwner());
+            User user = TradeSystem.userManager.searchUser(request.getOwner());
             Item item = new Item(request.getName(), request.getItemID());
             item.setDescription(request.getDescription());
             assert user != null;
@@ -90,7 +90,7 @@ public class AdminUser implements Serializable {
         else{
             UserAlert alert = new ItemValidationDeclinedAlert(request.getOwner(), request.getName(),
                     request.getDescription(), request.getItemID(), message);
-            userManager.alertUser(request.getName(), alert);
+            TradeSystem.userManager.alertUser(request.getName(), alert);
         }
     }
 
@@ -104,7 +104,7 @@ public class AdminUser implements Serializable {
         int numBorrowed = user.getNumBorrowed();
         int numLent = user.getNumLent();
         FrozenAlert alert = new FrozenAlert(numBorrowed, numLent, numBorrowed - numLent);
-        userManager.alertUser(user.getUsername(), alert);
+        TradeSystem.userManager.alertUser(user.getUsername(), alert);
     }
 
     /**
@@ -120,7 +120,7 @@ public class AdminUser implements Serializable {
      * @param newThreshold int variable for new threshold
      */
     public void changeThresholdForUser(int newThreshold) {
-        userManager.setBorrowLendThreshold(newThreshold);
+        TradeSystem.userManager.setBorrowLendThreshold(newThreshold);
     }
 
     /**
@@ -128,7 +128,7 @@ public class AdminUser implements Serializable {
      * @param adminAlert alert to be sent to userManager.alertAdmin
      */
     public void alertAdmin(AdminAlert adminAlert){
-        userManager.alertAdmin(adminAlert);
+        TradeSystem.userManager.alertAdmin(adminAlert);
     }
 
     /**

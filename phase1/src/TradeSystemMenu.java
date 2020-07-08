@@ -48,7 +48,7 @@ public class TradeSystemMenu {
             //TODO: Ensure the alert queue is depleted after all are handled.
             TradeSystem.adminActions.run();
         } else {
-            ArrayList<UserAlert> userAlerts = TradeSystem.adminUser.userManager.getUserAlerts(loggedIn.getUsername());
+            ArrayList<UserAlert> userAlerts = TradeSystem.userManager.getUserAlerts(loggedIn.getUsername());
             TradeSystem.userAlertManager.handleAlertQueue(userAlerts);
             TradeSystem.userActions.run(loggedIn);
         }
