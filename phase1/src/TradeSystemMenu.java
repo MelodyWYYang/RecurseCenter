@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TradeSystemMenu {
-
+// TODO: call the run method
     public void run() {
         if (!((new File("adminUser.ser"))).exists()) {
             TradeSystem.createAdminUser();
