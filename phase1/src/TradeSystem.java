@@ -8,7 +8,7 @@ public class TradeSystem {
 
     private AdminUser adminUser;
     private UserManager userManager;
-    private TradeManager tradeManager;
+    private TradeCreator tradeCreator;
 
     private UserAlertManager userAlertManager = new UserAlertManager();
 
@@ -18,14 +18,66 @@ public class TradeSystem {
 
     public TradeSystem(){}
 
+    public void run() {
+        if (!((new File("adminUser.ser"))).exists()) {
+            createAdminUser();
+        }
+
+        adminUser = FileManager.loadAdminUser("adminUser.ser");
+
+        onStartUp();
+
+        Scanner scan = new Scanner(System.in);
+        User loggedIn = null;
+        boolean isAdmin = false;
+
+        System.out.println("Welcome to Insert_name_here trading system!\n Would you like to create an account or " +
+                "login?\n(1) Create account \n(2) Login to an account\n(0) Quit");
+
+        int input = optionChoice(2);
+        //TODO: This will log a user in a admin if an incorrect username and password is entered.
+        if (input == 1) {
+            loggedIn = createAccount();
+        } else if (input == 2) {
+            User x = TradeSystem.login();
+            if (x == null) {
+                isAdmin = true;
+            } else {
+                loggedIn = x;
+            }
+
+        } else if (input == 0) {
+            return;
+        }
+
+        if (isAdmin) {
+            if (adminUser.getAdminAlerts().size() > 0) {
+                System.out.println("Admin has alerts");
+            }
+            ArrayList<AdminAlert> adminAlerts = adminUser.getAdminAlerts();
+            adminAlertManager.handleAlertQueue(adminAlerts);
+            //TODO: Ensure the alert queue is depleted after all are handled.
+            AdminMenu.run();
+        } else {
+            ArrayList<UserAlert> userAlerts = userManager.getUserAlerts(loggedIn.getUsername());
+            userAlertManager.handleAlertQueue(userAlerts);
+            userActions.run(loggedIn);
+        }
+
+        FileManager.saveAdminToFile(adminUser);
+
+
+    }
+
     public void createAdminUser(){
         AdminUser adminUser = new AdminUser("admin", "admin");
         FileManager.saveAdminToFile(adminUser);
     }
 
-    public void onStartUp(){
-        adminUser.onStartUp();
-        tradeManager.onStartUp();
+    protected void onStartUp(){
+        adminUser.onStartUp(userManager, tradeCreator);
+        userManager.onStartUp(tradeCreator);
+        tradeCreator.tradeHistories.checkForExpiredTempTrades();
     }
 
     public User createAccount(){  // does not check that the username is taken

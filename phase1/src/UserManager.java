@@ -28,7 +28,10 @@ public class UserManager implements Serializable{
         for (String key : alertsToAdd.keySet()){
             if (alertSystem.containsKey(key)){
                 ArrayList<UserAlert> alertsForUser = alertSystem.get(key);
-                for ()
+                alertsForUser.addAll(alertsToAdd.get(key));
+                alertSystem.put(key, alertsForUser);
+            } else {
+                alertSystem.put(key, alertsToAdd.get(key));
             }
         }
     }
