@@ -2,6 +2,7 @@ import AlertPack.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TradeCreator {
 
@@ -13,11 +14,13 @@ public class TradeCreator {
 
     protected ArrayList<AdminAlert> adminAlerts = new ArrayList<AdminAlert>();
 
+    protected HashMap<String, ArrayList<UserAlert>> userAlertsToDispatch = new HashMap<String, ArrayList<UserAlert>>();
+
     protected TradeHistories tradeHistories = new TradeHistories();
 
     private int completeThreshold; // # of complete trades allowed per week
 
-    private final int borrowLendThreshold = 1;
+    private int borrowLendThreshold = 1;
 
 
     public ArrayList<Trade> getPendingTrades() {
@@ -26,6 +29,13 @@ public class TradeCreator {
 
     public ArrayList<Trade> getPendingTradeRequests() {
         return pendingTradeRequests;
+    }
+
+    //TODO:
+    public HashMap<String, ArrayList<UserAlert>> fetchUserAlerts(){
+        HashMap<String, ArrayList<UserAlert>> alerts = userAlertsToDispatch;
+        this.userAlertsToDispatch = new HashMap<String, ArrayList<UserAlert>>();
+        return alerts;
     }
 
     /**
@@ -167,7 +177,7 @@ public class TradeCreator {
             trade.incrementUser2NumRequests();
         }
 
-        TradeRequestAlert alert = createTradeRequestAlert(trade, TradeSystem.userManager.searchUser(UserEditingname));
+        TradeRequestAlert alert = createTradeRequestAlert(trade, UserManager.searchUser(UserEditingname));
 
         String otherUserName;
 
@@ -272,7 +282,7 @@ public class TradeCreator {
      */ //TradeManager
     public void afterTrade(Trade trade){
         //TODO call this method from confirmTrade method in this class
-        TradeSystem.userManager.exchangeItems(trade);
+        UserManager.exchangeItems(trade);
         checkPendingTradeRequests();
         checkPendingTrades();
         pendingTrades.remove(trade);
@@ -284,8 +294,8 @@ public class TradeCreator {
             tradeHistories.addCompletedTrade(trade);
         }
 
-        User user1 = TradeSystem.userManager.searchUser(trade.getUsername1());
-        User user2 = TradeSystem.userManager.searchUser(trade.getUsername2());
+        User user1 = UserManager.searchUser(trade.getUsername1());
+        User user2 = UserManager.searchUser(trade.getUsername2());
 
         assert user1 != null;
         //This might be > instead of >= idk lol
@@ -310,10 +320,10 @@ public class TradeCreator {
     //TradeManager
     public void checkPendingTrades(){
         for(Trade trade: pendingTrades){
-            User user1 = TradeSystem.userManager.searchUser(trade.getUsername1());
-            User user2 = TradeSystem.userManager.searchUser(trade.getUsername2());
+            User user1 = UserManager.searchUser(trade.getUsername1());
+            User user2 = UserManager.searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()){
-                Item item = TradeSystem.userManager.searchItem(user2, itemID);
+                Item item = UserManager.searchItem(user2, itemID);
                 if (item == null){
                     pendingTrades.remove(trade);
                     UserAlert alert = new TradeCancelledAlert(trade.getTradeID());
@@ -322,7 +332,7 @@ public class TradeCreator {
                 }
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
-                Item item = TradeSystem.userManager.searchItem(user1, itemID);
+                Item item = UserManager.searchItem(user1, itemID);
                 if (item == null) {
                     pendingTrades.remove(trade);
                     UserAlert alert = new TradeCancelledAlert(trade.getTradeID());
@@ -339,10 +349,10 @@ public class TradeCreator {
      */ //TradeManager
     public void checkPendingTradeRequests(){
         for(Trade trade: pendingTradeRequests){
-            User user1 = TradeSystem.userManager.searchUser(trade.getUsername1());
-            User user2 = TradeSystem.userManager.searchUser(trade.getUsername2());
+            User user1 = UserManager.searchUser(trade.getUsername1());
+            User user2 = UserManager.searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()){
-                Item item = TradeSystem.userManager.searchItem(user2, itemID);
+                Item item = UserManager.searchItem(user2, itemID);
                 if (item == null){
                     pendingTradeRequests.remove(trade);
                     UserAlert alert = new TradeRequestCancelledAlert(trade.getTradeID());
@@ -351,7 +361,7 @@ public class TradeCreator {
                 }
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
-                Item item = TradeSystem.userManager.searchItem(user1, itemID);
+                Item item = UserManager.searchItem(user1, itemID);
                 if (item == null) {
                     pendingTradeRequests.remove(trade);
                     UserAlert alert = new TradeRequestCancelledAlert(trade.getTradeID());
@@ -378,9 +388,9 @@ public class TradeCreator {
      * @param alert alert object to send to the user
      */ //UserManager AND TradeManager
     public void alertUser(String username, UserAlert alert){
-        ArrayList<UserAlert> alerts = TradeSystem.userManager.alertSystem.get(username);
-        alerts.add(alert);
-        TradeSystem.userManager.alertSystem.put(username, alerts);
+        ArrayList<UserAlert> userAlerts = userAlertsToDispatch.get(username);
+        userAlerts.add(alert);
+        userAlertsToDispatch.put(username, userAlerts);
     }
 
     /** Method which sends an alert to the admin.
@@ -389,5 +399,21 @@ public class TradeCreator {
      */
     private void alertAdmin(AdminAlert a){
         this.adminAlerts.add(a);
+    }
+
+    public void setBorrowLendThreshold(int borrowLendThreshold){
+        this.borrowLendThreshold = borrowLendThreshold;
+    }
+
+    public int getBorrowLendThreshold(){
+        return this.borrowLendThreshold;
+    }
+
+    public void setCompleteThreshold(int completeThreshold){
+        this.completeThreshold = completeThreshold;
+    }
+
+    public int getCompleteThreshold(){
+        return this.completeThreshold;
     }
 }

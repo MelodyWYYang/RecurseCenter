@@ -22,9 +22,21 @@ public class UserManager implements Serializable{
     //UserManager -- all thresholds are admin things really, rethink this?
     private int incompleteThreshold; // # of incomplete trades allowed
 
+    public void onStartUp(TradeCreator tradeCreator){
+        HashMap<String, ArrayList<UserAlert>> alertsToAdd = tradeCreator.fetchUserAlerts();
+
+        for (String key : alertsToAdd.keySet()){
+            if (alertSystem.containsKey(key)){
+                ArrayList<UserAlert> alertsForUser = alertSystem.get(key);
+                for ()
+            }
+        }
+    }
+
     //UserManager
     public ArrayList<User> getListUsers() {
-        return listUsers;}
+        return listUsers;
+    }
 
     //TradeManager and UserManager
     public void clearAdminAlerts(){
@@ -49,10 +61,10 @@ public class UserManager implements Serializable{
      * @param trade trade object
      */ //TradeManager
     public void exchangeItems(Trade trade){
-        User user1 = TradeSystem.userManager.searchUser(trade.getUsername1());
-        User user2 = TradeSystem.userManager.searchUser(trade.getUsername2());
+        User user1 = searchUser(trade.getUsername1());
+        User user2 = searchUser(trade.getUsername2());
         for(int itemID : trade.getItemIDsSentToUser1()){
-            Item item = TradeSystem.userManager.searchItem(user2, itemID);
+            Item item = searchItem(user2, itemID);
             //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
             user1.increaseNumBorrowed(1);
             user2.increaseNumLent(1);
@@ -65,7 +77,7 @@ public class UserManager implements Serializable{
             }
         }
         for(int itemID : trade.getItemIDsSentToUser2()){
-            Item item = TradeSystem.userManager.searchItem(user1, itemID);
+            Item item = searchItem(user1, itemID);
             //do borrowed and lent get incremented every trade or just during TemporaryTrades? - Louis
             user2.increaseNumBorrowed(1);
             user1.increaseNumLent(1);
@@ -85,15 +97,15 @@ public class UserManager implements Serializable{
      * @param trade Temporary Trade Object
      */ //TradeManager???
     public void reExchangeItems(TemporaryTrade trade){
-        User user1 = TradeSystem.userManager.searchUser(trade.getUsername1());
-        User user2 = TradeSystem.userManager.searchUser(trade.getUsername2());
+        User user1 = searchUser(trade.getUsername1());
+        User user2 = searchUser(trade.getUsername2());
         for(int itemID : trade.getItemIDsSentToUser1()) {
-            Item item = TradeSystem.userManager.searchItem(user2, itemID);
+            Item item = searchItem(user2, itemID);
             user1.removeBorrowedItem(item);
             user2.addAvailableItem(item);
         }
         for(int itemID : trade.getItemIDsSentToUser2()) {
-            Item item = TradeSystem.userManager.searchItem(user1, itemID);
+            Item item = searchItem(user1, itemID);
             user2.removeBorrowedItem(item);
             user2.addAvailableItem(item);
         }

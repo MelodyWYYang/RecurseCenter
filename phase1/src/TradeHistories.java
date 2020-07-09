@@ -117,8 +117,7 @@ public class TradeHistories {
         ArrayList<Integer> orderedItemsIDClone = (ArrayList<Integer>) orderedItemsID.clone();
         ArrayList<Item> nOrderedItems = new ArrayList<Item>();
         while (nOrderedItems.size() < n & !orderedItemsIDClone.isEmpty()) {
-            //TODO: Control + F "TradeSystem" and get rid of all dependencies on it from here.
-            nOrderedItems.add(TradeSystem.userManager.searchItem(orderedItemsIDClone.get(orderedItemsIDClone.size() - 1)));
+            nOrderedItems.add(UserManager.searchItem(orderedItemsIDClone.get(orderedItemsIDClone.size() - 1)));
             orderedItemsIDClone.remove(orderedItemsIDClone.size() - 1);
         }
         return nOrderedItems;
