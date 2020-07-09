@@ -22,6 +22,10 @@ public class UserManager implements Serializable{
     //UserManager -- all thresholds are admin things really, rethink this?
     private int incompleteThreshold; // # of incomplete trades allowed
 
+    /**
+     * Method called on program Start up. Currently fetches all userAlerts from other places in the program.
+     * @param tradeCreator the TradeCreator used in this program.
+     */
     public void onStartUp(TradeCreator tradeCreator){
         HashMap<String, ArrayList<UserAlert>> alertsToAdd = tradeCreator.fetchUserAlerts();
 

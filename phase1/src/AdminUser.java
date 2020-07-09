@@ -76,9 +76,10 @@ public class AdminUser implements Serializable {
      * @param request corresponding ItemValidationRequestAlert object
      * @param message validation request message
      */
-    public void pollValidationRequest(boolean accepted, ItemValidationRequestAlert request, String message) {
+    public void pollValidationRequest(UserManager userManager,
+                                      boolean accepted, ItemValidationRequestAlert request, String message) {
         if (accepted) {
-            User user = UserManager.searchUser(request.getOwner());
+            User user = userManager.searchUser(request.getOwner());
             Item item = new Item(request.getName(), request.getItemID());
             item.setDescription(request.getDescription());
             assert user != null;
@@ -89,7 +90,7 @@ public class AdminUser implements Serializable {
         else{
             UserAlert alert = new ItemValidationDeclinedAlert(request.getOwner(), request.getName(),
                     request.getDescription(), request.getItemID(), message);
-            UserManager.alertUser(request.getName(), alert);
+            userManager.alertUser(request.getName(), alert);
         }
     }
 
@@ -98,12 +99,12 @@ public class AdminUser implements Serializable {
      * author: tian
      * @param user user object to freeze
      */
-    public void freezeUser(User user){
+    public void freezeUser(UserManager userManager, User user){
         user.setFrozen(true);
         int numBorrowed = user.getNumBorrowed();
         int numLent = user.getNumLent();
         FrozenAlert alert = new FrozenAlert(numBorrowed, numLent, numBorrowed - numLent);
-        UserManager.alertUser(user.getUsername(), alert);
+        userManager.alertUser(user.getUsername(), alert);
     }
 
     /**
@@ -118,17 +119,10 @@ public class AdminUser implements Serializable {
      * Change the borrow/lend threshold value
      * @param newThreshold int variable for new threshold
      */
-    public void changeThresholdForUser(int newThreshold) {
-        TradeCreator.setBorrowLendThreshold(newThreshold);
+    public void changeThresholdForUser(TradeCreator tradeCreator, int newThreshold) {
+        tradeCreator.setBorrowLendThreshold(newThreshold);
     }
 
-    /**
-     * Calls userManager.alertAdmin with the given alert
-     * @param adminAlert alert to be sent to userManager.alertAdmin
-     */
-    public void alertAdmin(AdminAlert adminAlert){
-        UserManager.alertAdmin(adminAlert);
-    }
 
     /**
      * Checks if password is correct

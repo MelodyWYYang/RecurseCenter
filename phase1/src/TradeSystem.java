@@ -22,6 +22,7 @@ public class TradeSystem {
         if (!((new File("adminUser.ser"))).exists()) {
             createAdminUser();
         }
+        //TODO: Create similar serialization for tradeCreator and userManager.
 
         adminUser = FileManager.loadAdminUser("adminUser.ser");
 
@@ -39,7 +40,7 @@ public class TradeSystem {
         if (input == 1) {
             loggedIn = createAccount();
         } else if (input == 2) {
-            User x = TradeSystem.login();
+            User x = login();
             if (x == null) {
                 isAdmin = true;
             } else {
@@ -99,14 +100,14 @@ public class TradeSystem {
      *
      * @return method which allows the user to login to their account.
      */
-    public static User login(){
+    public User login(){
         User user = takeUsername();
         if (user != null && takePassword(user)){
             return user;
         }
         return null;
     }
-    private static User takeUsername(){
+    private User takeUsername(){
         Scanner scanner = new Scanner(System.in);
         User user = null;
         while(user == null) {
@@ -125,7 +126,7 @@ public class TradeSystem {
         }
         return user;
     }
-    private static boolean takePassword(User user){
+    private boolean takePassword(User user){
         Scanner scanner = new Scanner(System.in);
         while(true) {
             System.out.println("Please enter the password for " + user.getUsername() + ":");
@@ -141,7 +142,7 @@ public class TradeSystem {
             }
         }
     }
-    private static Boolean takeAdminPassword(String username){
+    private Boolean takeAdminPassword(String username){
         Scanner scanner = new Scanner(System.in);
         while(true) {
             System.out.println("Please enter the password for " + username + ":");
@@ -158,7 +159,7 @@ public class TradeSystem {
         }
     }
 
-    protected static int optionChoice(int x){
+    protected int optionChoice(int x){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter one of the numbers listed above");
         int choice = scanner.nextInt();

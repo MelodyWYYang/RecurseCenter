@@ -592,11 +592,11 @@ public class TradeManager implements Serializable {
                 int tradeID = tempTrade.getTradeID();
 
                 if (!tempTrade.getUser1ItemReturnRequestAccepted()){
-                    UserAlert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername1(), tradeID);
+                    UserAlert alert = new ExpirationAlert(dueDate,  tempTrade.getUsername1(), tradeID);
                     alertUser(tempTrade.getUsername1(), alert);
                 }
                 if (!tempTrade.getUser2ItemReturnRequestAccepted()){
-                    UserAlert alert = new ExpirationAlert(dueDate, tradeString, tempTrade.getUsername2(), tradeID);
+                    UserAlert alert = new ExpirationAlert(dueDate, tempTrade.getUsername2(), tradeID);
                     alertUser(tempTrade.getUsername2(), alert);
                 }
 

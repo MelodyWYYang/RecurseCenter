@@ -31,11 +31,8 @@ public class TradeCreator {
         return pendingTradeRequests;
     }
 
-    //TODO:
     public HashMap<String, ArrayList<UserAlert>> fetchUserAlerts(){
-        HashMap<String, ArrayList<UserAlert>> alerts = userAlertsToDispatch;
-        this.userAlertsToDispatch = new HashMap<String, ArrayList<UserAlert>>();
-        return alerts;
+        return tradeHistories.fetchUserAlerts();
     }
 
     /**
@@ -163,7 +160,8 @@ public class TradeCreator {
      * @param meetingPlace location of trade
      * @param UserEditingname  username of user who is editing the trade
      */ //TradeManager
-    public void editTradeRequest(Trade trade, LocalDateTime timeOfTrade, String meetingPlace, String UserEditingname) {
+    public void editTradeRequest(UserManager userManager, Trade trade, LocalDateTime timeOfTrade,
+                                 String meetingPlace, String UserEditingname) {
         trade.timeOfTrade = timeOfTrade;
         trade.meetingPlace = meetingPlace;
         if (UserEditingname.equals(trade.getUsername1())) {
@@ -177,7 +175,7 @@ public class TradeCreator {
             trade.incrementUser2NumRequests();
         }
 
-        TradeRequestAlert alert = createTradeRequestAlert(trade, UserManager.searchUser(UserEditingname));
+        TradeRequestAlert alert = createTradeRequestAlert(trade, userManager.searchUser(UserEditingname));
 
         String otherUserName;
 
@@ -231,6 +229,20 @@ public class TradeCreator {
         return null;
     }
 
+    /** Searches pending trades by user and returns the trades of the user
+     * @param user the user whose pending trades are being searched
+     * @return the trades of the yser
+     */ //TradeManager
+    public ArrayList<Trade> searchPendingTradesByUser(User user){
+        ArrayList<Trade> userTrades = new ArrayList<Trade>();
+        for(Trade trade : pendingTrades){
+            if (trade.getUsername1().equals(user.getUsername()) || trade.getUsername2().equals(user.getUsername())){
+                userTrades.add(trade);
+            }
+        }
+        return userTrades;
+    }
+
     /** Method which searches pending trades when given the trade's ID number and returns the trade.
      * Returns null if an invalid ID is given
      * @param tradeID ID number corresponding to the trade
@@ -263,7 +275,7 @@ public class TradeCreator {
      * @param user who is confirming the trade
      * @param trade the trade object
      */ //TradeManager????
-    public void confirmTrade(User user, Trade trade){
+    public void confirmTrade(UserManager userManager, User user, Trade trade){
         if(user.getUsername().equals(trade.getUsername1())){
             trade.setUser1TradeConfirmed(true);
         }
@@ -271,7 +283,7 @@ public class TradeCreator {
             trade.setUser2AcceptedRequest(true);
         }
         if (trade.isTradeCompleted()){
-            afterTrade(trade);
+            afterTrade(userManager, trade);
         }
     }
 
@@ -280,11 +292,11 @@ public class TradeCreator {
      * Author: Louis Scheffer V
      * @param trade trade object
      */ //TradeManager
-    public void afterTrade(Trade trade){
+    public void afterTrade(UserManager userManager, Trade trade){
         //TODO call this method from confirmTrade method in this class
-        UserManager.exchangeItems(trade);
-        checkPendingTradeRequests();
-        checkPendingTrades();
+        userManager.exchangeItems(trade);
+        checkPendingTradeRequests(userManager);
+        checkPendingTrades(userManager);
         pendingTrades.remove(trade);
         if (trade instanceof TemporaryTrade){
             tradeHistories.addCurrentTemporaryTrade((TemporaryTrade) trade);
@@ -294,8 +306,8 @@ public class TradeCreator {
             tradeHistories.addCompletedTrade(trade);
         }
 
-        User user1 = UserManager.searchUser(trade.getUsername1());
-        User user2 = UserManager.searchUser(trade.getUsername2());
+        User user1 = userManager.searchUser(trade.getUsername1());
+        User user2 = userManager.searchUser(trade.getUsername2());
 
         assert user1 != null;
         //This might be > instead of >= idk lol
@@ -318,12 +330,12 @@ public class TradeCreator {
      * Author: Louis Scheffer V
      */
     //TradeManager
-    public void checkPendingTrades(){
+    public void checkPendingTrades(UserManager userManager){
         for(Trade trade: pendingTrades){
-            User user1 = UserManager.searchUser(trade.getUsername1());
-            User user2 = UserManager.searchUser(trade.getUsername2());
+            User user1 = userManager.searchUser(trade.getUsername1());
+            User user2 = userManager.searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()){
-                Item item = UserManager.searchItem(user2, itemID);
+                Item item = userManager.searchItem(user2, itemID);
                 if (item == null){
                     pendingTrades.remove(trade);
                     UserAlert alert = new TradeCancelledAlert(trade.getTradeID());
@@ -332,7 +344,7 @@ public class TradeCreator {
                 }
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
-                Item item = UserManager.searchItem(user1, itemID);
+                Item item = userManager.searchItem(user1, itemID);
                 if (item == null) {
                     pendingTrades.remove(trade);
                     UserAlert alert = new TradeCancelledAlert(trade.getTradeID());
@@ -347,12 +359,12 @@ public class TradeCreator {
      * request is deleted.
      * Author: Louis Scheffer V
      */ //TradeManager
-    public void checkPendingTradeRequests(){
+    public void checkPendingTradeRequests(UserManager userManager){
         for(Trade trade: pendingTradeRequests){
-            User user1 = UserManager.searchUser(trade.getUsername1());
-            User user2 = UserManager.searchUser(trade.getUsername2());
+            User user1 = userManager.searchUser(trade.getUsername1());
+            User user2 = userManager.searchUser(trade.getUsername2());
             for(int itemID : trade.getItemIDsSentToUser1()){
-                Item item = UserManager.searchItem(user2, itemID);
+                Item item = userManager.searchItem(user2, itemID);
                 if (item == null){
                     pendingTradeRequests.remove(trade);
                     UserAlert alert = new TradeRequestCancelledAlert(trade.getTradeID());
@@ -361,7 +373,7 @@ public class TradeCreator {
                 }
             }
             for(int itemID : trade.getItemIDsSentToUser2()) {
-                Item item = UserManager.searchItem(user1, itemID);
+                Item item = userManager.searchItem(user1, itemID);
                 if (item == null) {
                     pendingTradeRequests.remove(trade);
                     UserAlert alert = new TradeRequestCancelledAlert(trade.getTradeID());
@@ -388,9 +400,7 @@ public class TradeCreator {
      * @param alert alert object to send to the user
      */ //UserManager AND TradeManager
     public void alertUser(String username, UserAlert alert){
-        ArrayList<UserAlert> userAlerts = userAlertsToDispatch.get(username);
-        userAlerts.add(alert);
-        userAlertsToDispatch.put(username, userAlerts);
+        tradeHistories.alertUser(username, alert);
     }
 
     /** Method which sends an alert to the admin.

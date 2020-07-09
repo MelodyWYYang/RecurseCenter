@@ -407,7 +407,7 @@ public class UserActions {
      * Send a unfreeze request to admin
      * @param user user that sends the request
      */
-    public void sendUnfreezeRequest(User user) {
+    public void sendUnfreezeRequest(UserManager userManager, TradeCreator tradeCreator, User user) {
         if (!user.getFrozen()) {
             System.out.println("Your account is not frozen");
         }
@@ -415,9 +415,9 @@ public class UserActions {
             String username = user.getUsername();
             int numLent = user.getNumLent();
             int numBorrowed = user.getNumBorrowed();
-            int borrowLendThreshold = TradeSystem.tradeManager.getBorrowLendThreshold();
+            int borrowLendThreshold = tradeCreator.getBorrowLendThreshold();
             UnfreezeRequestAlert alert = new UnfreezeRequestAlert(username, numLent, numBorrowed, borrowLendThreshold);
-            TradeSystem.adminUser.alertAdmin(alert);
+            userManager.alertAdmin(alert);
             System.out.println("Your request has been sent");
         }
     }
@@ -426,16 +426,16 @@ public class UserActions {
      * Allow user to view their pending trade history
      * @param user user logged in
      */
-    public void viewPendingTrades(User user){
+    public void viewPendingTrades(TradeCreator tradeCreator, User user){
         int choice = 0;
         while (choice != 0 ) {
-            ArrayList<Trade> userTrades = TradeSystem.tradeManager.searchPendingTradesByUser(user);
+            ArrayList<Trade> userTrades = tradeCreator.searchPendingTradesByUser(user);
             System.out.println("Options:");
             System.out.println("(1) Exit this menu");
             System.out.println("====================");
             System.out.println("Your pending trades:");
             for (Trade trade : userTrades) {
-                System.out.println(TradeSystem.tradeManager.tradeToString(trade));
+                System.out.println(tradeToString(trade));
             }
             Scanner scanner = new Scanner(System.in);
             choice = scanner.nextInt();

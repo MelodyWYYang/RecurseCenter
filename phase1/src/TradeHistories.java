@@ -14,6 +14,8 @@ public class TradeHistories {
     protected ArrayList<Trade> completedTrades = new ArrayList<Trade>(); // list of all trades which have been completed - Louis
 
     protected ArrayList<AdminAlert> adminAlerts = new ArrayList<AdminAlert>();
+
+    protected HashMap<String, ArrayList<UserAlert>> userAlertsToDispatch = new HashMap<String, ArrayList<UserAlert>>();
     /**
      * Return a list of all adminAlerts stored in this class. Also empties the adminAlerts member.
      * @return an ArrayList of admin alerts
@@ -22,6 +24,28 @@ public class TradeHistories {
         ArrayList<AdminAlert> alerts = this.adminAlerts;
         this.adminAlerts = new ArrayList<AdminAlert>();
         return alerts;
+    }
+
+    public HashMap<String, ArrayList<UserAlert>> fetchUserAlerts(){
+        HashMap<String, ArrayList<UserAlert>> alerts = userAlertsToDispatch;
+        this.userAlertsToDispatch = new HashMap<String, ArrayList<UserAlert>>();
+        return alerts;
+    }
+
+    public void alertUser(User user, UserAlert alert){
+        String username = user.getUsername();
+        alertUser(username, alert);
+    }
+
+    public void alertUser(String username, UserAlert alert){
+        ArrayList<UserAlert> userAlerts;
+        if (userAlertsToDispatch.containsKey(username)) {
+            userAlerts = userAlertsToDispatch.get(username);
+        } else{
+            userAlerts = new ArrayList<UserAlert>();
+        }
+        userAlerts.add(alert);
+        userAlertsToDispatch.put(username, userAlerts);
     }
 
     /**
@@ -111,13 +135,13 @@ public class TradeHistories {
      * @param n number of items
      * @return ArrayList</Item> (sorted by LocalTimeDate)
      */ //TradeManager
-    public ArrayList<Item> getNRecentItems(String user, int n) {
+    public ArrayList<Item> getNRecentItems(UserManager userManager, String user, int n) {
         ArrayList<Integer> orderedItemsID = this.getOrderedItemsID(user);
         //TODO: This might not work
         ArrayList<Integer> orderedItemsIDClone = (ArrayList<Integer>) orderedItemsID.clone();
         ArrayList<Item> nOrderedItems = new ArrayList<Item>();
         while (nOrderedItems.size() < n & !orderedItemsIDClone.isEmpty()) {
-            nOrderedItems.add(UserManager.searchItem(orderedItemsIDClone.get(orderedItemsIDClone.size() - 1)));
+            nOrderedItems.add(userManager.searchItem(orderedItemsIDClone.get(orderedItemsIDClone.size() - 1)));
             orderedItemsIDClone.remove(orderedItemsIDClone.size() - 1);
         }
         return nOrderedItems;
@@ -224,7 +248,6 @@ public class TradeHistories {
     public void checkForExpiredTempTrades(){
         for (TemporaryTrade tempTrade : currentTemporaryTrades) {
             if (LocalDateTime.now().isAfter(tempTrade.getDueDate())) {
-                String tradeString = tradeToString(tempTrade);
                 LocalDateTime dueDate = tempTrade.getDueDate();
                 int tradeID = tempTrade.getTradeID();
 
@@ -248,7 +271,7 @@ public class TradeHistories {
      * @param user user who is confirming the re-exchange of items.
      * @param temporaryTrade the temporary trade object.
      */ //TradeManager????
-    public void confirmReExchange(User user, TemporaryTrade temporaryTrade){
+    public void confirmReExchange(UserManager userManager, User user, TemporaryTrade temporaryTrade){
         if(user.getUsername().equals(temporaryTrade.getUsername1())){
             temporaryTrade.setUser1ItemReturnRequestAccepted(true);
         }
@@ -256,7 +279,7 @@ public class TradeHistories {
             temporaryTrade.setUser2ItemReturnRequestAccepted(true);
         }
         if (temporaryTrade.getUser1ItemReturnRequestAccepted() && temporaryTrade.getUser2ItemReturnRequestAccepted()){
-            reExchangeItems(temporaryTrade);
+            userManager.reExchangeItems(temporaryTrade);
         }
     }
 
