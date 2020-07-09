@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class TradeSystemMenu {
 // TODO: call the run method
+// Text file time
     public void run() {
         if (!((new File("adminUser.ser"))).exists()) {
             TradeSystem.createAdminUser();
@@ -46,7 +47,7 @@ public class TradeSystemMenu {
             ArrayList<AdminAlert> adminAlerts = TradeSystem.adminUser.getAdminAlerts();
             TradeSystem.adminAlertManager.handleAlertQueue(adminAlerts);
             //TODO: Ensure the alert queue is depleted after all are handled.
-            TradeSystem.adminActions.run();
+            AdminMenu.run();
         } else {
             ArrayList<UserAlert> userAlerts = TradeSystem.userManager.getUserAlerts(loggedIn.getUsername());
             TradeSystem.userAlertManager.handleAlertQueue(userAlerts);

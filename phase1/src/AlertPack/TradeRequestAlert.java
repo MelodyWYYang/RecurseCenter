@@ -20,6 +20,10 @@ public class TradeRequestAlert extends UserAlert implements Serializable {
         return senderUserName;
     }
 
+    /**
+     *
+     * @return the ID of the trade request proposed
+     */
     public int getTradeID(){ return tradeID; }
 
 }

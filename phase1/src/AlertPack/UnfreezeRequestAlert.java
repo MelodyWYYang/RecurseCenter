@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class UnfreezeRequestAlert extends AdminAlert implements Serializable {
     //author: Callan Murphy in group 0110 for CSC207H1 summer 2020 project
-    // Parameter type changed from String to int by Tingyu
     private String username; // username of the user
     private int lent; // amount user has lent
     private int borrowed; // amount user has borrowed
@@ -17,18 +16,28 @@ public class UnfreezeRequestAlert extends AdminAlert implements Serializable {
         this.thresholdRequired = thresholdRequired;
     }
 
+    /**
+     *
+     * @return the username of the user who sends the unfreeze request
+     */
     public String getUsername(){ return username; }
 
+    /**
+     *
+     * @return the number of the items lent by the user
+     */
     public int getLent(){ return lent; }
 
+    /**
+     *
+     * @return the number of items borrowed by the user
+     */
     public int getBorrowed(){ return borrowed; }
 
-    public void setUsername(String username){ this.username = username; }
-
-    public void setLent(int lent){ this.lent = lent; }
-
-    public void setBorrowed(int borrowed){ this.borrowed = borrowed; }
-
+    /**
+     *
+     * @return the number of items that a user is required to lend before borrowing
+     */
     public int getThresholdRequired(){
         return this.thresholdRequired;
     }
