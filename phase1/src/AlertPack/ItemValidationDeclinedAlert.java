@@ -56,5 +56,9 @@ public class ItemValidationDeclinedAlert extends UserAlert implements Serializab
         return message;
     }
 
+    /**
+     *
+     * @return the item ID of the item validation request that was declined.
+     */
     public int getItemID(){ return itemID; }
 }

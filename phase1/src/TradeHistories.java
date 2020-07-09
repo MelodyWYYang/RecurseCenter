@@ -24,10 +24,18 @@ public class TradeHistories {
         return alerts;
     }
 
+    /**
+     *
+     * @param tempTrade the temporary trade being added to the list of completed trades.
+     */
     public void addCurrentTemporaryTrade(TemporaryTrade tempTrade){
         this.currentTemporaryTrades.add(tempTrade);
     }
 
+    /**
+     *
+     * @param trade the trade being added to the list of completed trades.
+     */
     public void addCompletedTrade(Trade trade){
         this.completedTrades.add(trade);
     }
@@ -116,6 +124,10 @@ public class TradeHistories {
         return nOrderedItems;
     }
 
+    /**
+     *
+     * @return the date & time which the current week starts.
+     */
     private LocalDateTime getStartofWeek() {
         LocalDateTime timeNow = LocalDateTime.now(); //gets the current time
         LocalDateTime timeNowBeginning = timeNow.withHour(0).withMinute(0).withSecond(0).withNano(0); //set time 00:00
@@ -145,7 +157,6 @@ public class TradeHistories {
         }
         return numTransactions;
     }
-
 
     private HashMap<String, Integer> getNumTradesPerUser(String username) {
         HashMap<String, Integer> numTradesPerUser = new HashMap<String, Integer>();

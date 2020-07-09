@@ -25,26 +25,50 @@ public class TemporaryTrade extends Trade implements Serializable {
         this.tradeUntil = now.plusDays(30);
     }
 
+    /**
+     *
+     * @return the time & date at which this temporary trade expires.
+     */
     public LocalDateTime getDueDate(){
         return this.tradeUntil;
     }
 
+    /**
+     *
+     * @param newDueDate the new time & date that this temporary trade will end.
+     */
     public void setDueDate(LocalDateTime newDueDate){
         this.tradeUntil = newDueDate;
     }
 
+    /**
+     *
+     * @return whether or not user1 has accepted the request to return the items.
+     */
     public boolean getUser1ItemReturnRequestAccepted(){
         return this.user1ItemReturnRequestAccepted;
     }
 
+    /**
+     *
+     * @return whether or not user2 has accepted the request to return the items.
+     */
     public boolean getUser2ItemReturnRequestAccepted(){
         return this.user2ItemReturnRequestAccepted;
     }
 
+    /**
+     *
+     * @param user1ItemReturnRequestAccepted whether or not user1 has accepted the request to return the items.
+     */
     public void setUser1ItemReturnRequestAccepted(boolean user1ItemReturnRequestAccepted){
         this.user1ItemReturnRequestAccepted = user1ItemReturnRequestAccepted;
     }
 
+    /**
+     *
+     * @param user2ItemReturnRequestAccepted whether or not user2 has accepted the request to return the items.
+     */
     public void setUser2ItemReturnRequestAccepted(boolean user2ItemReturnRequestAccepted){
         this.user2ItemReturnRequestAccepted = user2ItemReturnRequestAccepted;
     }

@@ -325,18 +325,35 @@ public class UserManager implements Serializable{
         alertUser(recipient, alert);
     }
 
+    /**
+     *
+     * @return the threshold of lent - borrowed which all users should be at or above.
+     */
     public int getIncompleteThreshold() {
         return incompleteThreshold;
     }
 
+    /**
+     *
+     * @param incompleteThreshold the threshold of lent - borrowed which all users should be at or above.
+     */
     public void setIncompleteThreshold(int incompleteThreshold) {
         this.incompleteThreshold = incompleteThreshold;
     }
 
+    /**
+     *
+     * @param user the number by which to increase the number of incomplete trades attributed to a user by.
+     */
     public void increaseUserIncompleteTrades(User user){
         user.increaseNumIncompleteTrades(1);
     }
 
+    /**
+     *
+     * @param user the user which is the number of incomplete trades is being queried.
+     * @return the number of incomplete trades attributed to the user.
+     */
     public int getUserIncompleteTrades(User user){
         return user.getNumIncompleteTrades();
     }

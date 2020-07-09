@@ -180,7 +180,7 @@ public class TradeCreator {
         alertUser(otherUserName, alert);
     }
 
-
+    //TODO: decide if we still need this.
     private ArrayList<Trade> getIncompleteTrades() {
         ArrayList<Trade> incompleteTrades = new ArrayList<Trade>();
         for (Trade trade : pendingTrades) {
@@ -383,6 +383,10 @@ public class TradeCreator {
         TradeSystem.userManager.alertSystem.put(username, alerts);
     }
 
+    /** Method which sends an alert to the admin.
+     *
+     * @param a the AdminAlert being sent to the admin.
+     */
     private void alertAdmin(AdminAlert a){
         this.adminAlerts.add(a);
     }

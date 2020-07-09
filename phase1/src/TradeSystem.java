@@ -42,6 +42,10 @@ public class TradeSystem {
         }
     }
 
+    /**
+     *
+     * @return method which allows the user to login to their account.
+     */
     public static User login(){
         User user = takeUsername();
         if (user != null && takePassword(user)){

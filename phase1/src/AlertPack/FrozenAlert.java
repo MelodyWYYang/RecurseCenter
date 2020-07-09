@@ -16,14 +16,26 @@ public class FrozenAlert extends UserAlert implements Serializable {
         threshholdNumofUser = threshholdNum;
     }
 
+    /**
+     *
+     * @return The number of items the user has borrowed.
+     */
     public int getNumBorrowedofUser() {
         return numBorrowedofUser;
     }
 
+    /**
+     *
+     * @return the number of items the user has lent.
+     */
     public int getNumLentofUser() {
         return numLentofUser;
     }
 
+    /**
+     *
+     * @return the threshold of lent - borrowed that each user should be greater than or equal to.
+     */
     public int getThreshholdNumofUser() {
         return threshholdNumofUser;
     }

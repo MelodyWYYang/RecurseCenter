@@ -55,9 +55,7 @@ public class UserAlertManager {
 
     }
 
-    /**
-     * Dismiss the frozen alert
-     */
+
     private void handleFrozenAlert(FrozenAlert a){
         System.out.println("Your account has been frozen by administrator at " +
                 "\n" + "You have borrowed: " + a.getNumBorrowedofUser() + "items" +
@@ -227,7 +225,7 @@ public class UserAlertManager {
         }
     }
 
-    public void handleItemValidationDeclinedAlert(ItemValidationDeclinedAlert a){
+    private void handleItemValidationDeclinedAlert(ItemValidationDeclinedAlert a){
 
         System.out.println("Your item validation request has been declined for the following reason: \n" +
                 a.getMessage()+ ".\nUser: " + a.getOwner() + "Item name: " + a.getName() + "\nItem description: " +
@@ -250,7 +248,7 @@ public class UserAlertManager {
         }
     }
 
-    public void handleTradePastDateAlert(TradePastDateAlert a){
+    private void handleTradePastDateAlert(TradePastDateAlert a){
 
         System.out.println("The following trade expired at" + a.getDueDate()+ "\n" +
                 tradeToString(tradeCreator.tradeHistories.searchPendingTrade(a.getTradeId())));

@@ -29,74 +29,165 @@ public class User implements Serializable {
         this.username = username; // Admin needs to access to freeze; USerManager needs to access/search by User
     }
 
-
+    /**
+     *
+     * @return the number of items they have borrowed.
+     */
     public int getNumBorrowed() {
         return numBorrowed;
     }
 
+    /**
+     *
+     * @return the number of incomplete trades that have been attributed to this user.
+     */
     public int getNumIncompleteTrades() {
         return numIncompleteTrades;
     }
 
+    /**
+     *
+     * @return the number of items that this user has lent.
+     */
     public int getNumLent() {
         return numLent;
     }
 
+    /**
+     *
+     * @param x the number to increase the number of items this user has borrowed by.
+     */
     public void increaseNumBorrowed(int x){
         numBorrowed += x;
     }
 
+    /**
+     *
+     * @param x the number to increase the number of items this user has lent by.
+     */
     public void increaseNumLent(int x){
         numBorrowed += x;
     }
 
+    /**
+     *
+     * @param x the number to increase the number of incomplete trades attributed to this user by.
+     */
     public void increaseNumIncompleteTrades(int x){
         numIncompleteTrades += x;
     }
 
+    /**
+     *
+     * @param password new password for this user.
+     */
     public void setPassword(String password) { this.password = password; }// may want to extend a use case to change password if forgotten
+
+    //do we want to have this?
+    /**
+     *
+     * @return returns the password of this user.
+     */
     public String getPassword() { return this.password;}
+
+    /**
+     *
+     * @param pass string to be checked against this user's password.
+     * @return whether the entered string matches this user's password.
+     */
     public boolean checkPassword(String pass){return pass.equals(password);}
 
     //for adding and removing from wishlist and available-to-lend lists, and getters for this User's lists
+
+    /**
+     *
+     * @return a list of the user's available items.
+     */
     public ArrayList<Item> getAvailableItems() {return this.availableItems;}
+
+    /**
+     *
+     * @return The wish list of the user.
+     */
     public ArrayList<String> getWishlistItemNames() {return this.wishlistItemNames;}
 
-
+    /**
+     *
+     * @param item item name to be added to this user's wish list.
+     */
     public void addItemToWishList(String item){
         wishlistItemNames.add(item);
     }
+
+    /**
+     *
+     * @param item item name to be removed from the user's wish list
+     */
     public void removeItemFromWishList(String item){
         wishlistItemNames.remove(item);
     }
+
+    /**
+     *
+     * @param item item to be added to the user's available items.
+     */
     public void addAvailableItem(Item item){
         availableItems.add(item);
     }
+
+    /**
+     *
+     * @param item item to be removed from the user's available items.
+     */
     public void removeAvailableItem(Item item){
         availableItems.remove(item);
     }
+
+    /**
+     *
+     * @param item item to be added to the user's borrowed items.
+     */
     public void addBorrowedItem(Item item){
         borrowedItems.add(item);
     }
+
+    /**
+     *
+     * @param item item to be removed from the user's borrowed items.
+     */
     public void removeBorrowedItem(Item item){
         borrowedItems.remove(item);
     }
 
-    //I needed this for UserManager - Louis
+    /**
+     *
+     * @return the username of the user.
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     *
+     * @return whether or not a user is frozen.
+     */
     public boolean getFrozen(){ // wondering how to implement freeze function with this; or should this only be a ThresholdChecker?
         // no code to automatically freeze because design says admin needs to do this
         return frozen;
     }
 
+    /**
+     *
+     * @param frozen whether or not a user is frozen.
+     */
     public void setFrozen(boolean frozen){
     this.frozen = frozen;
     } // whether the account is set to frozen or not
 
-
+    /**
+     *
+     * @return string representation of the user.
+     */
     public String toString(){
         StringBuilder userString = new StringBuilder("User: " + username + "\n");
         if (availableItems.size() == 0){

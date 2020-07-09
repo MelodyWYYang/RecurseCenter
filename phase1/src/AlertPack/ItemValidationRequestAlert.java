@@ -48,7 +48,10 @@ public class ItemValidationRequestAlert extends AdminAlert implements Serializab
         return description;
     }
 
-
+    /**
+     *
+     * @return the item ID should it be accepted.
+     */
     public int getItemID(){
         return this.itemID;
     }

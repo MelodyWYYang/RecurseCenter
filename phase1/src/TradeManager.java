@@ -49,6 +49,10 @@ public class TradeManager implements Serializable {
     }
 
     //TradeManager -- possibly add an OnStartUp method for UserManager also.
+
+    /** Method which executes all procedures which must be performed on startup.
+     *
+     */
     public void onStartUp(){
         //Calls all initialization stuff for UserManager.
         checkForExpiredTempTrades();
@@ -803,25 +807,51 @@ public class TradeManager implements Serializable {
         return userTrades;
     }
 
+    /**
+     *
+     * @return the threshold of lent - borrowed that all users should be greater than or equal to.
+     */
     public int getBorrowLendThreshold() {
         return borrowLendThreshold;
     }
 
+    /**
+     *
+     * @param borrowLendThreshold the threshold of lent - borrowed that all users should be greater than or equal to.
+     */
     public void setBorrowLendThreshold(int borrowLendThreshold) {
         this.borrowLendThreshold = borrowLendThreshold;
     }
 
+    /**
+     *
+     * @return the threshold of trades a user can complete per week.
+     */
     public int getCompleteThreshold() {
         return completeThreshold;
     }
 
+    /**
+     *
+     * @param completeThreshold the threshold of trades a user can complete per week.
+     */
     public void setCompleteThreshold(int completeThreshold) {
         this.completeThreshold = completeThreshold;
     }
 
+    /**
+     *
+     * @param user the user which an incomplete trade is being attributed to.
+     */
     public void increaseUserIncompleteTrades(User user){
         user.increaseNumIncompleteTrades(1);
     }
+
+    /**
+     *
+     * @param user the user whose incomplete trades are being checked.
+     * @return the number of incomplete trades that have been attributed to that user.
+     */
     public int getUserIncompleteTrades(User user){
         return user.getNumIncompleteTrades();
     }
