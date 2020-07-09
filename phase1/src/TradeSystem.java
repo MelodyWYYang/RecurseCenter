@@ -3,31 +3,32 @@ import AlertPack.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+// this should have a builder; now everything in here is private and you can just call the builder
 public class TradeSystem {
 
-    public static AdminUser adminUser;
-    public static UserManager userManager;
-    public static TradeManager tradeManager;
+    private AdminUser adminUser;
+    private UserManager userManager;
+    private TradeManager tradeManager;
 
-    static UserAlertManager userAlertManager = new UserAlertManager();
+    private UserAlertManager userAlertManager = new UserAlertManager();
 
-    static AdminAlertManager adminAlertManager = new AdminAlertManager();
-    static AdminActions adminActions = new AdminActions();
-    static UserActions userActions = new UserActions();
+    private AdminAlertManager adminAlertManager = new AdminAlertManager();
+    private AdminActions adminActions = new AdminActions();
+    private UserActions userActions = new UserActions();
 
+    public TradeSystem(){}
 
-    protected static void createAdminUser(){
+    public void createAdminUser(){
         AdminUser adminUser = new AdminUser("admin", "admin");
         FileManager.saveAdminToFile(adminUser);
     }
 
-    protected static void onStartUp(){
+    public void onStartUp(){
         adminUser.onStartUp();
         tradeManager.onStartUp();
     }
 
-    protected static User createAccount(){
+    public User createAccount(){  // does not check that the username is taken
         while (true) {
             try {
                 Scanner scan = new Scanner(System.in);
