@@ -13,7 +13,7 @@ public class TradeRequestCancelledAlert extends UserAlert implements Serializabl
 
     /**
      *
-     * @return String which details information about the trade.
+     * @return the ID of the trade request cancelled
      */
     public int getTradeID() {
         return tradeID;

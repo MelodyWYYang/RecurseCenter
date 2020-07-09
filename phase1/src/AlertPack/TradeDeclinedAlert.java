@@ -12,10 +12,18 @@ public class TradeDeclinedAlert extends UserAlert implements Serializable {
         this.tradeID = tradeID;
     }
 
+    /**
+     *
+     * @return the username of the user who declines the trade
+     */
     public String getDecliningUserName(){
         return this.decliningUserName;
     }
 
+    /**
+     *
+     * @return the ID of the trade declined by a user
+     */
     public int getTradeID(){
         return this.tradeID;
     }
