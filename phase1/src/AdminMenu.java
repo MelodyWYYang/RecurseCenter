@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AdminMenu {
-
-    public void run() {
+    /*
+    public void runAdminMenu(AdminUser adminUser) {
         boolean running = true;
         while (running) {
             int input = -1;
@@ -21,10 +21,10 @@ public class AdminMenu {
                 if (input > 2 || input < 0) {
                     System.out.println("Please enter a number from 0 to 2");
                 } else if (input == 1) {
-                    AdminActions.setThreshold(TradeSystem.adminUser);
+                    AdminActions.setThreshold(adminUser);
                     valid_input = true;
                 } else if (input == 2) {
-                    AdminActions.addNewAdmin(TradeSystem.adminUser);
+                    AdminActions.addNewAdmin(adminUser);
                     valid_input = true;
                 } else if (input == 0) {
                     valid_input = true;
@@ -32,7 +32,7 @@ public class AdminMenu {
                 }
             }
         }
-    }
+    }*/
 
 
 

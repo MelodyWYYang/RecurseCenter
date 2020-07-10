@@ -13,10 +13,10 @@ public class UserAlertManager {
      * Iterate through each alert in alerts, handle it and remove it from the list
      * @param alerts list of alert that are sent in
      */
-    public void handleAlertQueue(ArrayList<UserAlert> alerts){
+    public void handleAlertQueue(UserManager userManager, TradeCreator tradeCreator, ArrayList<UserAlert> alerts){
         while(!(alerts.size() == 0)){
             UserAlert alert = alerts.get(0);
-            handleAlert(alert);
+            handleAlert(userManager, tradeCreator, alert);
             alerts.remove(alert);
         }
     }
@@ -25,16 +25,16 @@ public class UserAlertManager {
      * Handle alert based on its coresponding type
      * @param alert alert sent in
      */
-    private void handleAlert(UserAlert alert) {
+    private void handleAlert(UserManager userManager, TradeCreator tradeCreator, UserAlert alert) {
 
         if (alert instanceof FrozenAlert) {
             handleFrozenAlert((FrozenAlert) alert);
         } else if (alert instanceof ExpirationAlert) {
-            handleExpirationAlert((ExpirationAlert) alert);
+            handleExpirationAlert(userManager, tradeCreator, (ExpirationAlert) alert);
         } else if (alert instanceof TradeRequestAlert){
-            handleTradeRequestAlert((TradeRequestAlert) alert);
+            handleTradeRequestAlert(userManager, tradeCreator, (TradeRequestAlert) alert);
         } else if (alert instanceof TradeAcceptedAlert) {
-            handleTradeAcceptedAlert((TradeAcceptedAlert) alert);
+            handleTradeAcceptedAlert(userManager, tradeCreator, (TradeAcceptedAlert) alert);
         } else if (alert instanceof TradeDeclinedAlert){
             handleTradeDeclinedAlert((TradeDeclinedAlert) alert);
         } else if (alert instanceof TradeCancelledAlert) {
@@ -42,9 +42,9 @@ public class UserAlertManager {
         } else if (alert instanceof  TradeRequestCancelledAlert) {
             handleTradeRequestCancelledAlert((TradeRequestCancelledAlert) alert);
         }else if (alert instanceof ItemValidationDeclinedAlert){
-            handleItemValidationDeclinedAlert((ItemValidationDeclinedAlert) alert);
+            handleItemValidationDeclinedAlert(userManager, (ItemValidationDeclinedAlert) alert);
         } else if (alert instanceof TradePastDateAlert) {
-            handleTradePastDateAlert((TradePastDateAlert) alert);
+            handleTradePastDateAlert(userManager, tradeCreator, (TradePastDateAlert) alert);
         } else if (alert instanceof MessageAlert) {
             handleMessageAlert((MessageAlert) alert);
         }
@@ -71,10 +71,10 @@ public class UserAlertManager {
         }
     }
 
-    private void handleExpirationAlert(ExpirationAlert alert){
+    private void handleExpirationAlert(UserManager userManager, TradeCreator tradeCreator, ExpirationAlert alert){
 
         System.out.println("The following TemporaryTrade has expired at" + alert.getDueDate() + ":\n" +
-                tradeToString(tradeCreator.tradeHistories.searchActiveTemporaryTrade(alert.getTradeId())));
+                tradeToString(userManager, tradeCreator.tradeHistories.searchActiveTemporaryTrade(alert.getTradeId())));
         boolean flag = true;
         int input = 0;
 
@@ -87,22 +87,22 @@ public class UserAlertManager {
         if (input == 1) {
             // report the other user
         } else {
-            User user = searchUser(alert.getUsername());
-            TemporaryTrade trade = searchTemporaryTrade(alert.getTradeId());
-            userManager.confirmReExchange(user, trade);
+            User user = userManager.searchUser(alert.getUsername());
+            TemporaryTrade trade = tradeCreator.tradeHistories.searchTemporaryTrade(alert.getTradeId());
+            tradeCreator.tradeHistories.confirmReExchange(userManager, user, trade);
             System.out.println("Trade ReExchange confirmed");
         }
     }
 
-    private void handleTradeRequestAlert(TradeRequestAlert a){
+    private void handleTradeRequestAlert(UserManager userManager, TradeCreator tradeCreator, TradeRequestAlert a){
 
         System.out.println( a.getSenderUserName() + " has proposed the following trade: \n" +
-                tradeToString(tradeCreator.searchPendingTradeRequest(a.getTradeID())));
+                tradeToString(userManager, tradeCreator.searchPendingTradeRequest(a.getTradeID())));
         boolean canEditTrade = true;
         int input = 0;
 
         Scanner scan = new Scanner(System.in);
-        Trade trade = userManager.searchPendingTradeRequest(a.getTradeID());
+        Trade trade = tradeCreator.searchPendingTradeRequest(a.getTradeID());
 
         User thisUser;
 
@@ -127,11 +127,11 @@ public class UserAlertManager {
         assert thisUser != null;
 
         if (input == 1){
-            TradeSystem.adminUser.userManager.acceptTradeRequest(trade, thisUser);
+            tradeCreator.acceptTradeRequest(trade, thisUser.getUsername());
             System.out.println("Trade Request Accepted. Meet up with the person at the time and place specified above."+
                     "Remember to login to confirm the trade afterwords!");
         } else if (input == 2){
-            TradeSystem.adminUser.userManager.declineTradeRequest(trade, thisUser);
+            tradeCreator.declineTradeRequest(trade, thisUser.getUsername());
             System.out.println("Trade Request Declined.");
         } else if (input == 3){
             System.out.println("Editing Trade Request. \n Enter new meeting time (format: yyyy-MM-dd HH:mm: \n");
@@ -155,16 +155,17 @@ public class UserAlertManager {
 
             //TODO: Ensure that this is not always null (the compiler complains that it is but I have my doubts).
             assert meetingTime != null;
-            userManager.editTradeRequest(trade, meetingTime, inputMeetingPlace, thisUser);
+            tradeCreator.editTradeRequest(userManager, trade, meetingTime, inputMeetingPlace, thisUser.getUsername());
             System.out.println("Trade successfully edited. Meeting at " + inputMeetingPlace + " at " + meetingTime +
                     ".");
         }
     }
 
-    private void handleTradeAcceptedAlert(TradeAcceptedAlert a){
+    private void handleTradeAcceptedAlert(UserManager userManager, TradeCreator tradeCreator, TradeAcceptedAlert a){
 
         System.out.println(a.getAcceptingUsername() +
-                " has accepted the following trade request: \n" + tradeToString(searchPendingTrade(a.getTradeID())));
+                " has accepted the following trade request: \n" + tradeToString(userManager,
+                tradeCreator.searchPendingTrade(a.getTradeID())));
         boolean handled = false;
 
         int input = 0;
@@ -225,7 +226,7 @@ public class UserAlertManager {
         }
     }
 
-    private void handleItemValidationDeclinedAlert(ItemValidationDeclinedAlert a){
+    private void handleItemValidationDeclinedAlert(UserManager userManager, ItemValidationDeclinedAlert a){
 
         System.out.println("Your item validation request has been declined for the following reason: \n" +
                 a.getMessage()+ ".\nUser: " + a.getOwner() + "Item name: " + a.getName() + "\nItem description: " +
@@ -248,10 +249,10 @@ public class UserAlertManager {
         }
     }
 
-    private void handleTradePastDateAlert(TradePastDateAlert a){
+    private void handleTradePastDateAlert(UserManager userManager, TradeCreator tradeCreator,TradePastDateAlert a){
 
         System.out.println("The following trade expired at" + a.getDueDate()+ "\n" +
-                tradeToString(tradeCreator.tradeHistories.searchPendingTrade(a.getTradeId())));
+                tradeToString(userManager, tradeCreator.searchPendingTrade(a.getTradeId())));
         boolean flag = true;
         int input = 0;
         while (flag) {
@@ -259,9 +260,9 @@ public class UserAlertManager {
             System.out.println("(1) Confirm Trade\n(2) I didn't show up\n(3) The other person didn't show up");
             input = scan.nextInt();
             if (input == 1) {
-                User user = userManager.searchUser(alert.getUsername());
-                userManager.confirmTrade(user,
-                        userManager.searchPendingTrade(alert.getTradeId()));
+                User user = userManager.searchUser(a.getUsername());
+                tradeCreator.confirmTrade(userManager, user,
+                        tradeCreator.searchPendingTrade(a.getTradeId()));
                 System.out.println("Trade confirmed. Your items have been exchanged on the system.");
                 //TODO
             }
@@ -305,28 +306,28 @@ public class UserAlertManager {
      * @param trade a trade object
      * @return a string which describes the two users involved in the trade and the Time & date of the trade.
      *///TradeManager -- consider moving to Trade
-    public String tradeToString(Trade trade){
+    public String tradeToString(UserManager userManager, Trade trade){
         return "User 1: " + trade.getUsername1() + "\nUser 2: " + trade.getUsername2() +
-                "\nItems being traded from user 1 to user 2: " + GetItemNamesFromUser1ToUser2(trade) +
-                "\nItems being traded from user 2 to user 1: " + GetItemNamesFromUser2ToUser1(trade) +
+                "\nItems being traded from user 1 to user 2: " + GetItemNamesFromUser1ToUser2(userManager, trade) +
+                "\nItems being traded from user 2 to user 1: " + GetItemNamesFromUser2ToUser1(userManager, trade) +
                 "\nTime & Date of item exchange: " + trade.getTimeOfTrade().toString() +
                 "\nLocation of Trade: " + trade.getMeetingPlace() + "\nTradeID: " + trade.getTradeID();
     }
     // helper method which lists the names of the items going from user 1 to user 2 - Louis
-    private String GetItemNamesFromUser1ToUser2(Trade trade){
+    private String GetItemNamesFromUser1ToUser2(UserManager userManager, Trade trade){
         StringBuilder stringBuilder = new StringBuilder();
         for(int itemID: trade.getItemIDsSentToUser2()){
-            Item item = searchItem(searchUser(trade.getUsername1()), itemID);
+            Item item = userManager.searchItem(userManager.searchUser(trade.getUsername1()), itemID);
             stringBuilder.append(item.getName()).append(" ");
             return stringBuilder.toString();
         }
         return null;
     }
     // helper method which lists the names of the items going from user 2 to user 1 - Louis
-    private String GetItemNamesFromUser2ToUser1(Trade trade){
+    private String GetItemNamesFromUser2ToUser1(UserManager userManager, Trade trade){
         StringBuilder stringBuilder = new StringBuilder();
         for(int itemID: trade.getItemIDsSentToUser1()){
-            Item item = searchItem(searchUser(trade.getUsername2()), itemID);
+            Item item = userManager.searchItem(userManager.searchUser(trade.getUsername2()), itemID);
             stringBuilder.append(item.getName()).append(" ");
             return stringBuilder.toString();
         }

@@ -9,16 +9,12 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      *
      * @param alerts Array List of AdminAlerts that need to be processed.
      */
-    public AdminUser adminUser = new AdminUser("admin", "admin");// Not really sure how we want to do this. Hardcoded for simplicity in the meanwhile - Louis
-    public UserManager userManager = new UserManager();
-    public TradeManager tradeManager = new TradeManager();
-
-    //Todo replace above line with actual admin user.
-    public void handleAlertQueue(ArrayList<AdminAlert> alerts){
+    public void handleAlertQueue(AdminUser adminUser, UserManager userManager, TradeCreator tradeCreator,
+                                 ArrayList<AdminAlert> alerts){
 
         while(!(alerts.size() == 0)){
             AdminAlert alert = alerts.get(0);
-            handleAlert(alert);
+            handleAlert(adminUser, userManager, tradeCreator, alert);
             alerts.remove(0);
         }
 
@@ -28,15 +24,15 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      *
      * @param a AdminAlert object to be handled
      */
-    private void handleAlert(AdminAlert a){
+    private void handleAlert(AdminUser adminUser, UserManager userManager, TradeCreator tradeCreator, AdminAlert a){
         if (a instanceof ItemValidationRequestAlert){
-                handleItemValidationRequestAlert((ItemValidationRequestAlert) a);
+                handleItemValidationRequestAlert(adminUser, userManager, (ItemValidationRequestAlert) a);
         } else if (a instanceof ReportAlert){
-            handleReportAlert((ReportAlert) a);
+            handleReportAlert(adminUser, userManager, tradeCreator, (ReportAlert) a);
         } else if (a instanceof FreezeUserAlert){
-            handleFreezeUserAlert((FreezeUserAlert) a);
+            handleFreezeUserAlert(adminUser, userManager,(FreezeUserAlert) a);
         }else if (a instanceof UnfreezeRequestAlert){
-            handleUnfreezeRequestAlert((UnfreezeRequestAlert) a);
+            handleUnfreezeRequestAlert(userManager, adminUser, (UnfreezeRequestAlert) a);
         }
     }
 
@@ -48,7 +44,7 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      *
      * @param alert AdminAlert that there is an ItemValidationRequestAlert to be handled
      */
-    private void handleItemValidationRequestAlert(ItemValidationRequestAlert alert){
+    private void handleItemValidationRequestAlert(AdminUser adminUser, UserManager userManager, ItemValidationRequestAlert alert){
         System.out.println("Item validation request\nUser: " + alert.getOwner() + "\nItem name: " + alert.getName() +
                 "\nItem description: " + alert.getDescription() + "\nItem ID number: " + alert.getItemID());
         Scanner scanner = new Scanner(System.in);
@@ -62,14 +58,15 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
         }else{
             message = "";
         }
-        adminUser.pollValidationRequest(choice == 1, alert, message);
+        adminUser.pollValidationRequest(userManager,choice == 1, alert, message);
     }
 
     /** Method that handles a ReportAlert by accepting the report or dismissing it
      *
      * @param alert AdminAlert that there is a ReportAlert to be handled
      */
-    private void handleReportAlert(ReportAlert alert){
+    private void handleReportAlert(AdminUser adminUser, UserManager userManager, TradeCreator tradeCreator,
+                                   ReportAlert alert){
         System.out.println(alert.getSenderUserName() + " has reported user " + alert.getReportedUserName() +
                 " whose trade status is " + alert.getIsTradeComplete()
                 + "\n" + "Details: " + alert.getReportDescription());
@@ -84,11 +81,11 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
             input = scan.nextInt();
             if (input == 1){
                 userManager.increaseUserIncompleteTrades(userManager.searchUser(alert.getReportedUserName()));
-                int numIncompleteTrades = tradeManager.getNumIncompTrades(alert.getReportedUserName());
-                threshold = TradeSystem.userManager.getIncompleteThreshold();
+                int numIncompleteTrades = tradeCreator.getNumIncompTrades(alert.getReportedUserName());
+                threshold = userManager.getIncompleteThreshold();
                 if (numIncompleteTrades > threshold){
-                    User reportedUser = TradeSystem.userManager.searchUser(alert.getReportedUserName());
-                    TradeSystem.adminUser.freezeUser(reportedUser);
+                    User reportedUser = userManager.searchUser(alert.getReportedUserName());
+                    adminUser.freezeUser(userManager, reportedUser);
                 }
                 flag = false;
             }
@@ -102,7 +99,7 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      *
      * @param alert AdminAlert that there is a user that should be frozen
      */
-    private void handleFreezeUserAlert(FreezeUserAlert alert){
+    private void handleFreezeUserAlert(AdminUser adminUser, UserManager userManager, FreezeUserAlert alert){
 
         System.out.println("Freeze User Alert" +
                 "\n" + alert.getUsername() + " has lent: " + alert.getLent() + " items" +
@@ -117,9 +114,9 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
             System.out.println("(2) Dismiss");
             input = scan.nextInt();
             if (input == 1) {
-                User user = TradeSystem.userManager.searchUser(alert.getUsername());
+                User user = userManager.searchUser(alert.getUsername());
                 assert user != null;
-                adminUser.freezeUser(user);
+                adminUser.freezeUser(userManager, user);
                 flag = false;
             }
             if (input == 2) flag = false;
@@ -131,7 +128,7 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      *
      * @param alert AdminAlert that there is a user who has requested that their account be unfrozen
      */
-    private void handleUnfreezeRequestAlert(UnfreezeRequestAlert alert){
+    private void handleUnfreezeRequestAlert(UserManager userManager, AdminUser adminUser, UnfreezeRequestAlert alert){
 
         System.out.println("Unfreeze User Request Alert" +
                 "\n" + alert.getUsername() + " has lent: " + alert.getLent() + " items" +
@@ -146,7 +143,7 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
             System.out.println("(2) Dismiss");
             input = scan.nextInt();
             if (input == 1) {
-                User user = TradeSystem.userManager.searchUser(alert.getUsername());
+                User user = userManager.searchUser(alert.getUsername());
                 adminUser.unfreezeAccount(user);
                 flag = false;
             }

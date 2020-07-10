@@ -31,8 +31,13 @@ public class AdminUser implements Serializable {
     }
 
 
-    public void addLogin(String username, String password){
-        this.loginInfo.put(username, password);
+    public boolean addLogin(String username, String password){
+        if (loginInfo.containsKey(username)){
+            return false;
+        } else {
+            this.loginInfo.put(username, password);
+            return true;
+        }
     }
 
 
@@ -119,7 +124,7 @@ public class AdminUser implements Serializable {
      * Change the borrow/lend threshold value
      * @param newThreshold int variable for new threshold
      */
-    public void changeThresholdForUser(TradeCreator tradeCreator, int newThreshold) {
+    public void changeBorrowLendThreshold(TradeCreator tradeCreator, int newThreshold) {
         tradeCreator.setBorrowLendThreshold(newThreshold);
     }
 

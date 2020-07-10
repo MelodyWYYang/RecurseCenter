@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class TradeSystemBuilder {
     private AdminUser adminUser;
     private UserManager userManager;
-    private TradeManager tradeManager;
+    private TradeCreator tradeCreator;
     private UserAlertManager userAlertManager = new UserAlertManager();
     private AdminAlertManager adminAlertManager = new AdminAlertManager();
     private AdminActions adminActions = new AdminActions();

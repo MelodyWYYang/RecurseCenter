@@ -14,15 +14,15 @@ import java.util.Scanner;
 public class UserActions {
 
 
-    public void run(User user){
-        mainMenu(user);
+    public void runUserMenu(UserManager userManager, TradeCreator tradeCreator, User user){
+        mainMenu(userManager, tradeCreator, user);
     }
 
     /**
      * Display the main menu to user, take user's input to implement the corresponding action
      * @param user user logged in making changes or viewing statuses
      */
-    public void mainMenu(User user){
+    public void mainMenu(UserManager userManager, TradeCreator tradeCreator, User user){
 
         boolean running = true;
         while (running) {
@@ -39,22 +39,22 @@ public class UserActions {
                 if (input > 6 || input < 0) {
                     System.out.println("Please enter a number from 0 to 6");
                 } else if (input == 1) {
-                    viewItemAndWishlist(user);
+                    viewItemAndWishlist(userManager, user);
                     valid_input = true;
                 } else if (input == 2) {
-                    runStats(user);
+                    runStats(userManager, tradeCreator, user);
                     valid_input = true;
                 } else if (input == 3) {
-                    sendUnfreezeRequest(user);
+                    sendUnfreezeRequest(userManager, tradeCreator, user);
                     valid_input = true;
                 } else if (input == 4) {
-                    viewAllUsers(user);
+                    viewAllUsers(userManager, tradeCreator, user);
                     valid_input = true;
                 } else if (input == 5) {
-                    viewPendingTrades(user);
+                    viewPendingTrades(tradeCreator, user);
                     valid_input = true;
                 } else if (input == 6) {
-                    viewActiveTempTrades(user);
+                    viewActiveTempTrades(tradeCreator, user);
                     valid_input = true;
                 } else if (input == 0){
                     valid_input = true;
@@ -68,7 +68,7 @@ public class UserActions {
      * Allow user to view their available items (inventory) and wishlist
      * @param user user logged in viewing their items
      */
-    public void viewItemAndWishlist(User user){
+    public void viewItemAndWishlist(UserManager userManager, User user){
         boolean flag = true;
         int input = 0;
         Scanner scan = new Scanner(System.in);
@@ -101,7 +101,7 @@ public class UserActions {
              System.out.println("Please enter the item description");
              String description = scan.nextLine();
              String username = user.getUsername();
-             TradeSystem.userManager.sendValidationRequest(name,description,username);
+             userManager.sendValidationRequest(name,description,username);
          } else if (input == 2){
              System.out.println("Please enter the ID of the item you wish to remove");
              int itemID = scan.nextInt();
@@ -130,13 +130,13 @@ public class UserActions {
      * Allow user to view all the users in the trading system
      * @param userViewing user logged in viewing other users
      */
-    public void viewAllUsers(User userViewing){
+    public void viewAllUsers(UserManager userManager, TradeCreator tradeCreator, User userViewing){
         boolean handled = false;
         Scanner scan = new Scanner(System.in);
         System.out.println("--- View other users ---");
         System.out.println("Enter a number to view a User's page:");
         int page = 1;
-        ArrayList<User> allUsers = TradeSystem.adminUser.userManager.getListUsers();
+        ArrayList<User> allUsers = userManager.getListUsers();
         boolean nextPageExists = true;
         while (!handled){
             int input = -1;
@@ -171,7 +171,7 @@ public class UserActions {
                     handled = true;
                     valid_input = true;
                     System.out.println("Viewing User: " + allUsers.get(input - 1).getUsername() + "...");
-                    viewUser(allUsers.get(input - 1), userViewing);
+                    viewUser(userManager, tradeCreator, allUsers.get(input - 1), userViewing);
                 }
             }
         }
@@ -185,7 +185,7 @@ public class UserActions {
      * @param userToView user that is being viewed
      * @param userViewing user logged in that is viewing other user
      */
-    private void viewUser(User userToView, User userViewing) {
+    private void viewUser(UserManager userManager, TradeCreator tradeCreator, User userToView, User userViewing) {
         Scanner scan = new Scanner(System.in);
         StringBuilder userString = new StringBuilder(userToView.toString());
         userString.append("(1) Send a message\n");
@@ -207,14 +207,14 @@ public class UserActions {
                 System.out.println("Enter the contents of your message:\n");
                 scan.nextLine();//this uglyness is needed to prevent the scanner from skipping a line - Louis
                 String message = scan.nextLine();
-                TradeSystem.userManager.sendMessageToUser(userViewing, userToView, message);
+                userManager.sendMessageToUser(userViewing, userToView, message);
                 System.out.println("Sent message to " + userToView.getUsername() + ": \"" + message + "\"");
             } else if (input == 2){
                 System.out.println("Enter the name of the item you would like added to your wishlist:\n");
                 String itemString = scan.nextLine();
-                TradeSystem.userManager.addToWishlist(userViewing, itemString);
+                userManager.addToWishlist(userViewing, itemString);
             } else if (input == 3 && !userToView.getFrozen()){
-                formTradeRequest(userViewing, userToView);
+                formTradeRequest(tradeCreator, userViewing, userToView);
             } else if (input == 0){
                 handled = true;
 
@@ -227,7 +227,7 @@ public class UserActions {
      * @param userSending user logged in that sends the trade request
      * @param userReceiving user that will receive the trade request
      */
-    private void formTradeRequest(User userSending, User userReceiving) {
+    private void formTradeRequest(TradeCreator tradeCreator, User userSending, User userReceiving) {
         //TODO break this method into helpers
         //TODO: Possibly have a limit to the number of items that can be traded at once?
         Scanner scan = new Scanner(System.in);
@@ -332,7 +332,7 @@ public class UserActions {
         System.out.println("Enter a meeting place: ");
         String meetingPlace = scan.nextLine();
 
-        Boolean canBeProcessed = TradeSystem.tradeManager.sendTradeRequest(userSending, userReceiving, itemIDsRecieved, itemIDsSent,
+        Boolean canBeProcessed = tradeCreator.sendTradeRequest(userSending, userReceiving, itemIDsRecieved, itemIDsSent,
                 meetingTime, meetingPlace);
         if (!canBeProcessed){
             System.out.println("Your trade could not be processed. This could have happened if you have completed " +
@@ -353,53 +353,56 @@ public class UserActions {
      * (7) Three most frequent trading partners
      * @param user user logged in viewing the statuses
      */
-    public void runStats(User user) {
+    public void runStats(UserManager userManager, TradeCreator tradeCreator, User user) {
+        //TODO: Fix this so we're not stacking calls on top of eachother.
         int input = 0;
-        while (true) {
-            Scanner scan = new Scanner(System.in);
-            System.out.println("--- View user stats ---");
-            System.out.println("(1) View number of items user has borrowed \n(2) View number of items user has lent" +
-                    "\n(3) View frozen status \n(4) View number of trades involving user that have not been" +
-                    "completed \n(5) View number of transactions this week \n(6) View items recently traded away" +
-                    "\n(7) View most frequent trading partner's \n(8) Return to \"User Menu\"");
-            input = scan.nextInt();
-            if (input > 8 || input < 1) {
-                System.out.println("Please enter a number from 1 to 8");
-            } else break;
-        }
-        if (input == 1) {
-            System.out.println("You have borrowed " + Integer.toString(user.getNumBorrowed()) + " items.");
-            runStats(user);
-        } else if (input == 2) {
-            System.out.println("You have lent " + Integer.toString(user.getNumLent()) + " items.");
-            runStats(user);
-        } else if (input == 3) {
-            if (user.getFrozen()) {
-                System.out.println("Your account has been frozen");
-            } else {
-                System.out.println("Your account is not frozen");
+        boolean handled = false;
+        while (!handled) {
+            while (true) {
+                Scanner scan = new Scanner(System.in);
+                System.out.println("--- View user stats ---");
+                System.out.println("(1) View number of items user has borrowed \n(2) View number of items user has lent" +
+                        "\n(3) View frozen status \n(4) View number of trades involving user that have not been" +
+                        "completed \n(5) View number of transactions this week \n(6) View items recently traded away" +
+                        "\n(7) View most frequent trading partner's \n(8) Return to \"User Menu\"");
+                input = scan.nextInt();
+                if (input > 8 || input < 1) {
+                    System.out.println("Please enter a number from 1 to 8");
+                } else break;
             }
-            runStats(user);
-        } else if (input == 4) { //Other methods need access to UserManager methods
-            int incompleteTrades = TradeSystem.tradeManager.getNumIncompTrades(user.getUsername());
-            System.out.println("Your account has made " + Integer.toString(incompleteTrades) +
-                    " incomplete transactions");
-            runStats(user);
-        } else if (input == 5) {
-            int weeklyTransactions = TradeSystem.tradeManager.getNumTradesThisWeek(user.getUsername());
-            System.out.println("Your account has made " + Integer.toString(weeklyTransactions) +
-                    " transactions this week");
-            runStats(user);
-        } else if (input == 6) {
-            ArrayList<Item> recentItems = TradeSystem.tradeManager.getNRecentItems(user.getUsername(), 3);
-            System.out.println(recentItems);
-            runStats(user);
-        } else if (input == 7) {
-            ArrayList<String> favouriteParnters = TradeSystem.tradeManager.getTopNTradingPartners(user.getUsername(), 3);
-            System.out.println(favouriteParnters);
-            runStats(user);
-        } else if (input == 8) {
-            mainMenu(user);
+            if (input == 1) {
+                System.out.println("You have borrowed " + Integer.toString(user.getNumBorrowed()) + " items.");
+
+            } else if (input == 2) {
+                System.out.println("You have lent " + Integer.toString(user.getNumLent()) + " items.");
+
+            } else if (input == 3) {
+                if (user.getFrozen()) {
+                    System.out.println("Your account has been frozen");
+                } else {
+                    System.out.println("Your account is not frozen");
+                }
+
+            } else if (input == 4) { //Other methods need access to UserManager methods
+                int incompleteTrades = tradeCreator.getNumIncompTrades(user.getUsername());
+                System.out.println("Your account has made " + Integer.toString(incompleteTrades) +
+                        " incomplete transactions");
+
+            } else if (input == 5) {
+                int weeklyTransactions = tradeCreator.tradeHistories.getNumTradesThisWeek(user.getUsername());
+                System.out.println("Your account has made " + Integer.toString(weeklyTransactions) +
+                        " transactions this week");
+
+            } else if (input == 6) {
+                ArrayList<Item> recentItems = tradeCreator.tradeHistories.getNRecentItems(userManager, user.getUsername(), 3);
+                System.out.println(recentItems);
+
+            } else if (input == 7) {
+                ArrayList<String> favouriteParnters = tradeCreator.tradeHistories.getTopNTradingPartners(user.getUsername(), 3);
+                System.out.println(favouriteParnters);
+            } else if (input == 8) {
+                handled = true;
+            }
         }
     }
 
@@ -435,7 +438,8 @@ public class UserActions {
             System.out.println("====================");
             System.out.println("Your pending trades:");
             for (Trade trade : userTrades) {
-                System.out.println(tradeToString(trade));
+                //System.out.println(tradeToString(trade));
+                System.out.println("tradeToString should be called here");
             }
             Scanner scanner = new Scanner(System.in);
             choice = scanner.nextInt();
@@ -449,15 +453,18 @@ public class UserActions {
      * Allow user to view their active temporary trade history
      * @param user user logged in
      */
-    public void viewActiveTempTrades(User user) {
+    public void viewActiveTempTrades(TradeCreator tradeCreator, User user) {
         int input = -1;
-        ArrayList<TemporaryTrade> userTrades = TradeSystem.tradeManager.searchActiveTempTradesByUser(user);
+        ArrayList<TemporaryTrade> userTrades = tradeCreator.tradeHistories.searchActiveTempTradesByUser(user);
         System.out.println("Options:");
         System.out.println("(1) Exit this menu");
         System.out.println("====================");
         System.out.println("Your active temporary trades:");
         for (Trade trade : userTrades) {
-            System.out.println(TradeSystem.tradeManager.tradeToString(trade));
+            //TODO: This tradeToString method should be implemented in our presenter layer. it can be called from there.
+            //System.out.println(tradeToString(trade));
+            //the below is our substitute for now:
+            System.out.println("tradeToString should be called here");
         }
         while (input != 1) {
             Scanner scanner = new Scanner(System.in);

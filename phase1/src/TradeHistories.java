@@ -229,13 +229,27 @@ public class TradeHistories {
      * @param tradeID ID number corresponding to the trade
      * @return the temporary trade
      */ //TradeManager
-    public TemporaryTrade serachTemporaryTrade(int tradeID) {
+    public TemporaryTrade searchTemporaryTrade(int tradeID) {
         for (TemporaryTrade tempTrade : currentTemporaryTrades){
             if (tempTrade.getTradeID() == tradeID){
                 return tempTrade;
             }
         }
         return null;
+    }
+
+    /** Searches current temporary trades by user and returns the trades of the user
+     * @param user the user whose trades are being searched
+     * @return the trades of the user
+     */ //TradeManager
+    public ArrayList<TemporaryTrade> searchActiveTempTradesByUser(User user) {
+        ArrayList<TemporaryTrade> userTrades = new ArrayList<TemporaryTrade>();
+        for (TemporaryTrade trade: currentTemporaryTrades) {
+            if (trade.getUsername1().equals(user.getUsername()) || trade.getUsername2().equals(user.getUsername())) {
+                userTrades.add(trade);
+            }
+        }
+        return userTrades;
     }
 
 

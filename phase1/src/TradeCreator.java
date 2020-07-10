@@ -158,28 +158,28 @@ public class TradeCreator {
      * @param trade trade object
      * @param timeOfTrade time & date of trade
      * @param meetingPlace location of trade
-     * @param UserEditingname  username of user who is editing the trade
+     * @param UserEditingName  username of user who is editing the trade
      */ //TradeManager
     public void editTradeRequest(UserManager userManager, Trade trade, LocalDateTime timeOfTrade,
-                                 String meetingPlace, String UserEditingname) {
+                                 String meetingPlace, String UserEditingName) {
         trade.timeOfTrade = timeOfTrade;
         trade.meetingPlace = meetingPlace;
-        if (UserEditingname.equals(trade.getUsername1())) {
+        if (UserEditingName.equals(trade.getUsername1())) {
             trade.user1AcceptedRequest = true;
             trade.user2AcceptedRequest = false;
             trade.incrementUser1NumRequests();
         }
-        else if (UserEditingname.equals(trade.getUsername2())) {
+        else if (UserEditingName.equals(trade.getUsername2())) {
             trade.user2AcceptedRequest = true;
             trade.user1AcceptedRequest = false;
             trade.incrementUser2NumRequests();
         }
 
-        TradeRequestAlert alert = createTradeRequestAlert(trade, userManager.searchUser(UserEditingname));
+        TradeRequestAlert alert = createTradeRequestAlert(trade, userManager.searchUser(UserEditingName));
 
         String otherUserName;
 
-        if (trade.getUsername1().equals(UserEditingname)){
+        if (trade.getUsername1().equals(UserEditingName)){
             otherUserName = trade.getUsername2();
         } else{
             otherUserName = trade.getUsername1();

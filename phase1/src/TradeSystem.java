@@ -22,6 +22,12 @@ public class TradeSystem {
         if (!((new File("adminUser.ser"))).exists()) {
             createAdminUser();
         }
+        if (!((new File("userManager.ser"))).exists()) {
+            createUserManager();
+        }
+        if (!((new File("tradeCreator.ser"))).exists()){
+            createTradeCreator();
+        }
         //TODO: Create similar serialization for tradeCreator and userManager.
 
         adminUser = FileManager.loadAdminUser("adminUser.ser");
@@ -56,13 +62,13 @@ public class TradeSystem {
                 System.out.println("Admin has alerts");
             }
             ArrayList<AdminAlert> adminAlerts = adminUser.getAdminAlerts();
-            adminAlertManager.handleAlertQueue(adminAlerts);
+            adminAlertManager.handleAlertQueue(adminUser, userManager, tradeCreator, adminAlerts);
             //TODO: Ensure the alert queue is depleted after all are handled.
-            AdminMenu.run();
+            adminActions.runAdminMenu(adminUser, tradeCreator);
         } else {
             ArrayList<UserAlert> userAlerts = userManager.getUserAlerts(loggedIn.getUsername());
-            userAlertManager.handleAlertQueue(userAlerts);
-            userActions.run(loggedIn);
+            userAlertManager.handleAlertQueue(userManager, tradeCreator, userAlerts);
+            userActions.runUserMenu(userManager, tradeCreator, loggedIn);
         }
 
         FileManager.saveAdminToFile(adminUser);
@@ -73,6 +79,15 @@ public class TradeSystem {
     public void createAdminUser(){
         AdminUser adminUser = new AdminUser("admin", "admin");
         FileManager.saveAdminToFile(adminUser);
+    }
+
+    public void createUserManager(){
+        UserManager userManager = new UserManager();
+        FileManager.saveUserManagerToFile(userManager);
+    }
+
+    public void createTradeCreator(){
+        FileManager.saveTradeCreatorToFile(tradeCreator);
     }
 
     protected void onStartUp(){
