@@ -134,4 +134,40 @@ public class FileManager {
         }
         return userList;
     }
+
+    /**
+     * Serializes a UserManager object to a .ser file
+     * @param userManager which is being saved to a file
+     */
+    public static void saveUserManagerToFile(UserManager userManager) {
+        //serializes the given user manager information in a .ser file
+        try {
+            FileOutputStream file = new FileOutputStream("userManager.ser");
+            ObjectOutputStream out = new ObjectOutputStream(file);
+            out.writeObject(userManager);
+            out.close();
+            file.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Serializes a UserManager object to a .ser file
+     * @param tradeCreator which is being saved to a file
+     */
+    public static void saveTradeCreatorToFile(TradeCreator tradeCreator) {
+        //serializes the given trade creator information in a .ser file
+        try {
+            FileOutputStream file = new FileOutputStream("tradeCreator.ser");
+            ObjectOutputStream out = new ObjectOutputStream(file);
+            out.writeObject(tradeCreator);
+            out.close();
+            file.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
