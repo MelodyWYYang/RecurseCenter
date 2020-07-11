@@ -19,6 +19,11 @@ public class TradeSystem {
     public TradeSystem(){}
 
     public void run() {
+        File directory = new File("data");
+        if (! directory.exists()) {
+            directory.mkdir();
+        }
+
         if (!((new File("data/adminUser.ser"))).exists()) {
             createAdminUser();
         }
