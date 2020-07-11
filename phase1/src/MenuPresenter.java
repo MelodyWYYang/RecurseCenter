@@ -16,36 +16,43 @@ import java.util.logging.Logger;
 //take file in and store each group of lines into a data structure
 //afterwards, call presenter methods i.e. MenuPresenter.loginmenu1() which will be the loginmenu
 // corresponding to the cell in the data structure
+//basically making a state machine, code pulled from:
+//https://stackoverflow.com/questions/12218959/how-to-read-certain-portion-of-the-text-file-in-java
+
 
 
 public class MenuPresenter {
-    private LinkedHashMap separateMenus() {
+    private LinkedHashMap readMenus() {
         LinkedHashMap menusMap = new LinkedHashMap();
         File menu = new File("Menu.text");
-        try (BufferedReader br = new BufferedReader(new FileReader(menu))) {
-            FileReader fr = new FileReader(menu);
-            Scanner scanner = new Scanner(fr);
-            while (menu.exists() && scanner.hasNextLine()) {
-                String str = scanner.nextLine();
-                System.out.println(str);
-                String next = scanner.nextLine();
-                while (! next.contains("MENU")){
-                    System.out.println(next);
-                } scanner.close();
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(menu));
+
+            try {
+                int menuNum = 1;
+                String readBuff = br.readLine();
+                String section = "";
+                while (readBuff != null) {
+                    if (section.equals("MENU{") && !readBuff.equals("}")) {
+                        menusMap.put(menuNum, readBuff);
+                        menuNum += 1;
+                    } else if (readBuff.equals("}")) {
+                        section = "";
+                    }
+                    readBuff = br.readLine();
+                }
+
+            } finally {
+                br.close();
             }
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("Cannot find file");
             e.printStackTrace();
         } catch (IOException e) {
+            System.out.println("Error occured, please try again later.");
             e.printStackTrace();
         }
-
-
-
-        }
-    }
-    public static void readMenu(String prompt) {
-
+        return menusMap;
     }
 }
-
