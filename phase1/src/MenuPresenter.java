@@ -1,10 +1,7 @@
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Logger;
+
 
 
 // import university.Student;
@@ -17,26 +14,33 @@ import java.util.logging.Logger;
 
 
 //store ea line in an arraylist for the hashmap
+
+// getMenu(key).get[0] .. get[1]... get[2]
+// stringbuilder -- //n
 public class MenuPresenter {
     private final LinkedHashMap<Integer, ArrayList<String>> menusMap = new LinkedHashMap<Integer, ArrayList<String>>();
-    File menu = new File("Menu.txt");
+    File menu;
 
     private LinkedHashMap readMenus() {
         try {
+            menu = new File("Menu.txt");
             BufferedReader br = new BufferedReader(new FileReader(menu));
 
             try {
-                int menuNum = 1;
+                int menuNum = 0;
                 String readBuff = br.readLine();
                 // add newline char back into sb
-                StringBuilder section = new StringBuilder();
+                ArrayList<String> section = new ArrayList<String>();
                 while (readBuff != null) {
                     if (readBuff.equals("MENU{")) {
-                        section.append(readBuff);
-                        menusMap.get(menuNum).add(section);
-                        menuNum += 1;
-                    } else if (readBuff.equals("}")) {
-                        section = "";
+                        readBuff = br.readLine();
+                        section.clear();
+                        while (!readBuff.equals("}")){
+                            section.add(readBuff);
+                            readBuff = br.readLine();
+                        }
+                        menusMap.put(menuNum, section);
+                        menuNum ++;
                     }
                     readBuff = br.readLine();
                 }
@@ -54,7 +58,7 @@ public class MenuPresenter {
         return menusMap;
     }
 
-    public void getMenu(int num) {
-        System.out.println(menusMap.get(num));
+    public void printMenu(int menuIndex, int lineIndex) {
+        System.out.println(menusMap.get(menuIndex).get(lineIndex));
     }
 }
