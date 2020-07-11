@@ -1,0 +1,43 @@
+MENU{
+Main Menu
+Welcome to Insert_name_here trading system!
+Would you like to create an account or login?
+(1) Create account
+(2) Login to an account
+(0) Quit
+}
+
+MENU{
+Create Account Menu
+Enter your desired username
+Enter your desired password
+Username taken, try again
+}
+
+MENU{
+User Username Login Menu
+Enter your username:
+Username was not valid. Please try again or enter 0 to return to the main menu.
+}
+
+MENU{
+User Password Login Menu
+Please enter the password for
+Logged in as
+Invalid Password. Please try again or enter 0 to return to the main menu.
+}
+
+MENU{
+Admin Login Menu
+Please enter the password for 
+Logged in as Admin: 
+Invalid Password. Please try again or enter 0 to return to the main menu.
+}
+
+MENU{
+optionChoice Menu
+Please enter one of the numbers listed above
+The number you entered was not listed above. Please enter a choice between 0 and
+}
+
+
