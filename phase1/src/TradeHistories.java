@@ -2,12 +2,13 @@ import AlertPack.AdminAlert;
 import AlertPack.ExpirationAlert;
 import AlertPack.UserAlert;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TradeHistories {
+public class TradeHistories  implements Serializable {
     protected ArrayList<TemporaryTrade> currentTemporaryTrades = new ArrayList<TemporaryTrade>(); //list of all temporary trades where items have
     // been exchanged but not returned -Louis
 

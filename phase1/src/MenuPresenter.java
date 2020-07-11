@@ -1,5 +1,6 @@
-package managers;
-
+//package managers;
+import java.io.Serializable;
+/*
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -23,14 +24,15 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
 import university.*;
+ */
 
 // import university.Student;
-
+//I've commented out all of the methods and imports so i can test trade system. - Louis
 /**
  * Manages the saving and loading of Students.
  */
 public class MenuPresenter implements Serializable {
-
+/*
     // All instances of StudentManager will share one Logger, so it's
     // static.
     // We use StudentManager.class.getName() to get the fully-qualified
@@ -41,7 +43,8 @@ public class MenuPresenter implements Serializable {
     private static final Handler consoleHandler = new ConsoleHandler();
 
     /** A mapping of student ids to Students. */
-    private Map<String, Student> students;
+
+    //private Map<String, Student> students;
 
     /**
      * Creates a new empty StudentManager.
@@ -49,6 +52,7 @@ public class MenuPresenter implements Serializable {
      * @throws IOException
      * @throws ClassNotFoundException
      */
+    /*
     public StudentManager(String filePath) throws ClassNotFoundException, IOException {
         students = new HashMap<String, Student>();
 
@@ -66,13 +70,14 @@ public class MenuPresenter implements Serializable {
             file.createNewFile();
         }
     }
-
+    */
     /**
      * Populates the records map from the file at path filePath.
      *
      * @param filePath the path of the data file
      * @throws FileNotFoundException if filePath is not a valid path
      */
+    /*
     public void readFromCSVFile(String filePath) throws FileNotFoundException {
 
         // FileInputStream can be used for reading raw bytes, like an image.
@@ -102,25 +107,27 @@ public class MenuPresenter implements Serializable {
             logger.log(Level.SEVERE, "Cannot read from input.", ex);
         }
     }
-
+    */
     /**
      * Adds record to this StudentManager.
      *
      * @param record a record to be added.
      */
+    /*
     public void add(Student record) {
         students.put(record.getID(), record);
 
         // Log the addition of a student.
         logger.log(Level.INFO, "Added a new student " + record.toString());
     }
-
+    */
     /**
      * Writes the students to file at filePath.
      *
      * @param filePath the file to write the records to
      * @throws IOException
      */
+    /*
     public void saveToFile(String filePath) throws IOException {
 
         OutputStream file = new FileOutputStream(filePath);
@@ -140,5 +147,7 @@ public class MenuPresenter implements Serializable {
         }
         return result;
     }
+
+     */
 }
 

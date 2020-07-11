@@ -1,10 +1,11 @@
 import AlertPack.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TradeCreator {
+public class TradeCreator implements Serializable {
 
     protected ArrayList<Trade> pendingTrades = new ArrayList<Trade>(); // list of all trades which have been accepted but not completed - Louis
 

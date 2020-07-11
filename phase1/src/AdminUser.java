@@ -59,11 +59,12 @@ public class AdminUser implements Serializable {
      */
     public void onStartUp(UserManager userManager, TradeCreator tradeCreator){
         this.adminAlerts = userManager.fetchAdminAlerts();
+        System.out.println(tradeCreator);
         this.adminAlerts.addAll(tradeCreator.fetchAdminAlerts());
         userManager.clearAdminAlerts();
     }
 
-    /**Temporarily abandoned by Tingyu
+    /*Temporarily abandoned by Tingyu
     public HashMap<String, String> getLogInInfo(){
         return this.loginInfo;
     }

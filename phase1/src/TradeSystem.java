@@ -31,6 +31,8 @@ public class TradeSystem {
         //TODO: Create similar serialization for tradeCreator and userManager.
 
         adminUser = FileManager.loadAdminUser("adminUser.ser");
+        userManager = FileManager.loadUserManager("userManager.ser");
+        tradeCreator = FileManager.loadTradeCreator("tradeCreator.ser");
 
         onStartUp();
 
@@ -102,10 +104,13 @@ public class TradeSystem {
     }
 
     public void createTradeCreator(){
+        TradeCreator tradeCreator = new TradeCreator();
         FileManager.saveTradeCreatorToFile(tradeCreator);
     }
 
     protected void onStartUp(){
+        System.out.println(userManager);
+        System.out.println(tradeCreator);
         adminUser.onStartUp(userManager, tradeCreator);
         userManager.onStartUp(tradeCreator);
         tradeCreator.tradeHistories.checkForExpiredTempTrades();
