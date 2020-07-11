@@ -22,10 +22,10 @@ import java.util.logging.Logger;
 
 
 public class MenuPresenter {
-    private LinkedHashMap readMenus() {
-        LinkedHashMap menusMap = new LinkedHashMap();
-        File menu = new File("Menu.text");
+    private final LinkedHashMap<Integer, String> menusMap = new LinkedHashMap<Integer, String>();
+    File menu = new File("Menu.text");
 
+    private LinkedHashMap readMenus() {
         try {
             BufferedReader br = new BufferedReader(new FileReader(menu));
 
@@ -37,6 +37,8 @@ public class MenuPresenter {
                     if (section.equals("MENU{") && !readBuff.equals("}")) {
                         menusMap.put(menuNum, readBuff);
                         menuNum += 1;
+                    } else if (readBuff.equals("source_files {") || readBuff.equals("clone_pairs {")) {
+                        section = readBuff;
                     } else if (readBuff.equals("}")) {
                         section = "";
                     }
@@ -54,5 +56,9 @@ public class MenuPresenter {
             e.printStackTrace();
         }
         return menusMap;
+    }
+
+    public void getMenu(int num) {
+        System.out.println(menusMap.get(num));
     }
 }
