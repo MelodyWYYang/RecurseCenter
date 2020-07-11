@@ -74,7 +74,7 @@ public class UserAlertManager {
     private void handleExpirationAlert(UserManager userManager, TradeCreator tradeCreator, ExpirationAlert alert){
 
         System.out.println("The following TemporaryTrade has expired at" + alert.getDueDate() + ":\n" +
-                tradeToString(userManager, tradeCreator.tradeHistories.searchActiveTemporaryTrade(alert.getTradeId())));
+                tradeToString(userManager, tradeCreator.tradeHistories.searchTemporaryTrade(alert.getTradeId())));
         boolean flag = true;
         int input = 0;
 
@@ -85,7 +85,20 @@ public class UserAlertManager {
             if (input == 1 || input == 2) flag = false;
         }
         if (input == 1) {
-            // report the other user
+            Trade trade = tradeCreator.tradeHistories.searchTemporaryTrade(alert.getTradeId());
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Reason for reporting: + \n");
+            String message = scan.nextLine();
+
+            String user2 = alert.getUsername();
+            String user1;
+            if (user2.equals(trade.getUsername2())){
+                user1 = trade.getUsername1();
+            } else user1 = trade.getUsername2();
+
+            userManager.reportUser(user1, user2, message,false);
+            System.out.println("Report has been sent to the tribunal");
+
         } else {
             User user = userManager.searchUser(alert.getUsername());
             TemporaryTrade trade = tradeCreator.tradeHistories.searchTemporaryTrade(alert.getTradeId());

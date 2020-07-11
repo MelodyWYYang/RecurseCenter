@@ -40,6 +40,18 @@ public class UserManager implements Serializable{
         }
     }
 
+    /**
+     * Method for a User to send a reportAlert to Administrator
+     * @param sender the username of the USer sending the report
+     * @param reportedUser  the username of the User to whom the sender wishes to report
+     * @param message the message the sender would like to include
+     * @param isTradeComplete whether the trade between the user is complete
+     */
+    public void reportUser(String sender, String reportedUser, String message, boolean isTradeComplete){
+        AdminAlert alert = new ReportAlert(sender, reportedUser, isTradeComplete, message);
+        this.alertAdmin(alert);
+    }
+
     //UserManager
     public ArrayList<User> getListUsers() {
         return listUsers;

@@ -296,13 +296,4 @@ public class TradeHistories {
             userManager.reExchangeItems(temporaryTrade);
         }
     }
-
-    public Trade searchActiveTemporaryTrade(int tradeID){
-        for (TemporaryTrade trade : currentTemporaryTrades){
-            if (trade.getTradeID() == tradeID){
-                return trade;
-            }
-        }
-        return null;
-    }
 }
