@@ -1,10 +1,6 @@
 
-
 import java.io.*;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.ConsoleHandler;
@@ -20,10 +16,10 @@ import java.util.logging.Logger;
 //https://stackoverflow.com/questions/12218959/how-to-read-certain-portion-of-the-text-file-in-java
 
 
-
+//store ea line in an arraylist for the hashmap
 public class MenuPresenter {
-    private final LinkedHashMap<Integer, String> menusMap = new LinkedHashMap<Integer, String>();
-    File menu = new File("Menu.text");
+    private final LinkedHashMap<Integer, ArrayList<String>> menusMap = new LinkedHashMap<Integer, ArrayList<String>>();
+    File menu = new File("Menu.txt");
 
     private LinkedHashMap readMenus() {
         try {
@@ -32,13 +28,13 @@ public class MenuPresenter {
             try {
                 int menuNum = 1;
                 String readBuff = br.readLine();
-                String section = "";
+                // add newline char back into sb
+                StringBuilder section = new StringBuilder();
                 while (readBuff != null) {
-                    if (section.equals("MENU{") && !readBuff.equals("}")) {
-                        menusMap.put(menuNum, readBuff);
+                    if (readBuff.equals("MENU{")) {
+                        section.append(readBuff);
+                        menusMap.get(menuNum).add(section);
                         menuNum += 1;
-                    } else if (readBuff.equals("source_files {") || readBuff.equals("clone_pairs {")) {
-                        section = readBuff;
                     } else if (readBuff.equals("}")) {
                         section = "";
                     }
