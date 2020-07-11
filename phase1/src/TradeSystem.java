@@ -19,20 +19,19 @@ public class TradeSystem {
     public TradeSystem(){}
 
     public void run() {
-        if (!((new File("adminUser.ser"))).exists()) {
+        if (!((new File("data/adminUser.ser"))).exists()) {
             createAdminUser();
         }
-        if (!((new File("userManager.ser"))).exists()) {
+        if (!((new File("data/serManager.ser"))).exists()) {
             createUserManager();
         }
-        if (!((new File("tradeCreator.ser"))).exists()){
+        if (!((new File("data/tradeCreator.ser"))).exists()){
             createTradeCreator();
         }
-        //TODO: Create similar serialization for tradeCreator and userManager.
 
-        adminUser = FileManager.loadAdminUser("adminUser.ser");
-        userManager = FileManager.loadUserManager("userManager.ser");
-        tradeCreator = FileManager.loadTradeCreator("tradeCreator.ser");
+        adminUser = FileManager.loadAdminUser();
+        userManager = FileManager.loadUserManager();
+        tradeCreator = FileManager.loadTradeCreator();
 
         onStartUp();
 
