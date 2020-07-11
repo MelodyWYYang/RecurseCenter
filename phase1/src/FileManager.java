@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
 
 public class FileManager {
     //author: Callan Murphy in group 0110 for CSC207H1 summer 2020 project
@@ -84,9 +83,9 @@ public class FileManager {
         }
     }
 
-    /** Loads a UserManager from a .ser file.
-     *
-     * @return the UserManager object stored in the file.
+    /**
+     * Loads a UserManager from a .ser file
+     * @return the UserManager object stored in the file
      */
     public static UserManager loadUserManager(){
         UserManager userManager;
@@ -105,9 +104,9 @@ public class FileManager {
         return userManager;
     }
 
-    /** Loads a TradeCreator from a .ser file.
-     *
-     * @return the UserManager object stored in the file.
+    /**
+     * Loads a TradeCreator from a .ser file
+     * @return the UserManager object stored in the file
      */
     public static TradeCreator loadTradeCreator(){
         TradeCreator tradeCreator;
