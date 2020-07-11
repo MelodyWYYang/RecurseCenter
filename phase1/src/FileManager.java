@@ -7,27 +7,6 @@ public class FileManager {
     //https://attacomsian.com/blog/java-write-object-to-file as a reference
 
     /**
-     * Loads Admin from .ser file
-     * @return AdminUser object
-     */
-    public static AdminUser loadAdminUser(){
-        // deserializes AdminUser object
-        AdminUser adminUsr;
-        try {
-            FileInputStream file = new FileInputStream("data/adminUser.ser");
-            ObjectInputStream in = new ObjectInputStream(file);
-            adminUsr = (AdminUser) in.readObject();
-            in.close();
-            file.close();
-        }
-        catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return adminUsr;
-    }
-
-    /**
      * Serializes an admin object to a .ser file
      * @param admin admin which is being saved to a file
      */
@@ -79,6 +58,27 @@ public class FileManager {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Loads Admin from .ser file
+     * @return AdminUser object
+     */
+    public static AdminUser loadAdminUser(){
+        // deserializes AdminUser object
+        AdminUser adminUsr;
+        try {
+            FileInputStream file = new FileInputStream("data/adminUser.ser");
+            ObjectInputStream in = new ObjectInputStream(file);
+            adminUsr = (AdminUser) in.readObject();
+            in.close();
+            file.close();
+        }
+        catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return adminUsr;
     }
 
     /**
