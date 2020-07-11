@@ -30,7 +30,7 @@ public class FileManager {
     public static AdminUser loadAdminUser(String fileName){
         AdminUser adminUsr;
         try {
-            FileInputStream file = new FileInputStream("adminUser.ser");
+            FileInputStream file = new FileInputStream("adminUser.ser"); //Todo: Either un hard-code this or change the the method to have 0 arguments. - Louis
             ObjectInputStream in = new ObjectInputStream(file);
             adminUsr = (AdminUser) in.readObject();
             in.close();
@@ -154,7 +154,7 @@ public class FileManager {
     }
 
     /**
-     * Serializes a UserManager object to a .ser file
+     * Serializes a TradeCreator object to a .ser file
      * @param tradeCreator which is being saved to a file
      */
     public static void saveTradeCreatorToFile(TradeCreator tradeCreator) {
@@ -169,5 +169,51 @@ public class FileManager {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /** Loads a UserManager from a .ser file.
+     *
+     * @param fileName the name of the file.
+     * @return the UserManager object stored in the file.
+     */
+    public static UserManager loadUserManager(String fileName){
+        UserManager userManager;
+        try {
+            FileInputStream file = new FileInputStream("userManager.ser"); //Todo: Either un hard-code this or change the the method to have 0 arguments. - Louis
+            ObjectInputStream in = new ObjectInputStream(file);
+            userManager = (UserManager) in.readObject();
+            in.close();
+            file.close();
+        }
+        catch (IOException | ClassNotFoundException e) {
+            // ClassNotFoundException if User class is not recognized
+            e.printStackTrace();
+            return null;
+        }
+        return userManager;
+    }
+
+    /** Loads a TradeCreator from a .ser file.
+     *
+     * @param fileName the name of the file.
+     * @return the UserManager object stored in the file.
+     */
+    public static TradeCreator loadTradeCreator(String fileName){
+        TradeCreator tradeCreator;
+        try {
+            FileInputStream file = new FileInputStream("tradeCreator.ser"); //Todo: Either un hard-code this or change the the method to have 0 arguments. - Louis
+            ObjectInputStream in = new ObjectInputStream(file);
+            tradeCreator = (TradeCreator) in.readObject();
+            System.out.println(tradeCreator);
+            in.close();
+            file.close();
+        }
+        catch (IOException | ClassNotFoundException e) {
+            // ClassNotFoundException if User class is not recognized
+            e.printStackTrace();
+            return null;
+        }
+
+        return tradeCreator;
     }
 }
