@@ -87,7 +87,7 @@ public class UserActions {
 
         while (flag){
             System.out.println("(1) Send Item Validation request \n (2) Remove an item from available items " +
-                    "\n (3) Remove an item from your wishlist");
+                    "\n (3) Remove an item from your wishlist\n (0) Exit to main menu");
             input = scan.nextInt();
             if (input < 1 || input > 3){
                 System.out.println("Please enter a number from 1 to 3");
@@ -112,7 +112,10 @@ public class UserActions {
                  } else System.out.println("Invalid item id");
              }
 
-         } else {
+         } else if (input == 0) {
+             return;
+
+            }else {
              System.out.println("Please enter the name of the item on your wishlist you wish to remove");
              String wishlistitem = scan.nextLine();
              for (String itemName: user.getWishlistItemNames()){
@@ -331,9 +334,30 @@ public class UserActions {
 
         System.out.println("Enter a meeting place: ");
         String meetingPlace = scan.nextLine();
+        System.out.println("Should this be a temporary trade? (Y/N)");
+        boolean isTempTrade = false;
+        boolean validYN = false;
+        while(!validYN) {
+            String tempYN = scan.nextLine();
+            if (tempYN.equals("Y")){
+                validYN = true;
+                isTempTrade = true;
+            } else if (tempYN.equals("N")){
+                validYN = true;
+                isTempTrade = false;
+            } else{
+                System.out.println("Please enter either Y or N:");
+            }
+        }
 
-        Boolean canBeProcessed = tradeCreator.sendTradeRequest(userSending, userReceiving, itemIDsRecieved, itemIDsSent,
-                meetingTime, meetingPlace);
+        Boolean canBeProcessed;
+        if (isTempTrade) {
+            canBeProcessed = tradeCreator.sendTradeRequest(userSending, userReceiving, itemIDsRecieved, itemIDsSent,
+                    meetingTime, meetingPlace);
+        } else {
+            canBeProcessed = tradeCreator.sendTemporaryTradeRequest(userSending, userReceiving, itemIDsRecieved, itemIDsSent,
+                    meetingTime, meetingPlace);
+        }
         if (!canBeProcessed){
             System.out.println("Your trade could not be processed. This could have happened if you have completed " +
                     "too many trades this week or if one of the users was frozen");

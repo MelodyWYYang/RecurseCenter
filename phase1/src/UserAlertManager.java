@@ -108,9 +108,14 @@ public class UserAlertManager {
     }
 
     private void handleTradeRequestAlert(UserManager userManager, TradeCreator tradeCreator, TradeRequestAlert a){
-
-        System.out.println( a.getSenderUserName() + " has proposed the following trade: \n" +
-                tradeToString(userManager, tradeCreator.searchPendingTradeRequest(a.getTradeID())));
+        if (a.getIsTempTrade()) {
+            System.out.println(a.getSenderUserName() + " has proposed the following trade: \n" +
+                    tradeToString(userManager, tradeCreator.searchPendingTradeRequest(a.getTradeID())));
+        } else{
+            System.out.println(a.getSenderUserName() + " has proposed the following temporary trade (items " +
+                    "due back in 30 days: \n" +
+                    tradeToString(userManager, tradeCreator.searchPendingTradeRequest(a.getTradeID())));
+        }
         boolean canEditTrade = true;
         int input = 0;
 

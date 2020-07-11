@@ -5,11 +5,13 @@ import java.io.Serializable;
 public class TradeRequestAlert extends UserAlert implements Serializable {
     protected String senderUserName;
     protected int tradeID;
+    protected boolean isTempTrade;
 
-    public TradeRequestAlert(String senderUserName, int tradeID){
+    public TradeRequestAlert(String senderUserName, int tradeID, boolean isTempTrade){
         super();
         this.senderUserName = senderUserName;
         this.tradeID = tradeID;
+        this.isTempTrade = isTempTrade;
     }
 
     /**
@@ -26,4 +28,7 @@ public class TradeRequestAlert extends UserAlert implements Serializable {
      */
     public int getTradeID(){ return tradeID; }
 
+    public boolean getIsTempTrade(){
+        return this.isTempTrade;
+    }
 }

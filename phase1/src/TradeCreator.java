@@ -23,6 +23,8 @@ public class TradeCreator implements Serializable {
 
     private int borrowLendThreshold = 1;
 
+    private int tradeIdGenerator = 1;
+
 
     public ArrayList<Trade> getPendingTrades() {
         return pendingTrades;
@@ -61,7 +63,6 @@ public class TradeCreator implements Serializable {
     public Boolean sendTradeRequest(User user1, User user2, //user1 is the one sending the request to user2.
                                     ArrayList<Integer> itemIDsSentToUser1, ArrayList<Integer> itemIDsSentToUser2,
                                     LocalDateTime timeOfTrade, String meetingPlace) {
-        //TODO make sure a user cannot create a trade if they have hit the weekly threshold
 
         if (!beforeTrade(user1, user2)) {
             return false;
@@ -79,14 +80,61 @@ public class TradeCreator implements Serializable {
             list2 =  itemIDsSentToUser2;
         }
 
-        Trade trade = new Trade(user1.username, user2.username, list1, list2);
+        Trade trade = new Trade(user1.username, user2.username, list1, list2, tradeIdGenerator);
+        tradeIdGenerator++;
         pendingTradeRequests.add(trade);
         trade.setTimeOfTrade(timeOfTrade);
         trade.setMeetingPlace(meetingPlace);
         trade.user1TradeConfirmed = true;
 
         //Creating and adding an alert for user2
-        TradeRequestAlert alert = createTradeRequestAlert(trade, user1);
+        TradeRequestAlert alert = createTradeRequestAlert(trade, user1, false);
+        alertUser(user2, alert);
+        return true;
+
+    } //Does not remove item from user1 availableItems or user2 availableItems
+
+
+    /** Method which creates a temporary trade request and adds it to the list of pending trade requests.
+     * Author: Jinyu Liu
+     * Slight rework by Louis Scheffer V 6/27/2020
+     * @param user1 user1
+     * @param user2 user2
+     * @param itemIDsSentToUser1 list of IDs of items which will be sent to user1
+     * @param itemIDsSentToUser2 list of IDs of items which will be sent to user2
+     * @param timeOfTrade time & date of the trade
+     * @param meetingPlace location of the trade
+     */
+    public Boolean sendTemporaryTradeRequest(User user1, User user2, //user1 is the one sending the request to user2.
+                                    ArrayList<Integer> itemIDsSentToUser1, ArrayList<Integer> itemIDsSentToUser2,
+                                    LocalDateTime timeOfTrade, String meetingPlace) {
+
+        if (!beforeTrade(user1, user2)) {
+            return false;
+        }
+        ArrayList<Integer> list1;
+        if (itemIDsSentToUser1.size() == 0){
+            list1 = new ArrayList<Integer>();
+        } else {
+            list1 =  itemIDsSentToUser1;
+        }
+        ArrayList<Integer> list2;
+        if (itemIDsSentToUser2.size() == 0){
+            list2 = new ArrayList<Integer>();
+        }else {
+            list2 =  itemIDsSentToUser2;
+        }
+
+        TemporaryTrade trade = new TemporaryTrade(user1.username, user2.username, list1, list2,
+                LocalDateTime.now().plusDays(30), tradeIdGenerator);
+        tradeIdGenerator++;
+        pendingTradeRequests.add(trade);
+        trade.setTimeOfTrade(timeOfTrade);
+        trade.setMeetingPlace(meetingPlace);
+        trade.user1TradeConfirmed = true;
+
+        //Creating and adding an alert for user2
+        TradeRequestAlert alert = createTradeRequestAlert(trade, user1, true);
         alertUser(user2, alert);
         return true;
 
@@ -99,8 +147,8 @@ public class TradeCreator implements Serializable {
      * @param user1 the User who is sending the Trade request.
      * @return A TradeRequestAlert corresponding to <trade>
      */ //TradeManager
-    public TradeRequestAlert createTradeRequestAlert(Trade trade, User user1){
-        return new TradeRequestAlert(user1.getUsername(), trade.getTradeID());
+    public TradeRequestAlert createTradeRequestAlert(Trade trade, User user1, boolean isTempTrade){
+        return new TradeRequestAlert(user1.getUsername(), trade.getTradeID(), isTempTrade);
     }
 
     /** Method which allows a user to accept a trade request
@@ -176,7 +224,8 @@ public class TradeCreator implements Serializable {
             trade.incrementUser2NumRequests();
         }
 
-        TradeRequestAlert alert = createTradeRequestAlert(trade, userManager.searchUser(UserEditingName));
+        TradeRequestAlert alert = createTradeRequestAlert(trade, userManager.searchUser(UserEditingName),
+                trade instanceof TemporaryTrade);
 
         String otherUserName;
 

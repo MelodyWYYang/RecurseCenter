@@ -9,12 +9,12 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      *
      * @param alerts Array List of AdminAlerts that need to be processed.
      */
-    public void handleAlertQueue(AdminUser adminUser, UserManager userManager, TradeCreator tradeCreator,
+    public void handleAlertQueue(MenuPresenter menuPresenter, AdminUser adminUser, UserManager userManager, TradeCreator tradeCreator,
                                  ArrayList<AdminAlert> alerts){
 
         while(!(alerts.size() == 0)){
             AdminAlert alert = alerts.get(0);
-            handleAlert(adminUser, userManager, tradeCreator, alert);
+            handleAlert(menuPresenter, adminUser, userManager, tradeCreator, alert);
             alerts.remove(0);
         }
 
@@ -24,7 +24,7 @@ public class AdminAlertManager { //This class has a two way dependency with Trad
      *
      * @param a AdminAlert object to be handled
      */
-    private void handleAlert(AdminUser adminUser, UserManager userManager, TradeCreator tradeCreator, AdminAlert a){
+    private void handleAlert(MenuPresenter menuPresenter, AdminUser adminUser, UserManager userManager, TradeCreator tradeCreator, AdminAlert a){
         if (a instanceof ItemValidationRequestAlert){
                 handleItemValidationRequestAlert(adminUser, userManager, (ItemValidationRequestAlert) a);
         } else if (a instanceof ReportAlert){

@@ -13,14 +13,14 @@ public class TemporaryTrade extends Trade implements Serializable {
     //default to thirty days after the present.
 
     public TemporaryTrade(String username1, String username2, ArrayList<Integer> itemIDsSentToUser1,
-                          ArrayList<Integer> itemIDsSentToUser2, LocalDateTime tradeUntil) {
-        super(username1, username2, itemIDsSentToUser1, itemIDsSentToUser2);
+                          ArrayList<Integer> itemIDsSentToUser2, LocalDateTime tradeUntil, int tradeID) {
+        super(username1, username2, itemIDsSentToUser1, itemIDsSentToUser2, tradeID);
         this.tradeUntil = tradeUntil;
     }
 
     public TemporaryTrade(String username1, String username2, ArrayList<Integer> itemIDsSentToUser1,
-                          ArrayList<Integer> itemIDsSentToUser2){
-        super(username1, username2, itemIDsSentToUser1, itemIDsSentToUser2);
+                          ArrayList<Integer> itemIDsSentToUser2, int tradeID){
+        super(username1, username2, itemIDsSentToUser1, itemIDsSentToUser2, tradeID);
         LocalDateTime now = LocalDateTime.now();
         this.tradeUntil = now.plusDays(30);
     }

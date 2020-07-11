@@ -1,5 +1,6 @@
 import AlertPack.*;
 
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -9,6 +10,7 @@ public class TradeSystem {
     private AdminUser adminUser;
     private UserManager userManager;
     private TradeCreator tradeCreator;
+    private MenuPresenter menuPresenter = new MenuPresenter();
 
     private UserAlertManager userAlertManager = new UserAlertManager();
 
@@ -27,7 +29,7 @@ public class TradeSystem {
         if (!((new File("data/adminUser.ser"))).exists()) {
             createAdminUser();
         }
-        if (!((new File("data/serManager.ser"))).exists()) {
+        if (!((new File("data/userManager.ser"))).exists()) {
             createUserManager();
         }
         if (!((new File("data/tradeCreator.ser"))).exists()){
@@ -68,7 +70,7 @@ public class TradeSystem {
                 System.out.println("Admin has alerts");
             }
             ArrayList<AdminAlert> adminAlerts = adminUser.getAdminAlerts();
-            adminAlertManager.handleAlertQueue(adminUser, userManager, tradeCreator, adminAlerts);
+            adminAlertManager.handleAlertQueue(menuPresenter, adminUser, userManager, tradeCreator, adminAlerts);
             //TODO: Ensure the alert queue is depleted after all are handled.
             adminActions.runAdminMenu(adminUser, tradeCreator);
         } else {
@@ -78,7 +80,8 @@ public class TradeSystem {
         }
 
         FileManager.saveAdminToFile(adminUser);
-
+        FileManager.saveTradeCreatorToFile(tradeCreator);
+        FileManager.saveUserManagerToFile(userManager);
 
     }
 
