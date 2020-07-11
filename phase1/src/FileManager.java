@@ -3,31 +3,8 @@ import java.io.*;
 public class FileManager {
     //author: Callan Murphy in group 0110 for CSC207H1 summer 2020 project
     //used provided code in file StudentManager.java as a reference
-    //used https://www.tutorialspoint.com/java/java_serialization.htm
-    //as a reference for saveUserToFile and loadUserFromFile
-    //used https://stackoverflow.com/questions/4917326/how-to-iterate-over-the-files-of-a-certain-directory-in-java
-    //as a reference for iterating over files in loadAllUsers
-
-    /**
-     * Loads Admin from .ser file
-     * @return AdminUser object
-     */
-    public static AdminUser loadAdminUser(){
-        // deserializes AdminUser object
-        AdminUser adminUsr;
-        try {
-            FileInputStream file = new FileInputStream("data/adminUser.ser");
-            ObjectInputStream in = new ObjectInputStream(file);
-            adminUsr = (AdminUser) in.readObject();
-            in.close();
-            file.close();
-        }
-        catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return adminUsr;
-    }
+    //used https://www.tutorialspoint.com/java/java_serialization.htm and
+    //https://attacomsian.com/blog/java-write-object-to-file as a reference
 
     /**
      * Serializes an admin object to a .ser file
@@ -81,6 +58,27 @@ public class FileManager {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Loads Admin from .ser file
+     * @return AdminUser object
+     */
+    public static AdminUser loadAdminUser(){
+        // deserializes AdminUser object
+        AdminUser adminUsr;
+        try {
+            FileInputStream file = new FileInputStream("data/adminUser.ser");
+            ObjectInputStream in = new ObjectInputStream(file);
+            adminUsr = (AdminUser) in.readObject();
+            in.close();
+            file.close();
+        }
+        catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return adminUsr;
     }
 
     /**

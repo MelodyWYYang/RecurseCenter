@@ -39,7 +39,7 @@ public class TradeSystem {
         User loggedIn = null;
         boolean isAdmin = false;
 //method Menu Builder
-        System.out.println("Welcome to Insert_name_here trading system!\n Would you like to create an account or " +
+        System.out.println("Welcome to the Trade Master 9000!\n Would you like to create an account or " +
                 "login?\n(1) Create account \n(2) Login to an account\n(0) Quit");
 
         int input = optionChoice(2);
