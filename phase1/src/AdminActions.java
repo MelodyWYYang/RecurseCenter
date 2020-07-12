@@ -7,9 +7,9 @@ public class AdminActions {
         while (running) {
             int input = -1;
             Scanner scan = new Scanner(System.in);
-            System.out.println("--- Admin Menu --- \n");
-            System.out.println("(1) Set borrow/lend threshold \n(2) Add new admin" +
-                    " \n(0) Quit");
+            // System.out.println("--- Admin Menu --- \n");
+            // System.out.println("(1) Set borrow/lend threshold \n(2) Add new admin" +
+            //         " \n(0) Quit");
             boolean valid_input = false;
             while (!valid_input) {
                 input = scan.nextInt();
