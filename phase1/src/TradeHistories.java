@@ -117,7 +117,7 @@ public class TradeHistories  implements Serializable {
      * @param username username of User being evaluated
      * @return ArrayList</int> (sorted by LocalTimeDate)
      */ //TradeManager
-    public ArrayList<Integer> getOrderedItemsID(String username) {
+    private ArrayList<Integer> getOrderedItemsID(String username) {
         ArrayList<Trade> tradeHistory = this.getOrderedTrades(username);
         ArrayList<Integer> orderedItemsID = new ArrayList<Integer>();
         for (Trade trade : tradeHistory) {
