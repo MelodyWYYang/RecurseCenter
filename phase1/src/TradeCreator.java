@@ -330,7 +330,7 @@ public class TradeCreator implements Serializable {
             trade.setUser1TradeConfirmed(true);
         }
         else if (user.getUsername().equals(trade.getUsername2())){
-            trade.setUser2AcceptedRequest(true);
+            trade.setUser2TradeConfirmed(true);
         }
         if (trade.isTradeCompleted()){
             afterTrade(userManager, trade);

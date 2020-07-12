@@ -11,7 +11,7 @@ public class User implements Serializable {
     private int numLent;
     private int numBorrowed;
     private int numIncompleteTrades;
-    private boolean frozen = false; // false being frozen or Lent>Borrowed; true being no violations
+    private boolean frozen = false; // true being frozen or Lent>Borrowed; false being no violations
     private ArrayList<Item> availableItems = new ArrayList<Item>(); // if this was protected then our presenters can't access it
     private ArrayList<Item> borrowedItems = new ArrayList<Item>();// items that the user is currently borrowing via TemporaryTrade - Louis
     private ArrayList<String> wishlistItemNames = new ArrayList<String>();// presenter needs to access this as well
@@ -177,7 +177,7 @@ public class User implements Serializable {
     }
 
     /**
-     *
+     * Setter for frozen boolean. true means the account is frozen. false means the account is not frozen.
      * @param frozen whether or not a user is frozen.
      */
     public void setFrozen(boolean frozen){
