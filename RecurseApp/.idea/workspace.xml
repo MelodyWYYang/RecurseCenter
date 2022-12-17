@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0b223b0b-4290-4edd-9b4d-4e5bd16b0954" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="RecurseApp" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Recurse" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="ProjectId" id="2GQcE8Ak0yDzUDfDFzRRC48cwR8" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.gutterIcons" />
+  </component>
+  <component name="RunManager" selected="Python.CracklePop">
+    <configuration name="CracklePop" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="RecurseApp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CracklePop" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="RecurseApp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tictactoeUI" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="RecurseApp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tictactoeUI.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.CracklePop" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.tictactoeUI" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0b223b0b-4290-4edd-9b4d-4e5bd16b0954" name="Default Changelist" comment="" />
+      <created>1666324133782</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1666324133782</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="320" y="126" key="#Notifications" timestamp="1671240765037">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="320" y="126" key="#Notifications/0.25.1440.875@0.25.1440.875" timestamp="1671240765037" />
+    <state x="451" y="283" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1666324222594">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="451" y="283" key="#com.intellij.fileTypes.FileTypeChooser/0.25.1440.875@0.25.1440.875" timestamp="1666324222594" />
+    <state width="1419" height="227" key="GridCell.Tab.0.bottom" timestamp="1670544390370">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1419" height="227" key="GridCell.Tab.0.bottom/0.25.1440.875@0.25.1440.875" timestamp="1670544390370" />
+    <state width="1419" height="227" key="GridCell.Tab.0.center" timestamp="1670544390368">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1419" height="227" key="GridCell.Tab.0.center/0.25.1440.875@0.25.1440.875" timestamp="1670544390368" />
+    <state width="1419" height="227" key="GridCell.Tab.0.left" timestamp="1670544390367">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1419" height="227" key="GridCell.Tab.0.left/0.25.1440.875@0.25.1440.875" timestamp="1670544390367" />
+    <state width="1419" height="227" key="GridCell.Tab.0.right" timestamp="1670544390369">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1419" height="227" key="GridCell.Tab.0.right/0.25.1440.875@0.25.1440.875" timestamp="1670544390369" />
+    <state width="1419" height="213" key="GridCell.Tab.1.bottom" timestamp="1667603470179">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1419" height="213" key="GridCell.Tab.1.bottom/0.25.1440.875@0.25.1440.875" timestamp="1667603470179" />
+    <state width="1419" height="213" key="GridCell.Tab.1.center" timestamp="1667603470179">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1419" height="213" key="GridCell.Tab.1.center/0.25.1440.875@0.25.1440.875" timestamp="1667603470179" />
+    <state width="1419" height="213" key="GridCell.Tab.1.left" timestamp="1667603470178">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1419" height="213" key="GridCell.Tab.1.left/0.25.1440.875@0.25.1440.875" timestamp="1667603470178" />
+    <state width="1419" height="213" key="GridCell.Tab.1.right" timestamp="1667603470179">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state width="1419" height="213" key="GridCell.Tab.1.right/0.25.1440.875@0.25.1440.875" timestamp="1667603470179" />
+    <state x="100" y="125" width="1240" height="675" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1671245244321">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="100" y="125" width="1240" height="675" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.25.1440.875@0.25.1440.875" timestamp="1671245244321" />
+    <state x="389" y="374" key="com.intellij.ide.util.TipDialog" timestamp="1671240934987">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="389" y="374" key="com.intellij.ide.util.TipDialog/0.25.1440.875@0.25.1440.875" timestamp="1671240934987" />
+    <state x="505" y="384" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1671245007435">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="505" y="384" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1440.875@0.25.1440.875" timestamp="1671245007435" />
+    <state x="276" y="193" width="835" height="538" key="find.popup" timestamp="1666518214606">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="276" y="193" width="835" height="538" key="find.popup/0.25.1440.875@0.25.1440.875" timestamp="1666518214606" />
+    <state x="385" y="214" width="670" height="676" key="search.everywhere.popup" timestamp="1671244996732">
+      <screen x="0" y="25" width="1440" height="875" />
+    </state>
+    <state x="385" y="214" width="670" height="676" key="search.everywhere.popup/0.25.1440.875@0.25.1440.875" timestamp="1671244996732" />
+  </component>
+</project>

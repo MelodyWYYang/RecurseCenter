@@ -1,0 +1,12 @@
+a = 100
+
+for n in range(1, 101):  # stop value is not incl in range
+    word = ""  # empty string
+    if not n % 3:  # modulo operator returns any remainder, not = 0/false
+        word = "Crackle"
+        if not n % 5:
+            word += "Pop"
+    elif not n % 5:
+        word = "Pop"
+    if word != "":
+        print(n, ":", word)
